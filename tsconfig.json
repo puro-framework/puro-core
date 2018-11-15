@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "lib",
+    "strict": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pure/*": ["src/*"],
+      "@plugins/*": ["plugins/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "plugins/**/*",
+    "typings/**/*"
+  ],
+  "exclude": [
+    "*.spec.ts"
+  ]
+}
