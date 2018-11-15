@@ -30,6 +30,10 @@ import { Request, Response, NextFunction } from 'express';
 export { Server, Request, Response, NextFunction };
 export { Router } from 'express';
 
+/**
+ * It represents a list of hints for an HTTP exception (i.e. a list of invalid
+ * parameters with errors).
+ */
 export interface HttpExceptionHints {
   [key: string]: string[];
 }
