@@ -24,21 +24,116 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction } from '@pure/http';
+import { Request, Response, NextFunction, Middleware } from '@testing/mocks';
+import { mock } from '@testing/mocks';
 
-import { requestHandler } from '@pure/http';
+import {
+  HttpException,
+  BadRequestException,
+  InvalidParameterException,
+  AccessDeniedHttpException,
+  NotFoundHttpException,
+  MethodNotAllowedHttpException
+} from '@pure/http';
+
+import {
+  requestHandler,
+  responseHandler,
+  errorHandler,
+  error404Handler
+} from '@pure/http';
 
 describe('http', () => {
-  let requestMock: Request;
-  let responseMock: Response;
-  let nextMock: NextFunction;
+  let request: Request;
+  let response: Response;
+  let next: NextFunction;
 
   beforeEach(() => {
-    nextMock = jest.fn();
+    request = new Request();
+    response = new Response();
+    next = jest.fn();
   });
 
-  it('can handle a request', async () => {
-    await requestHandler(requestMock, responseMock, nextMock);
-    expect(nextMock).toBeCalled();
+  it('can handle Request', async () => {
+    await mock<Middleware>(requestHandler)(request, response, next);
+    expect(next).toBeCalled();
+  });
+
+  it('can handle Response', async () => {
+    await mock<Middleware>(responseHandler)(request, response, next);
+    expect(typeof response.content).toBe('function');
+    expect(next).toBeCalled();
+  });
+
+  it('can handle HttpException', async () => {
+    const exceptionHints = {
+      hint1: ['message1'],
+      hint2: ['message2'],
+      hint3: ['message3']
+    };
+
+    const exception = new HttpException(
+      123,
+      'Custom Exception',
+      exceptionHints
+    );
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(123);
+    expect(response.content).toBeCalledWith('Custom Exception', exceptionHints);
+  });
+
+  it('can handle BadRequestException', async () => {
+    const exception = new BadRequestException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(400);
+    expect(response.content).toBeCalledWith('Bad Request', undefined);
+  });
+
+  it('can handle InvalidParameterException', async () => {
+    const exception = new InvalidParameterException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(400);
+    expect(response.content).toBeCalledWith('Invalid Parameter', undefined);
+  });
+
+  it('can handle AccessDeniedHttpException', async () => {
+    const exception = new AccessDeniedHttpException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(403);
+    expect(response.content).toBeCalledWith('Forbidden', undefined);
+  });
+
+  it('can handle NotFoundHttpException', async () => {
+    const exception = new NotFoundHttpException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(404);
+    expect(response.content).toBeCalledWith('Not Found', undefined);
+  });
+
+  it('can handle MethodNotAllowedHttpException', async () => {
+    const exception = new MethodNotAllowedHttpException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(405);
+    expect(response.content).toBeCalledWith('Method Not Allowed', undefined);
+  });
+
+  it('can handle unknown exceptions', async () => {
+    const exception = new Error('Internal Error');
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.status).toBeCalledWith(500);
+    expect(response.content).toBeCalledWith('Internal Server Error', undefined);
+  });
+
+  it('can handle native not found exceptions', async () => {
+    await mock<Middleware>(error404Handler)(request, response);
+    expect(response.status).toBeCalledWith(404);
+    expect(response.content).toBeCalledWith('Not Found');
   });
 });

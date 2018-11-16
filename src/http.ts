@@ -143,24 +143,24 @@ export const errorHandler = async (
   response: Response,
   next: NextFunction
 ) => {
-  let status = 500,
-    content = 'Internal Server Error',
-    hints = undefined;
+  let status = 500;
+  let message = 'Internal Server Error';
+  let hints = undefined;
 
   if (exception instanceof HttpException) {
-    [status, content, hints] = [
+    [status, message, hints] = [
       exception.statusCode,
       exception.message,
       exception.hints
     ];
   }
 
-  response.status(status).content(content, hints);
+  response.status(status).content(message, hints);
 };
 
 /**
  * The 404 error handler.
  */
 export const error404Handler = async (request: Request, response: Response) => {
-  response.status(404).content('Not found');
+  response.status(404).content('Not Found');
 };

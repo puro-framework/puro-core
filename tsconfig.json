@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "@pure/*": ["src/*"],
-      "@plugins/*": ["plugins/*"]
+      "@plugins/*": ["plugins/*"],
+      "@testing/*": ["testing/*"]
     }
   },
   "include": [

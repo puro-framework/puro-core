@@ -9,15 +9,18 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "prettify": "prettier --single-quote --write 'src/**/*.ts' 'plugins/**/*.ts'",
+    "prettify": "prettier --single-quote --write 'src/**/*.ts' 'plugins/**/*.ts' 'testing/**/*.ts'",
     "test": "jest"
   },
   "jest": {
     "preset": "ts-jest",
-    "testMatch": ["**/?(*.)+(spec|test).ts?(x)"],
+    "testMatch": [
+      "**/?(*.)+(spec|test).ts?(x)"
+    ],
     "moduleNameMapper": {
       "^@pure/(.*)$": "<rootDir>/src/$1",
-      "^@plugins/(.*)$": "<rootDir>/plugins/$1"
+      "^@plugins/(.*)$": "<rootDir>/plugins/$1",
+      "^@testing/(.*)$": "<rootDir>/testing/$1"
     }
   },
   "husky": {
