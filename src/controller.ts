@@ -24,71 +24,104 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction } from '@pure/http';
-
-import {
-  NotFoundHttpException,
-  MethodNotAllowedHttpException
-} from '@pure/http';
+import { Request, Response } from '@pure/http';
+import { MethodNotAllowedHttpException } from '@pure/http';
 
 import { container } from '@pure/container';
 
-const HttpMethodMap: { [key: string]: string } = {
-  POST: 'create',
-  GET: 'read',
-  PUT: 'update',
-  DELETE: 'remove'
-};
-
 /**
- * This descriptor defines what is part of the API schema.
+ * This annotation defines what is part of the API schema.
  */
 export const schema = (rules?: any): Function => {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    target.rules = rules;
-    return target;
+    descriptor.value.schema = { rules };
+    return descriptor.value;
   };
 };
 
 /**
- * The Controller class.
+ * The controller class.
  */
-export class Controller {
+export abstract class Controller {
+  /**
+   * The CRUD functions.
+   */
+  static HttpMethodOptions: { [key: string]: any } = {
+    POST: {
+      funct: 'create',
+      defaultStatusCode: 201
+    },
+    GET: {
+      funct: 'read',
+      defaultStatusCode: 200
+    },
+    PUT: {
+      funct: 'update',
+      defaultStatusCode: 204
+    },
+    DELETE: {
+      funct: 'remove',
+      defaultStatusCode: 204
+    }
+  };
+
+  /**
+   * Reference to the service container.
+   */
   protected container = container.getService.bind(container);
 
-  async handle(request: Request, response: Response) {
-    const action = HttpMethodMap[request.method];
+  /**
+   * This method is the entrypoint for the router.
+   */
+  async handleRequest(request: Request, response: Response) {
+    const options = Controller.HttpMethodOptions[request.method];
 
-    if (!action) {
+    if (!options) {
       throw new MethodNotAllowedHttpException();
     }
 
-    const handler = this.getHandler(action);
-    const result = await handler(request, response);
+    const handler = this.getHandler(options.funct);
+    const output = await handler(request, response);
 
-    // TODO: create a method `processResult()`
-    if (result) {
-      response.content(result);
-    }
+    await this.processOutput(output, response, options);
   }
 
+  /**
+   * The handler methods you need to override.
+   */
   async create(request: Request, response: Response): Promise<any> {
-    throw new NotFoundHttpException();
+    throw new Error('Not Implemented');
   }
-
   async read(request: Request, response: Response): Promise<any> {
-    throw new NotFoundHttpException();
+    throw new Error('Not Implemented');
   }
-
   async update(request: Request, response: Response): Promise<any> {
-    throw new NotFoundHttpException();
+    throw new Error('Not Implemented');
   }
-
   async remove(request: Request, response: Response): Promise<any> {
-    throw new NotFoundHttpException();
+    throw new Error('Not Implemented');
   }
 
+  /**
+   * Returns the method handler by name.
+   */
   private getHandler(name: string) {
     return (this as any)[name].bind(this);
+  }
+
+  /**
+   * Processes the handler output and set the response content.
+   */
+  private async processOutput(output: any, response: Response, options: any) {
+    // Handle promises and async functions
+    if (output instanceof Promise) {
+      output = await output;
+    } else if (typeof output === 'function') {
+      output = await output();
+    }
+
+    // TODO: handle entities
+
+    response.content(options.defaultStatusCode, output);
   }
 }

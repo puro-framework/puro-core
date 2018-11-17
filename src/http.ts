@@ -123,9 +123,14 @@ export const responseHandler = async (
   response: Response,
   next: NextFunction
 ) => {
-  response.content = function(body: any, hints?: HttpExceptionHints) {
-    return this.send({
-      status: this.statusCode,
+  // Add a new method for setting the response content
+  response.content = function(
+    statusCode: number,
+    body: any,
+    hints?: HttpExceptionHints
+  ) {
+    return this.status(statusCode).send({
+      status: statusCode,
       content: body,
       hints: hints
     });
@@ -143,24 +148,24 @@ export const errorHandler = async (
   response: Response,
   next: NextFunction
 ) => {
-  let status = 500;
+  let statusCode = 500;
   let message = 'Internal Server Error';
   let hints = undefined;
 
   if (exception instanceof HttpException) {
-    [status, message, hints] = [
+    [statusCode, message, hints] = [
       exception.statusCode,
       exception.message,
       exception.hints
     ];
   }
 
-  response.status(status).content(message, hints);
+  response.content(statusCode, message, hints);
 };
 
 /**
  * The 404 error handler.
  */
 export const error404Handler = async (request: Request, response: Response) => {
-  response.status(404).content('Not Found');
+  response.content(404, 'Not Found');
 };

@@ -3,6 +3,7 @@ node_modules
 
 # Compiled objects
 lib/
+coverage/
 
 # IDEs
 .idea/

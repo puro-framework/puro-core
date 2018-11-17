@@ -26,11 +26,15 @@
 
 import { HttpExceptionHints } from '@pure/http';
 
-export class Request {}
+export class Request {
+  method?: string;
+  user?: any;
+}
 
 export class Response {
   status = jest.fn<Response>((code: number) => this);
   content = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
+  send = jest.fn<Response>((body?: any) => this);
 }
 
 export interface NextFunction {

@@ -33,7 +33,6 @@ declare global {
      */
     export interface Request {
       user: any;
-      validate: Function;
       entities: any;
     }
 
@@ -41,12 +40,10 @@ declare global {
      * It represents the HTTP response that will be sent.
      */
     export interface Response {
-      status(code: number): Response;
-
       /**
        * Sets the content of the response.
        */
-      content(body: any, hints?: HttpExceptionHints): Response;
+      content(code: number, body: any, hints?: HttpExceptionHints): Response;
     }
   }
 }
