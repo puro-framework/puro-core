@@ -26,10 +26,10 @@
 
 import { Route } from '@puro/plugin';
 
-import { AuthController } from './controllers/AuthController';
-import { VersionController } from './controllers/VersionController';
+import { StatusController } from './controllers/StatusController';
+import { SessionController } from './controllers/SessionController';
 
 export const routes: Route[] = [
-  { path: '/auth/status', controller: AuthController },
-  { path: '/version', controller: VersionController }
+  { path: '/status', controller: StatusController },
+  { path: '/session', controller: SessionController }
 ];

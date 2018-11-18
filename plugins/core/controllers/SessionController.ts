@@ -1,5 +1,5 @@
 /**
- * @file core/controllers/VersionController.ts
+ * @file core/controllers/AuthController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,10 +24,11 @@
  * SOFTWARE.
  */
 
+import { Request } from '@puro/http';
 import { Controller } from '@puro/controller';
 
-export class VersionController extends Controller {
-  async read() {
-    return '0.1.0';
+export class SessionController extends Controller {
+  async read(request: Request) {
+    return `Authenticated as User [${request.user.id}]`;
   }
 }
