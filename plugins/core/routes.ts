@@ -24,10 +24,12 @@
  * SOFTWARE.
  */
 
+import { Route } from '@puro/plugin';
+
 import { AuthController } from './controllers/AuthController';
 import { VersionController } from './controllers/VersionController';
 
-export const routes = [
-  ['/auth/status', AuthController],
-  ['/version', VersionController]
+export const routes: Route[] = [
+  { path: '/auth/status', controller: AuthController },
+  { path: '/version', controller: VersionController }
 ];

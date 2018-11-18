@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Controller } from '@pure/controller';
+import { Controller } from '@puro/controller';
 
 export class VersionController extends Controller {
   async read() {

@@ -34,14 +34,14 @@ import {
   AccessDeniedHttpException,
   NotFoundHttpException,
   MethodNotAllowedHttpException
-} from '@pure/http';
+} from '@puro/http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from '@pure/http';
+} from '@puro/http';
 
 describe('http', () => {
   let request: Request;
@@ -49,6 +49,8 @@ describe('http', () => {
   let next: NextFunction;
 
   beforeEach(() => {
+    console.error = jest.fn();
+
     request = new Request();
     response = new Response();
     next = jest.fn();
@@ -153,6 +155,8 @@ describe('http', () => {
       'Internal Server Error',
       undefined
     );
+
+    expect(console.error).toHaveBeenCalledWith(exception);
   });
 
   it('can handle native not found exceptions', async () => {

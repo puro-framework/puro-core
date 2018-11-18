@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '@pure/http';
-import { Controller } from '@pure/controller';
+import { Request } from '@puro/http';
+import { Controller } from '@puro/controller';
 
 export class AuthController extends Controller {
   async read(request: Request) {

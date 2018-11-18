@@ -24,18 +24,20 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '@pure/http';
-import { MethodNotAllowedHttpException } from '@pure/http';
+import { Request, Response } from '@puro/http';
+import { MethodNotAllowedHttpException } from '@puro/http';
 
-import { container } from '@pure/container';
+import { container } from '@puro/container';
 
 /**
  * This annotation defines what is part of the API schema.
  */
 export const schema = (rules?: any): Function => {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    descriptor.value.schema = { rules };
-    return descriptor.value;
+    target.schema = Object.assign(target.schema || {}, {
+      [propertyKey]: rules
+    });
+    return target;
   };
 };
 
@@ -120,7 +122,7 @@ export abstract class Controller {
       output = await output();
     }
 
-    // TODO: handle entities
+    // TODO: handle entities here
 
     response.content(options.defaultStatusCode, output);
   }

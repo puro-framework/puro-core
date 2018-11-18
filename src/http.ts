@@ -161,6 +161,10 @@ export const errorHandler = async (
   }
 
   response.content(statusCode, message, hints);
+
+  if (statusCode >= 500) {
+    console.error(exception);
+  }
 };
 
 /**

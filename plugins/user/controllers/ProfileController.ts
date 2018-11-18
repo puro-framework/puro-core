@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '@pure/http';
-import { Controller, schema } from '@pure/controller';
+import { Request } from '@puro/http';
+import { Controller, schema } from '@puro/controller';
 
 const updateschema = {
   displayName: {

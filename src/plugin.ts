@@ -1,5 +1,5 @@
 /**
- * @file src/router.ts
+ * @file src/plugin.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -23,3 +23,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import { Request, Response, NextFunction, Router } from '@puro/http';
+import { Controller } from '@puro/controller';
+
+/**
+ * The definition for a route.
+ */
+export interface Route {
+  path: string;
+  controller: typeof Controller;
+}
+
+/**
+ * The Puro's plugin.
+ */
+export class Plugin {
+  path: string;
+  router: any;
+
+  /**
+   * Constructor method.
+   */
+  constructor(path: string) {
+    this.path = path;
+
+    this.loadRoutes();
+  }
+
+  /**
+   * Loads the routes from `plugins/routes.ts`.
+   */
+  private loadRoutes() {
+    const { routes } = require(`${this.path}/routes`);
+
+    this.router = Router();
+
+    routes.forEach((route: Route) => {
+      this.router.use(route.path, this.buildController(route.controller));
+    });
+  }
+
+  /**
+   * Builds the controller and wraps it inside a middleware.
+   */
+  private buildController = (ControllerClass: any) => {
+    return async (request: Request, response: Response, next: NextFunction) => {
+      try {
+        let instance = new ControllerClass();
+        await instance.handleRequest(request, response);
+      } catch (e) {
+        next(e);
+      }
+    };
+  };
+}

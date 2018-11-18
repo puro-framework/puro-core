@@ -3848,9 +3848,9 @@ type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typeorm@^0.2.8:
-  version "0.2.8"
-  resolved "https://registry.npmjs.org/typeorm/-/typeorm-0.2.8.tgz#b8f7e0809ad7b2c03c03ff101fadf1b90e4083a3"
+typeorm@^0.2.9:
+  version "0.2.9"
+  resolved "https://registry.npmjs.org/typeorm/-/typeorm-0.2.9.tgz#b21a55f4c7ae398c104911e298485c232bcceefc"
   dependencies:
     app-root-path "^2.0.1"
     buffer "^5.1.0"

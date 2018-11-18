@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { schema } from '@pure/controller';
+import { schema } from '@puro/controller';
 
 import { Resource } from '@plugins/core/entities/Resource';
 

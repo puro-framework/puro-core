@@ -24,12 +24,14 @@
  * SOFTWARE.
  */
 
+import { Route } from '@puro/plugin';
+
 import { UserController } from './controllers/UserController';
 import { UserCollectionController } from './controllers/UserCollectionController';
 import { ProfileController } from './controllers/ProfileController';
 
-export const routes = [
-  ['/users', UserCollectionController],
-  ['/users/me', ProfileController],
-  ['/users/:userId', UserController]
+export const routes: Route[] = [
+  { path: '/users', controller: UserCollectionController },
+  { path: '/users/me', controller: ProfileController },
+  { path: '/users/:userId', controller: UserController }
 ];

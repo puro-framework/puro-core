@@ -1,5 +1,5 @@
 /**
- * @file src/bootstrap.ts
+ * @file src/puro.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,49 +24,96 @@
  * SOFTWARE.
  */
 
-import { Server, Request, Response, NextFunction } from '@pure/http';
+import { Server, Router } from '@puro/http';
+import { Request, Response, NextFunction } from '@puro/http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from '@pure/http';
+} from '@puro/http';
 
-import { container } from '@pure/container';
+import { container } from '@puro/container';
+import { Plugin } from '@puro/plugin';
 
-export const Puro = () => {
+/**
+ * The definition for Puro's server options.
+ */
+export interface PuroOptions {
+  [key: string]: any;
+}
+
+/**
+ * The Puro's server.
+ */
+export class Puro {
   /**
-   * Create the server instance.
+   * The Express' instance.
    */
-  const server = Server();
-
-  /**
-   * Install the request and response handlers.
-   */
-  server.use(requestHandler);
-  server.use(responseHandler);
-
-  // TODO: install the routers here
-
-  /**
-   * Install the error handlers.
-   */
-  server.use(errorHandler);
-  server.use(error404Handler);
+  server: any;
 
   /**
-   * The middleware to clean up the container services.
+   * The installed plugins.
    */
-  server.use(
-    async (request: Request, response: Response, next: NextFunction) => {
-      response.on('finish', async () => {
-        await container.shoutdown();
-      });
+  plugins: Plugin[] = [];
 
-      next();
-    }
-  );
+  /**
+   * The server options.
+   */
+  options: PuroOptions = {
+    basepath: '/api/'
+  };
 
-  return server;
-};
+  /**
+   * Constructor method.
+   */
+  constructor(options?: PuroOptions) {
+    this.options = Object.assign(this.options, options);
+    this.server = Server();
+  }
+
+  /**
+   * Installs a plugin into the server.
+   */
+  install(path: string) {
+    this.plugins.push(new Plugin(path));
+  }
+
+  /**
+   * Listens for connections on the specified host and port.
+   */
+  listen(port: number, hostname?: string) {
+    this.setupServer();
+    return this.server.listen(port, hostname);
+  }
+
+  /**
+   * Sets up the server.
+   */
+  private setupServer() {
+    // Install the request and response handlers
+    this.server.use(requestHandler);
+    this.server.use(responseHandler);
+
+    // Install the plugin routers
+    this.plugins.forEach(plugin => {
+      this.server.use(this.options.basepath, plugin.router);
+    });
+
+    // Install the error handlers
+    this.server.use(errorHandler);
+    this.server.use(error404Handler);
+
+    // Install the middleware for cleaning up the container services
+    this.server.use(
+      async (request: Request, response: Response, next: NextFunction) => {
+        response.on('finish', async () => {
+          await container.shoutdown();
+        });
+
+        next();
+      }
+    );
+  }
+}

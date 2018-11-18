@@ -27,18 +27,18 @@
 import { Request, Response, Middleware } from '@testing/mocks';
 import { mock } from '@testing/mocks';
 
-import { MethodNotAllowedHttpException } from '@pure/http';
-import { Controller, schema } from '@pure/controller';
+import { MethodNotAllowedHttpException } from '@puro/http';
+import { Controller, schema } from '@puro/controller';
 
 describe('schema', () => {
   it('can annotate methods', async () => {
-    class Test {
+    class TestController {
       @schema({ key: 'value' })
-      method() {}
+      create(request: Request) {}
     }
 
-    expect((new Test().method as any).schema).toEqual({
-      rules: { key: 'value' }
+    expect((new TestController() as any).schema).toEqual({
+      create: { key: 'value' }
     });
   });
 });
@@ -52,8 +52,8 @@ describe('controller', () => {
     request = new Request();
     response = new Response();
 
-    class ControllerMock extends Controller {}
-    controller = new ControllerMock();
+    class TestController extends Controller {}
+    controller = new TestController();
     controller.handleRequest = controller.handleRequest.bind(controller);
   });
 

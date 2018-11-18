@@ -18,7 +18,7 @@
       "**/?(*.)+(spec|test).ts?(x)"
     ],
     "moduleNameMapper": {
-      "^@pure/(.*)$": "<rootDir>/src/$1",
+      "^@puro/(.*)$": "<rootDir>/src/$1",
       "^@plugins/(.*)$": "<rootDir>/plugins/$1",
       "^@testing/(.*)$": "<rootDir>/testing/$1"
     }
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "express": "^4.16.4",
+    "typeorm": "^0.2.9",
     "typescript": "^3.1.6"
   },
   "devDependencies": {
@@ -47,7 +48,6 @@
     "lint-staged": "^8.0.4",
     "prettier": "1.15.2",
     "reflect-metadata": "^0.1.12",
-    "ts-jest": "^23.10.4",
-    "typeorm": "^0.2.8"
+    "ts-jest": "^23.10.4"
   }
 }
