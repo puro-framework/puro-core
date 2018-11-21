@@ -147,7 +147,7 @@ describe('controller', () => {
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
-    expect(response.content).toBeCalledWith(201, 'Response Content');
+    expect(response.prepare).toBeCalledWith(201, 'Response Content');
   });
 
   it('can process READ functions', async () => {
@@ -163,7 +163,7 @@ describe('controller', () => {
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
-    expect(response.content).toBeCalledWith(200, 'Response Content');
+    expect(response.prepare).toBeCalledWith(200, 'Response Content');
   });
 
   it('can process UPDATE functions', async () => {
@@ -179,7 +179,7 @@ describe('controller', () => {
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
-    expect(response.content).toBeCalledWith(204, 'Response Content');
+    expect(response.prepare).toBeCalledWith(204, 'Response Content');
   });
 
   it('can process DELETE functions', async () => {
@@ -195,34 +195,34 @@ describe('controller', () => {
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
-    expect(response.content).toBeCalledWith(204, 'Response Content');
+    expect(response.prepare).toBeCalledWith(204, 'Response Content');
   });
 
   it('can handle plain object output', async () => {
     const options = { defaultStatusCode: 200 };
     const output = { key: 'value' };
     await (controller as any).processOutput(output, response, options);
-    expect(response.content).toBeCalledWith(200, output);
+    expect(response.prepare).toBeCalledWith(200, output);
   });
 
   it('can handle array output', async () => {
     const options = { defaultStatusCode: 200 };
     const output = [1, 2, 3];
     await (controller as any).processOutput(output, response, options);
-    expect(response.content).toBeCalledWith(200, output);
+    expect(response.prepare).toBeCalledWith(200, output);
   });
 
   it('can handle async function output', async () => {
     const options = { defaultStatusCode: 200 };
     const output = async () => 'value';
     await (controller as any).processOutput(output, response, options);
-    expect(response.content).toBeCalledWith(200, await output());
+    expect(response.prepare).toBeCalledWith(200, await output());
   });
 
   it('can handle promise output', async () => {
     const options = { defaultStatusCode: 200 };
     const output = Promise.resolve('value');
     await (controller as any).processOutput(output, response, options);
-    expect(response.content).toBeCalledWith(200, await output);
+    expect(response.prepare).toBeCalledWith(200, await output);
   });
 });

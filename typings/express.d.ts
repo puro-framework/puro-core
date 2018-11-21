@@ -32,6 +32,7 @@ declare global {
      * It represents the HTTP request.
      */
     export interface Request {
+      bucket: any;
       user: any;
       entities: any;
     }
@@ -43,7 +44,7 @@ declare global {
       /**
        * Sets the content of the response.
        */
-      content(code: number, body: any, hints?: HttpExceptionHints): Response;
+      prepare(code: number, body: any, hints?: HttpExceptionHints): Response;
     }
   }
 }

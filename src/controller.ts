@@ -124,6 +124,6 @@ export abstract class Controller {
 
     // TODO: handle entities here
 
-    response.content(options.defaultStatusCode, output);
+    response.prepare(options.defaultStatusCode, output);
   }
 }

@@ -57,13 +57,18 @@ describe('http', () => {
   });
 
   it('can handle Request', async () => {
+    request.query = { a: 1, b: 1, c: 1 };
+    request.body = { b: 2, c: 2 };
+    request.params = { c: 3 };
+
     await mock<Middleware>(requestHandler)(request, response, next);
+    expect(request.bucket).toEqual({ a: 1, b: 2, c: 3 });
     expect(next).toBeCalled();
   });
 
   it('can handle Response', async () => {
     await mock<Middleware>(responseHandler)(request, response, next);
-    expect(typeof response.content).toBe('function');
+    expect(typeof response.prepare).toBe('function');
     expect(next).toBeCalled();
 
     const responseHints = {
@@ -72,7 +77,7 @@ describe('http', () => {
       hint3: ['message3']
     };
 
-    response.content(123, 'Response Content', responseHints);
+    response.prepare(123, 'Response Content', responseHints);
 
     expect(response.status).toBeCalledWith(123);
     expect(response.send).toBeCalledWith({
@@ -96,7 +101,7 @@ describe('http', () => {
     );
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(
+    expect(response.prepare).toBeCalledWith(
       123,
       'Custom Exception',
       exceptionHints
@@ -107,14 +112,14 @@ describe('http', () => {
     const exception = new BadRequestException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(400, 'Bad Request', undefined);
+    expect(response.prepare).toBeCalledWith(400, 'Bad Request', undefined);
   });
 
   it('can handle InvalidParameterException', async () => {
     const exception = new InvalidParameterException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(
+    expect(response.prepare).toBeCalledWith(
       400,
       'Invalid Parameter',
       undefined
@@ -125,21 +130,21 @@ describe('http', () => {
     const exception = new AccessDeniedHttpException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(403, 'Forbidden', undefined);
+    expect(response.prepare).toBeCalledWith(403, 'Forbidden', undefined);
   });
 
   it('can handle NotFoundHttpException', async () => {
     const exception = new NotFoundHttpException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(404, 'Not Found', undefined);
+    expect(response.prepare).toBeCalledWith(404, 'Not Found', undefined);
   });
 
   it('can handle MethodNotAllowedHttpException', async () => {
     const exception = new MethodNotAllowedHttpException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(
+    expect(response.prepare).toBeCalledWith(
       405,
       'Method Not Allowed',
       undefined
@@ -150,7 +155,7 @@ describe('http', () => {
     const exception = new Error('Internal Error');
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.content).toBeCalledWith(
+    expect(response.prepare).toBeCalledWith(
       500,
       'Internal Server Error',
       undefined
@@ -161,6 +166,6 @@ describe('http', () => {
 
   it('can handle native not found exceptions', async () => {
     await mock<Middleware>(error404Handler)(request, response);
-    expect(response.content).toBeCalledWith(404, 'Not Found');
+    expect(response.prepare).toBeCalledWith(404, 'Not Found');
   });
 });

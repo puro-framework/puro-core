@@ -112,6 +112,12 @@ export const requestHandler = async (
   response: Response,
   next: NextFunction
 ) => {
+  request.bucket = Object.assign(
+    {},
+    request.query,
+    request.body,
+    request.params
+  );
   next();
 };
 
@@ -124,7 +130,7 @@ export const responseHandler = async (
   next: NextFunction
 ) => {
   // Add a new method for setting the response content
-  response.content = function(
+  response.prepare = function(
     statusCode: number,
     body: any,
     hints?: HttpExceptionHints
@@ -160,7 +166,7 @@ export const errorHandler = async (
     ];
   }
 
-  response.content(statusCode, message, hints);
+  response.prepare(statusCode, message, hints);
 
   if (statusCode >= 500) {
     console.error(exception);
@@ -171,5 +177,5 @@ export const errorHandler = async (
  * The 404 error handler.
  */
 export const error404Handler = async (request: Request, response: Response) => {
-  response.content(404, 'Not Found');
+  response.prepare(404, 'Not Found');
 };

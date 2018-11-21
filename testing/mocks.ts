@@ -28,12 +28,16 @@ import { HttpExceptionHints } from '@puro/http';
 
 export class Request {
   method?: string;
+  query?: any;
+  body?: any;
+  params?: any;
+  bucket?: any;
   user?: any;
 }
 
 export class Response {
   status = jest.fn<Response>((code: number) => this);
-  content = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
+  prepare = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
   send = jest.fn<Response>((body?: any) => this);
 }
 
