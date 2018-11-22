@@ -38,8 +38,11 @@ $ curl http://127.0.0.1/v1/hello
   "status": 200,
   "content": "Hello John!"
 }
-
 ```
+
+## Under the Hood
+
+![Request - Life Cycle](https://github.com/Wicker25/puro/blob/master/doc/life-cycle.png)
 
 ## Request Validation
 
@@ -69,5 +72,5 @@ TODO
 
 * **Giacomo Trudu** - *Creator, Developer* - [Wicker25](https://github.com/Wicker25)
 
-See also the list of [contributors](https://github.com/udemy/data-table/contributors)
+See also the list of [contributors](https://github.com/Wicker25/puro/contributors)
 who participated in this project.
