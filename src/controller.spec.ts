@@ -199,30 +199,34 @@ describe('controller', () => {
   });
 
   it('can handle plain object output', async () => {
-    const options = { defaultStatusCode: 200 };
     const output = { key: 'value' };
-    await (controller as any).processOutput(output, response, options);
-    expect(response.prepare).toBeCalledWith(200, output);
+    const result = await (controller as any).processOutput(output, response, {
+      defaultStatusCode: 200
+    });
+    expect(result).toEqual(output);
   });
 
   it('can handle array output', async () => {
-    const options = { defaultStatusCode: 200 };
     const output = [1, 2, 3];
-    await (controller as any).processOutput(output, response, options);
-    expect(response.prepare).toBeCalledWith(200, output);
+    const result = await (controller as any).processOutput(output, response, {
+      defaultStatusCode: 200
+    });
+    expect(result).toEqual(output);
   });
 
   it('can handle async function output', async () => {
-    const options = { defaultStatusCode: 200 };
     const output = async () => 'value';
-    await (controller as any).processOutput(output, response, options);
-    expect(response.prepare).toBeCalledWith(200, await output());
+    const result = await (controller as any).processOutput(output, response, {
+      defaultStatusCode: 200
+    });
+    expect(result).toEqual(await output());
   });
 
   it('can handle promise output', async () => {
-    const options = { defaultStatusCode: 200 };
     const output = Promise.resolve('value');
-    await (controller as any).processOutput(output, response, options);
-    expect(response.prepare).toBeCalledWith(200, await output);
+    const result = await (controller as any).processOutput(output, response, {
+      defaultStatusCode: 200
+    });
+    expect(result).toEqual(await output);
   });
 });

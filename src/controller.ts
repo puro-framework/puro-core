@@ -83,9 +83,14 @@ export abstract class Controller {
     }
 
     const handler = this.getHandler(options.funct);
-    const output = await handler(request, response);
 
-    await this.processOutput(output, response, options);
+    const output = await this.processOutput(
+      await handler(request, response),
+      response,
+      options
+    );
+
+    response.prepare(options.defaultStatusCode, output);
   }
 
   /**
@@ -117,13 +122,11 @@ export abstract class Controller {
   private async processOutput(output: any, response: Response, options: any) {
     // Handle promises and async functions
     if (output instanceof Promise) {
-      output = await output;
+      return await output;
     } else if (typeof output === 'function') {
-      output = await output();
+      return await output();
     }
 
-    // TODO: handle entities here
-
-    response.prepare(options.defaultStatusCode, output);
+    return output;
   }
 }

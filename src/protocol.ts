@@ -1,5 +1,5 @@
 /**
- * @file src/express.d.ts
+ * @file src/protocol.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -23,30 +23,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import { HttpExceptionHints } from '@puro/http';
-
-declare global {
-  namespace Express {
-    /**
-     * It represents the HTTP request.
-     */
-    export interface Request {
-      bucket: any;
-      user: any;
-      entities: any;
-
-      prepare(schema: any): Request;
-    }
-
-    /**
-     * It represents the HTTP response that will be sent.
-     */
-    export interface Response {
-      /**
-       * Sets the content of the response.
-       */
-      prepare(code: number, body: any, hints?: HttpExceptionHints): Response;
-    }
-  }
-}
