@@ -56,35 +56,40 @@ describe('http', () => {
     next = jest.fn();
   });
 
-  it('can handle Request', async () => {
+  it('can handle the request', async () => {
     request.query = { a: 1, b: 1, c: 1 };
     request.body = { b: 2, c: 2 };
     request.params = { c: 3 };
+    request.prepare = undefined;
 
     await mock<Middleware>(requestHandler)(request, response, next);
     expect(request.bucket).toEqual({ a: 1, b: 2, c: 3 });
+    expect(typeof request.prepare).toBe('function');
     expect(next).toBeCalled();
   });
 
-  it('can handle Response', async () => {
+  it('can handle the response', async () => {
+    response.prepare = undefined;
+
     await mock<Middleware>(responseHandler)(request, response, next);
     expect(typeof response.prepare).toBe('function');
     expect(next).toBeCalled();
+  });
 
-    const responseHints = {
-      hint1: ['message1'],
-      hint2: ['message2'],
-      hint3: ['message3']
-    };
+  it('can prepare the request', async () => {
+    await mock<Middleware>(requestHandler)(request, response, next);
 
-    response.prepare(123, 'Response Content', responseHints);
+    expect(() => {
+      (request as any).prepare({});
+    }).not.toThrow();
+  });
 
-    expect(response.status).toBeCalledWith(123);
-    expect(response.send).toBeCalledWith({
-      status: 123,
-      content: 'Response Content',
-      hints: responseHints
-    });
+  it('can prepare the response', async () => {
+    await mock<Middleware>(responseHandler)(request, response, next);
+
+    expect(() => {
+      (response as any).prepare(200, 'Response Content', {});
+    }).not.toThrow();
   });
 
   it('can handle HttpException', async () => {

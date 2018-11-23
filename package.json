@@ -17,6 +17,10 @@
     "testMatch": [
       "**/?(*.)+(spec|test).ts?(x)"
     ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/testing/"
+    ],
     "moduleNameMapper": {
       "^@puro/(.*)$": "<rootDir>/src/$1",
       "^@plugins/(.*)$": "<rootDir>/plugins/$1",

@@ -33,12 +33,13 @@ export class Request {
   params?: any;
   bucket?: any;
   user?: any;
+  prepare? = jest.fn<Response>((schema: any) => this);
 }
 
 export class Response {
   status = jest.fn<Response>((code: number) => this);
-  prepare = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
   send = jest.fn<Response>((body?: any) => this);
+  prepare? = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
 }
 
 export interface NextFunction {
@@ -56,4 +57,4 @@ export interface Middleware {
   ): Promise<void>;
 }
 
-export const mock = <T>(target: any) => (target as unknown) as T;
+export const mock = <T = any>(target: any) => (target as unknown) as T;

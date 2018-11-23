@@ -24,6 +24,8 @@
  * SOFTWARE.
  */
 
+import { prepareRequest, prepareResponse } from '@puro/protocol';
+
 import * as Server from 'express';
 import { Request, Response, NextFunction } from 'express';
 
@@ -120,6 +122,11 @@ export const requestHandler = async (
     request.params
   );
 
+  // Add a new method for preparing the request
+  request.prepare = function(schema: any) {
+    return prepareRequest(this, schema);
+  };
+
   next();
 };
 
@@ -131,17 +138,13 @@ export const responseHandler = async (
   response: Response,
   next: NextFunction
 ) => {
-  // Add a new method for setting the response content
+  // Add a new method for preparing the response
   response.prepare = function(
     statusCode: number,
     body: any,
     hints?: HttpExceptionHints
   ) {
-    return this.status(statusCode).send({
-      status: statusCode,
-      content: body,
-      hints: hints
-    });
+    return prepareResponse(response, statusCode, body, hints);
   };
 
   next();

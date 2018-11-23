@@ -1,5 +1,5 @@
 /**
- * @file src/protocol.ts
+ * @file src/protocol.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,34 +24,43 @@
  * SOFTWARE.
  */
 
-import { Request, Response, HttpExceptionHints } from '@puro/http';
-import { Validator } from '@puro/validator';
+import { Request, Response } from '@testing/mocks';
+import { mock } from '@testing/mocks';
 
-/**
- * The validator instance for this module.
- */
-const validator = new Validator();
+import { prepareRequest, prepareResponse } from '@puro/protocol';
 
-/**
- * Prepare the request.
- */
-export const prepareRequest = (request: Request, schema: any): Request => {
-  validator.validateRequest(request, schema);
-  return request;
-};
+describe('protocol', () => {
+  let request: Request;
+  let response: Response;
 
-/**
- * Prepare the response.
- */
-export const prepareResponse = (
-  response: Response,
-  statusCode: number,
-  body: any,
-  hints?: HttpExceptionHints
-): Response => {
-  return response.status(statusCode).send({
-    status: statusCode,
-    content: body,
-    hints: hints
+  beforeEach(() => {
+    request = new Request();
+    response = new Response();
   });
-};
+
+  it('can prepare the request', async () => {
+    request = mock(prepareRequest)(request, {});
+  });
+
+  it('can handle the response', async () => {
+    const responseHints = {
+      hint1: ['message1'],
+      hint2: ['message2'],
+      hint3: ['message3']
+    };
+
+    response = mock(prepareResponse)(
+      response,
+      123,
+      'Response Content',
+      responseHints
+    );
+
+    expect(response.status).toBeCalledWith(123);
+    expect(response.send).toBeCalledWith({
+      status: 123,
+      content: 'Response Content',
+      hints: responseHints
+    });
+  });
+});

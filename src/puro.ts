@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Server, Router } from '@puro/http';
+import { Server } from '@puro/http';
 import { Request, Response, NextFunction } from '@puro/http';
 
 import {
