@@ -31,63 +31,63 @@ import * as validator from 'validator';
 const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
 
 /**
- * This map is used for making the method arguments in validator.js consistent
- * with each other.
- *
- * It follows the format:
- *
- *  {
- *    <method_name>: [<option_name>, ...],
- *    ...
- *  }
- *
- * where the option name `$options` represents the entire options object.
- *
- * The position of the specified option names indicates where the TODO
+ * The constraint methods.
  */
-const ConstraintArgs: { [key: string]: string[] } = {
-  isAfter: ['date'],
-  isAlpha: ['locale'],
-  isAlphanumeric: ['locale'],
-  isAscii: [],
-  isBase64: [],
-  isBefore: ['date'],
-  isBoolean: [],
-  isByteLength: ['$options'],
-  isCreditCard: [],
-  isCurrency: ['$options'],
-  isDecimal: ['$options'],
-  isEmail: ['$options'],
-  isFQDN: ['$options'],
-  isFloat: ['$options'],
-  isHash: ['algorithm'],
-  isHexadecimal: [],
-  isIdentityCard: ['locale'],
-  isIP: ['version'],
-  isIPRange: [],
-  isISO8601: [],
-  isRFC3339: [],
-  isISO31661Alpha2: [],
-  isISO31661Alpha3: [],
-  isIn: ['values'],
-  isInt: ['$options'],
-  isJSON: [],
-  isJWT: [],
-  isLatLong: [],
-  isLength: ['$options'],
-  isLowercase: [],
-  isMACAddress: [],
-  isMimeType: [],
-  isMobilePhone: ['locale', '$options'],
-  isNumeric: ['$options'],
-  isPort: [],
-  isPostalCode: ['locale'],
-  isURL: ['$options'],
-  isUUID: ['version'],
-  isUppercase: [],
-  isWhitelisted: ['chars']
+/* istanbul ignore next */
+const ConstraintMethods: any = {
+  isAfter: (v: string, o: any) => !v.length || validator.isAfter(v, o.date),
+  isAlpha: (v: string, o: any) => !v.length || validator.isAlpha(v, o.locale),
+  isAlphanumeric: (v: string, o: any) =>
+    !v.length || validator.isAlphanumeric(v, o.locale),
+  isAscii: (v: any) => !v.length || validator.isAscii(v),
+  isBase64: (v: any) => !v.length || validator.isBase64(v),
+  isBefore: (v: string, o: any) => !v.length || validator.isBefore(v, o.date),
+  isBoolean: (v: any) => !v.length || validator.isBoolean(v),
+  isByteLength: (v: string, o: any) =>
+    !v.length || validator.isByteLength(v, o),
+  isCreditCard: (v: any) => !v.length || validator.isCreditCard(v),
+  isCurrency: (v: string, o: any) => !v.length || validator.isCurrency(v, o),
+  isDecimal: (v: string, o: any) => !v.length || validator.isDecimal(v, o),
+  isEmail: (v: string, o: any) => !v.length || validator.isEmail(v, o),
+  isFQDN: (v: string, o: any) => !v.length || validator.isFQDN(v, o),
+  isFloat: (v: string, o: any) => !v.length || validator.isFloat(v, o),
+  isHash: (v: string, o: any) => !v.length || validator.isHash(v, o.algorithm),
+  isHexadecimal: (v: any) => !v.length || validator.isHexadecimal(v),
+  isIdentityCard: (v: string, o: any) =>
+    !v.length || (validator as any).isIdentityCard(v, o.locale),
+  isIP: (v: string, o: any) => !v.length || validator.isIP(v, o.version),
+  isIPRange: (v: any) => !v.length || (validator as any).isIPRange(v),
+  isISO8601: (v: any) => !v.length || validator.isISO8601(v),
+  isRequired: (v: any) => v && v.length > 0,
+  isRFC3339: (v: any) => !v.length || (validator as any).isRFC3339(v),
+  isISO31661Alpha2: (v: any) => !v.length || validator.isISO31661Alpha2(v),
+  isISO31661Alpha3: (v: any) =>
+    !v.length || (validator as any).isISO31661Alpha3(v),
+  isIn: (v: string, o: any) => !v.length || validator.isIn(v, o.values),
+  isInt: (v: string, o: any) => !v.length || validator.isInt(v, o),
+  isJSON: (v: any) => !v.length || validator.isJSON(v),
+  isJWT: (v: any) => !v.length || (validator as any).isJWT(v),
+  isLatLong: (v: any) => !v.length || validator.isLatLong(v),
+  isLength: (v: string, o: any) => !v.length || validator.isLength(v, o),
+  isLowercase: (v: any) => !v.length || validator.isLowercase(v),
+  isMACAddress: (v: any) => !v.length || validator.isMACAddress(v),
+  isMimeType: (v: any) => !v.length || validator.isMimeType(v),
+  isMobilePhone: (v: string, o: any) =>
+    !v.length || validator.isMobilePhone(v, o.locale, o),
+  isNumeric: (v: string, o: any) => !v.length || validator.isNumeric(v, o),
+  isPort: (v: any) => !v.length || validator.isPort(v),
+  isPostalCode: (v: string, o: any) =>
+    !v.length || validator.isPostalCode(v, o.locale),
+  isURL: (v: string, o: any) => !v.length || validator.isURL(v, o),
+  isUUID: (v: string, o: any) => !v.length || validator.isUUID(v, o.version),
+  isUppercase: (v: any) => !v.length || validator.isUppercase(v),
+  isWhitelisted: (v: string, o: any) =>
+    !v.length || validator.isWhitelisted(v, o.chars)
 };
 
+/**
+ * The constraint hints.
+ */
 const ConstraintHints: { [key: string]: string } = {
   isAfter: 'The parameter must be a date after %date%',
   isAlpha: 'The parameter must contain only letters',
@@ -109,6 +109,7 @@ const ConstraintHints: { [key: string]: string } = {
   isIP: 'The parameter must be a valid IP address',
   isIPRange: 'The parameter must be a valid IP address range',
   isISO8601: 'The parameter must be a valid ISO 8601 date',
+  isRequired: 'The parameter is required',
   isRFC3339: 'The parameter must be a valid RFC 3339 date',
   isISO31661Alpha2:
     'The parameter must be a valid ISO 3166-1 alpha-2 country code',
@@ -134,68 +135,6 @@ const ConstraintHints: { [key: string]: string } = {
 };
 
 /**
- * The constraint validator.
- */
-export class ConstraintValidator {
-  method: Function;
-  args: string[];
-  hint: string;
-
-  /**
-   * Constructor method.
-   */
-  constructor(name: string, options: any) {
-    this.method = this.prepareMethod(name);
-    this.args = this.prepareArgs(name, options);
-    this.hint = this.prepareHint(name, options);
-  }
-
-  /**
-   * Validates a value.
-   */
-  validate(value: any) {
-    return this.method.apply(null, [value].concat(this.args));
-  }
-
-  /**
-   * Prepares the validator method.
-   */
-  private prepareMethod(constraint: string) {
-    const method = (validator as any)[constraint];
-
-    if (!method) {
-      throw new Error(`The constraint "${constraint}" does not exist`);
-    }
-
-    return method;
-  }
-
-  /**
-   * Prepares the arguments for the validator method.
-   */
-  private prepareArgs(constraint: string, options: any) {
-    return ConstraintArgs[constraint].reduce((output: any, arg: string) => {
-      if (arg === '$options') {
-        output.push(options);
-      } else {
-        output.push(options[arg]);
-      }
-      return output;
-    }, []);
-  }
-
-  /**
-   * Prepares the hint message.
-   */
-  private prepareHint(constraint: string, options: any) {
-    return ConstraintHints[constraint].replace(
-      ConstraintHintPlaceholderRe,
-      (match, placeholder) => options[placeholder]
-    );
-  }
-}
-
-/**
  * The validator.
  */
 export class Validator {
@@ -204,13 +143,16 @@ export class Validator {
    */
   validateValue(value: string, constraints: any): string[] {
     return Object.keys(constraints).reduce((hints: string[], name: string) => {
-      const constraintValidator = new ConstraintValidator(
-        name,
-        constraints[name]
-      );
+      const method = ConstraintMethods[name];
 
-      if (!constraintValidator.validate(value)) {
-        return hints.concat(constraintValidator.hint);
+      if (!method) {
+        throw new Error(`The constraint "${name}" does not exist`);
+      }
+
+      const options = constraints[name];
+
+      if (!method(value, options)) {
+        return hints.concat(this.prepareHint(name, options));
       }
 
       return hints;
@@ -223,7 +165,7 @@ export class Validator {
   validateRequest(request: Request, schema: any) {
     return Object.keys(schema).reduce((output: any, name: string) => {
       const hints = this.validateValue(
-        String(request.bucket[name]),
+        String(request.bucket[name] || ''),
         schema[name]
       );
 
@@ -233,5 +175,15 @@ export class Validator {
 
       return output;
     }, {});
+  }
+
+  /**
+   * Prepares the hint message.
+   */
+  private prepareHint(constraint: string, options: any) {
+    return ConstraintHints[constraint].replace(
+      ConstraintHintPlaceholderRe,
+      (match, placeholder) => options[placeholder]
+    );
   }
 }

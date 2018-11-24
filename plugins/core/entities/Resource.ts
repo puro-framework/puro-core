@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { schema } from '@puro/controller';
+import { schema } from '@puro/protocol';
 
 import { PrimaryGeneratedColumn, Column } from 'typeorm';
 import { BeforeInsert, BeforeUpdate, BeforeRemove } from 'typeorm';

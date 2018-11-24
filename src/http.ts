@@ -114,14 +114,6 @@ export const requestHandler = async (
   response: Response,
   next: NextFunction
 ) => {
-  // Fill the bucket property with all request data
-  request.bucket = Object.assign(
-    {},
-    request.query,
-    request.body,
-    request.params
-  );
-
   // Add a new method for preparing the request
   request.prepare = function(schema: any) {
     return prepareRequest(this, schema);

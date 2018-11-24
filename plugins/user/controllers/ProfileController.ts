@@ -25,7 +25,8 @@
  */
 
 import { Request } from '@puro/http';
-import { Controller, schema } from '@puro/controller';
+import { Controller } from '@puro/controller';
+import { schema } from '@puro/protocol';
 
 const updateschema = {
   displayName: {

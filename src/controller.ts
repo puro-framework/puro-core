@@ -30,18 +30,6 @@ import { MethodNotAllowedHttpException } from '@puro/http';
 import { container } from '@puro/container';
 
 /**
- * This annotation defines what is part of the API schema.
- */
-export const schema = (rules?: any): Function => {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    target.schema = Object.assign(target.schema || {}, {
-      [propertyKey]: rules
-    });
-    return target;
-  };
-};
-
-/**
  * The controller class.
  */
 export abstract class Controller {
@@ -50,19 +38,19 @@ export abstract class Controller {
    */
   static HttpMethodOptions: { [key: string]: any } = {
     POST: {
-      funct: 'create',
+      hook: 'create',
       defaultStatusCode: 201
     },
     GET: {
-      funct: 'read',
+      hook: 'read',
       defaultStatusCode: 200
     },
     PUT: {
-      funct: 'update',
+      hook: 'update',
       defaultStatusCode: 204
     },
     DELETE: {
-      funct: 'remove',
+      hook: 'remove',
       defaultStatusCode: 204
     }
   };
@@ -82,7 +70,10 @@ export abstract class Controller {
       throw new MethodNotAllowedHttpException();
     }
 
-    const handler = this.getHandler(options.funct);
+    const handler = this.getHandler(options.hook);
+
+    const schema = (this as any).schema || {};
+    request.prepare(schema[options.hook]);
 
     const output = await this.processOutput(
       await handler(request, response),
@@ -96,24 +87,22 @@ export abstract class Controller {
   /**
    * The handler methods you need to override.
    */
-  async create(request: Request, response: Response): Promise<any> {
-    throw new Error('Not Implemented');
-  }
-  async read(request: Request, response: Response): Promise<any> {
-    throw new Error('Not Implemented');
-  }
-  async update(request: Request, response: Response): Promise<any> {
-    throw new Error('Not Implemented');
-  }
-  async remove(request: Request, response: Response): Promise<any> {
-    throw new Error('Not Implemented');
-  }
+  async create?(request: Request, response: Response): Promise<any>;
+  async read?(request: Request, response: Response): Promise<any>;
+  async update?(request: Request, response: Response): Promise<any>;
+  async remove?(request: Request, response: Response): Promise<any>;
 
   /**
    * Returns the method handler by name.
    */
   private getHandler(name: string) {
-    return (this as any)[name].bind(this);
+    const handler = (this as any)[name];
+
+    if (!handler) {
+      throw new MethodNotAllowedHttpException();
+    }
+
+    return handler.bind(this);
   }
 
   /**

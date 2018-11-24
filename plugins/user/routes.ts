@@ -31,7 +31,7 @@ import { UserCollectionController } from './controllers/UserCollectionController
 import { ProfileController } from './controllers/ProfileController';
 
 export const routes: Route[] = [
-  { path: '/users', controller: UserCollectionController },
   { path: '/users/me', controller: ProfileController },
-  { path: '/users/:userId', controller: UserController }
+  { path: '/users/:userId', controller: UserController },
+  { path: '/users', controller: UserCollectionController }
 ];

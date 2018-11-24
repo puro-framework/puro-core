@@ -27,7 +27,8 @@
 import { Request, Response } from '@testing/mocks';
 import { mock } from '@testing/mocks';
 
-import { prepareRequest, prepareResponse } from '@puro/protocol';
+import { InvalidParameterException } from '@puro/http';
+import { prepareRequest, prepareResponse, schema } from '@puro/protocol';
 
 describe('protocol', () => {
   let request: Request;
@@ -39,7 +40,12 @@ describe('protocol', () => {
   });
 
   it('can prepare the request', async () => {
+    request.query = { a: 1, b: 1, c: 1 };
+    request.body = { b: 2, c: 2 };
+    request.params = { c: 3 };
+
     request = mock(prepareRequest)(request, {});
+    expect(request.bucket).toEqual({ a: 1, b: 2, c: 3 });
   });
 
   it('can handle the response', async () => {
@@ -61,6 +67,25 @@ describe('protocol', () => {
       status: 123,
       content: 'Response Content',
       hints: responseHints
+    });
+  });
+
+  it('can handle invalid parameters', async () => {
+    try {
+      request = mock(prepareRequest)(request, { param: { isRequired: {} } });
+    } catch (e) {
+      expect(e).toBeInstanceOf(InvalidParameterException);
+    }
+  });
+
+  it('can annotate Controller handlers', async () => {
+    class TestController {
+      @schema({ key: 'value' })
+      create(request: Request) {}
+    }
+
+    expect((new TestController() as any).schema).toEqual({
+      create: { key: 'value' }
     });
   });
 });

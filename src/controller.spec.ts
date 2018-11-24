@@ -27,21 +27,9 @@
 import { Request, Response, Middleware } from '@testing/mocks';
 import { mock } from '@testing/mocks';
 
+import { Request as HttpRequest } from '@puro/http';
 import { MethodNotAllowedHttpException } from '@puro/http';
-import { Controller, schema } from '@puro/controller';
-
-describe('schema', () => {
-  it('can annotate methods', async () => {
-    class TestController {
-      @schema({ key: 'value' })
-      create(request: Request) {}
-    }
-
-    expect((new TestController() as any).schema).toEqual({
-      create: { key: 'value' }
-    });
-  });
-});
+import { Controller } from '@puro/controller';
 
 describe('controller', () => {
   let request: Request;
@@ -94,7 +82,7 @@ describe('controller', () => {
       request.method = 'POST';
       await mock<Middleware>(controller.handleRequest)(request, response);
     } catch (e) {
-      expect(e).toEqual(new Error('Not Implemented'));
+      expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
   });
 
@@ -103,7 +91,7 @@ describe('controller', () => {
       request.method = 'GET';
       await mock<Middleware>(controller.handleRequest)(request, response);
     } catch (e) {
-      expect(e).toEqual(new Error('Not Implemented'));
+      expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
   });
 
@@ -112,7 +100,7 @@ describe('controller', () => {
       request.method = 'PUT';
       await mock<Middleware>(controller.handleRequest)(request, response);
     } catch (e) {
-      expect(e).toEqual(new Error('Not Implemented'));
+      expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
   });
 
@@ -121,7 +109,7 @@ describe('controller', () => {
       request.method = 'DELETE';
       await mock<Middleware>(controller.handleRequest)(request, response);
     } catch (e) {
-      expect(e).toEqual(new Error('Not Implemented'));
+      expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
   });
 
@@ -138,7 +126,7 @@ describe('controller', () => {
     request.method = 'POST';
 
     class CreateController extends Controller {
-      async create(request: Request) {
+      async create(request: HttpRequest) {
         return 'Response Content';
       }
     }
@@ -154,7 +142,7 @@ describe('controller', () => {
     request.method = 'GET';
 
     class UpdateController extends Controller {
-      async read(request: Request) {
+      async read(request: HttpRequest) {
         return 'Response Content';
       }
     }
@@ -170,7 +158,7 @@ describe('controller', () => {
     request.method = 'PUT';
 
     class UpdateController extends Controller {
-      async update(request: Request) {
+      async update(request: HttpRequest) {
         return 'Response Content';
       }
     }
@@ -186,7 +174,7 @@ describe('controller', () => {
     request.method = 'DELETE';
 
     class DeleteController extends Controller {
-      async remove(request: Request) {
+      async remove(request: HttpRequest) {
         return 'Response Content';
       }
     }

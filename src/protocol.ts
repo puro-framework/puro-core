@@ -24,7 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request, Response, HttpExceptionHints } from '@puro/http';
+import { Request, Response } from '@puro/http';
+import { InvalidParameterException, HttpExceptionHints } from '@puro/http';
 import { Validator } from '@puro/validator';
 
 /**
@@ -36,7 +37,21 @@ const validator = new Validator();
  * Prepare the request.
  */
 export const prepareRequest = (request: Request, schema: any): Request => {
-  validator.validateRequest(request, schema);
+  // Fill the property bucket with all request data
+  request.bucket = Object.assign(
+    {},
+    request.query,
+    request.body,
+    request.params
+  );
+
+  // Validate the request by using the schema
+  const hints = validator.validateRequest(request, schema);
+
+  if (Object.keys(hints).length > 0) {
+    throw new InvalidParameterException('Invalid Parameter', hints);
+  }
+
   return request;
 };
 
@@ -54,4 +69,16 @@ export const prepareResponse = (
     content: body,
     hints: hints
   });
+};
+
+/**
+ * This annotation defines what is part of the API schema.
+ */
+export const schema = (rules?: any): Function => {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    target.schema = Object.assign(target.schema || {}, {
+      [propertyKey]: rules
+    });
+    return target;
+  };
 };

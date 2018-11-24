@@ -57,13 +57,9 @@ describe('http', () => {
   });
 
   it('can handle the request', async () => {
-    request.query = { a: 1, b: 1, c: 1 };
-    request.body = { b: 2, c: 2 };
-    request.params = { c: 3 };
     request.prepare = undefined;
 
     await mock<Middleware>(requestHandler)(request, response, next);
-    expect(request.bucket).toEqual({ a: 1, b: 2, c: 3 });
     expect(typeof request.prepare).toBe('function');
     expect(next).toBeCalled();
   });
