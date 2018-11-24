@@ -24,15 +24,15 @@
  * SOFTWARE.
  */
 
-import { schema } from '@puro/protocol';
+import { Schema } from '../../../src/protocol';
 
-import { Resource } from '@plugins/core/entities/Resource';
+import { Resource } from '../../core/entities/Resource';
 
 import { Entity, Column } from 'typeorm';
 
 @Entity()
 export class User extends Resource {
-  @schema()
+  @Schema()
   @Column({ length: 254 })
   email!: string;
 
@@ -42,15 +42,15 @@ export class User extends Resource {
   @Column({ length: 40 })
   salt!: string;
 
-  @schema()
+  @Schema()
   @Column({ length: 128 })
   displayName!: string;
 
-  @schema()
+  @Schema()
   @Column({ length: 64 })
   firstName!: string;
 
-  @schema()
+  @Schema()
   @Column({ length: 64 })
   lastName!: string;
 }

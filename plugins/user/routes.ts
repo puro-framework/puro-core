@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Route } from '@puro/plugin';
+import { Route } from '../../src/plugin';
 
 import { UserController } from './controllers/UserController';
 import { UserCollectionController } from './controllers/UserCollectionController';

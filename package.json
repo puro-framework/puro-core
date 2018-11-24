@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Puro REST Framework",
   "license": "MIT",
-  "main": "./lib/index.js",
   "engines": {
     "node": "8"
   },
@@ -20,12 +19,7 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/testing/"
-    ],
-    "moduleNameMapper": {
-      "^@puro/(.*)$": "<rootDir>/src/$1",
-      "^@plugins/(.*)$": "<rootDir>/plugins/$1",
-      "^@testing/(.*)$": "<rootDir>/testing/$1"
-    }
+    ]
   },
   "husky": {
     "hooks": {

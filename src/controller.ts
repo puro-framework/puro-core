@@ -24,10 +24,11 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '@puro/http';
-import { MethodNotAllowedHttpException } from '@puro/http';
+import { Request, Response } from './http';
+import { MethodNotAllowedHttpException } from './http';
 
-import { container } from '@puro/container';
+import { getSchema } from './protocol';
+import { container } from './container';
 
 /**
  * The controller class.
@@ -72,8 +73,8 @@ export abstract class Controller {
 
     const handler = this.getHandler(options.hook);
 
-    const schema = (this as any).schema || {};
-    request.prepare(schema[options.hook]);
+    const methodSchema = getSchema(this, options.hook) || {};
+    request.prepare(methodSchema);
 
     const output = await this.processOutput(
       await handler(request, response),

@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { HttpExceptionHints } from '@puro/http';
+import { HttpExceptionHints } from '../src/http';
 
 export class Request {
   method?: string;

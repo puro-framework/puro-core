@@ -24,11 +24,11 @@
  * SOFTWARE.
  */
 
-import { Request } from '@puro/http';
-import { Controller } from '@puro/controller';
-import { schema } from '@puro/protocol';
+import { Request } from '../../../src/http';
+import { Controller } from '../../../src/controller';
+import { Schema } from '../../../src/protocol';
 
-const updateschema = {
+const updateSchema = {
   displayName: {
     isName: true,
     isLength: { min: 5, max: 128 }
@@ -50,7 +50,7 @@ export class ProfileController extends Controller {
     return request.user;
   }
 
-  @schema(updateschema)
+  @Schema(updateSchema)
   async update(request: Request) {
     Object.assign(request.user, request.params);
 

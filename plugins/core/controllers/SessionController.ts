@@ -1,5 +1,5 @@
 /**
- * @file core/controllers/AuthController.ts
+ * @file core/controllers/SessionController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '@puro/http';
-import { Controller } from '@puro/controller';
+import { Request } from '../../../src/http';
+import { Controller } from '../../../src/controller';
 
 export class SessionController extends Controller {
   async read(request: Request) {

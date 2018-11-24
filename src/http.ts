@@ -24,13 +24,15 @@
  * SOFTWARE.
  */
 
-import { prepareRequest, prepareResponse } from '@puro/protocol';
+import { prepareRequest, prepareResponse } from './protocol';
 
 import * as Server from 'express';
 import { Request, Response, NextFunction } from 'express';
 
 export { Server, Request, Response, NextFunction };
 export { Router } from 'express';
+
+import '../typings/express';
 
 /**
  * It represents a list of hints for an HTTP exception (i.e. a list of invalid

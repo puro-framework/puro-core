@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction, Middleware } from '@testing/mocks';
-import { mock } from '@testing/mocks';
+import { Request, Response, NextFunction, Middleware } from '../testing/mocks';
+import { mock } from '../testing/mocks';
 
 import {
   HttpException,
@@ -34,14 +34,14 @@ import {
   AccessDeniedHttpException,
   NotFoundHttpException,
   MethodNotAllowedHttpException
-} from '@puro/http';
+} from './http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from '@puro/http';
+} from './http';
 
 describe('http', () => {
   let request: Request;

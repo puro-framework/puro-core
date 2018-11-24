@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Route } from '@puro/plugin';
+import { Route } from '../../src/plugin';
 
 import { StatusController } from './controllers/StatusController';
 import { SessionController } from './controllers/SessionController';

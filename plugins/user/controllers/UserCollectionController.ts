@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '@puro/http';
-import { Controller } from '@puro/controller';
+import { Request } from '../../../src/http';
+import { Controller } from '../../../src/controller';
 
 export class UserCollectionController extends Controller {
   async read(request: Request) {

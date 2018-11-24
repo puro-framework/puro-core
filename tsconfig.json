@@ -1,20 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2017",
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
+    "baseUrl": ".",
     "outDir": "lib",
     "strict": true,
     "noImplicitAny": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "@puro/*": ["src/*"],
-      "@plugins/*": ["plugins/*"],
-      "@testing/*": ["testing/*"]
-    }
+    "experimentalDecorators": true
   },
   "include": [
     "src/**/*",

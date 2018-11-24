@@ -1,5 +1,5 @@
 /**
- * @file src/container.ts
+ * @file src/database.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,27 +24,39 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection } from './database';
+const db: any = {
+  type: 'mariadb',
+  host: '127.0.0.1',
+  port: 3306,
+  username: 'root',
+  password: 'root',
+  database: 'todo_db',
+  entities: [
+    'src/*/entities/*.ts',
+    'plugins/*/entities/*.ts',
+    'src/todo/entities/*.ts'
+  ],
+  synchronize: true,
+  logging: false
+};
 
-class Container {
-  protected services: any = {
-    connection: async () => {
-      return getConnection();
-    }
-  };
+import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
 
-  registerService(name: string, handler: Function) {
-    this.services[name] = handler;
+const connectionManager = new ConnectionManager();
+let connection: Connection;
+
+export const getConnection = async () => {
+  connection = connectionManager.create(db as ConnectionOptions);
+
+  if (!connection.isConnected) {
+    await connection.connect();
   }
 
-  async getService(name: string) {
-    // TODO: throw an exception here
-    return this.services[name].call(null);
-  }
+  return connection;
+};
 
-  shoutdown() {
-    return closeConnection();
+export const closeConnection = async () => {
+  if (connection.isConnected) {
+    await connection.close();
   }
-}
-
-export const container = new Container();
+};

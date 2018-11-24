@@ -24,9 +24,30 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '@puro/http';
-import { InvalidParameterException, HttpExceptionHints } from '@puro/http';
-import { Validator } from '@puro/validator';
+import { Request, Response } from './http';
+import { InvalidParameterException, HttpExceptionHints } from './http';
+import { Validator } from './validator';
+
+import 'reflect-metadata';
+
+/**
+ * The schema symbol.
+ */
+const schemaSymbol = Symbol('schema');
+
+/**
+ * Sets the schema on an object property/method.
+ */
+export const Schema = (rules?: any): Function => {
+  return Reflect.metadata(schemaSymbol, rules);
+};
+
+/**
+ * Gets the schema from an object property/method.
+ */
+export const getSchema = (target: any, propertyKey: string) => {
+  return Reflect.getMetadata(schemaSymbol, target, propertyKey);
+};
 
 /**
  * The validator instance for this module.
@@ -69,16 +90,4 @@ export const prepareResponse = (
     content: body,
     hints: hints
   });
-};
-
-/**
- * This annotation defines what is part of the API schema.
- */
-export const schema = (rules?: any): Function => {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    target.schema = Object.assign(target.schema || {}, {
-      [propertyKey]: rules
-    });
-    return target;
-  };
 };

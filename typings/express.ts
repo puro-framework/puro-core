@@ -1,5 +1,5 @@
 /**
- * @file src/express.d.ts
+ * @file src/express.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { HttpExceptionHints } from '@puro/http';
+import { HttpExceptionHints } from '../src/http';
 
 declare global {
   namespace Express {

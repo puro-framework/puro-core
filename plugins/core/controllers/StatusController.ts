@@ -1,5 +1,5 @@
 /**
- * @file core/controllers/VersionController.ts
+ * @file core/controllers/StatusController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Controller } from '@puro/controller';
+import { Controller } from '../../../src/controller';
 
 export class StatusController extends Controller {
   async read() {

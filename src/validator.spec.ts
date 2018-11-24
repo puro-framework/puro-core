@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '@testing/mocks';
-import { Validator } from '@puro/validator';
+import { Request } from '../testing/mocks';
+import { Validator } from './validator';
 
 describe('validator', () => {
   let validator: Validator;

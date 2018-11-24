@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Request } from '@puro/http';
+import { Request } from './http';
 
 import * as validator from 'validator';
 

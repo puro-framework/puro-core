@@ -24,18 +24,18 @@
  * SOFTWARE.
  */
 
-import { Server } from '@puro/http';
-import { Request, Response, NextFunction } from '@puro/http';
+import { Server } from './http';
+import { Request, Response, NextFunction } from './http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from '@puro/http';
+} from './http';
 
-import { container } from '@puro/container';
-import { Plugin } from '@puro/plugin';
+import { container } from './container';
+import { Plugin } from './plugin';
 
 /**
  * The definition for Puro's server options.

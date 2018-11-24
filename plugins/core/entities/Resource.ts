@@ -24,13 +24,13 @@
  * SOFTWARE.
  */
 
-import { schema } from '@puro/protocol';
+import { Schema } from '../../../src/protocol';
 
 import { PrimaryGeneratedColumn, Column } from 'typeorm';
 import { BeforeInsert, BeforeUpdate, BeforeRemove } from 'typeorm';
 
 export class Resource {
-  @schema()
+  @Schema()
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -44,7 +44,7 @@ export class Resource {
   deletedOn!: Date;
 
   @Column()
-  isDeleted!: boolean;
+  isDeleted: boolean = false;
 
   @BeforeInsert()
   updateCreatedOn() {

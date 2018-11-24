@@ -24,12 +24,12 @@
  * SOFTWARE.
  */
 
-import { Request, Response, Middleware } from '@testing/mocks';
-import { mock } from '@testing/mocks';
+import { Request, Response, Middleware } from '../testing/mocks';
+import { mock } from '../testing/mocks';
 
-import { Request as HttpRequest } from '@puro/http';
-import { MethodNotAllowedHttpException } from '@puro/http';
-import { Controller } from '@puro/controller';
+import { Request as HttpRequest } from './http';
+import { MethodNotAllowedHttpException } from './http';
+import { Controller } from './controller';
 
 describe('controller', () => {
   let request: Request;

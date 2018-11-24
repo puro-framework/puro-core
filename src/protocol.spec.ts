@@ -24,11 +24,12 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '@testing/mocks';
-import { mock } from '@testing/mocks';
+import { Request, Response } from '../testing/mocks';
+import { mock } from '../testing/mocks';
 
-import { InvalidParameterException } from '@puro/http';
-import { prepareRequest, prepareResponse, schema } from '@puro/protocol';
+import { InvalidParameterException } from './http';
+
+import { prepareRequest, prepareResponse, Schema, getSchema } from './protocol';
 
 describe('protocol', () => {
   let request: Request;
@@ -37,6 +38,16 @@ describe('protocol', () => {
   beforeEach(() => {
     request = new Request();
     response = new Response();
+  });
+
+  it('can annotate controller handlers', async () => {
+    class TestController {
+      @Schema({ key: 'value' })
+      create(request: Request) {}
+    }
+
+    const createSchema = getSchema(new TestController(), 'create');
+    expect(createSchema).toEqual({ key: 'value' });
   });
 
   it('can prepare the request', async () => {
@@ -76,16 +87,5 @@ describe('protocol', () => {
     } catch (e) {
       expect(e).toBeInstanceOf(InvalidParameterException);
     }
-  });
-
-  it('can annotate Controller handlers', async () => {
-    class TestController {
-      @schema({ key: 'value' })
-      create(request: Request) {}
-    }
-
-    expect((new TestController() as any).schema).toEqual({
-      create: { key: 'value' }
-    });
   });
 });

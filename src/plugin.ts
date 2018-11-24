@@ -24,8 +24,21 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction, Router } from '@puro/http';
-import { Controller } from '@puro/controller';
+import { Request, Response, NextFunction, Router } from './http';
+import { Controller } from './controller';
+
+import { container } from './container';
+
+// TODO: improve this shit
+// TODO: check for absolute path
+const importModule = (path: string) => {
+  try {
+    return require(path);
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
 
 /**
  * The definition for a route.
@@ -47,21 +60,46 @@ export class Plugin {
    */
   constructor(path: string) {
     this.path = path;
+    this.router = Router();
 
     this.loadRoutes();
+    this.loadServices();
   }
 
   /**
    * Loads the routes from `plugins/routes.ts`.
    */
   private loadRoutes() {
-    const { routes } = require(`${this.path}/routes`);
+    const module = importModule(`${this.path}/routes`);
 
-    this.router = Router();
+    if (!module) {
+      return;
+    }
+
+    const { routes } = module;
+    console.log(`Loading routes for "${this.path}" ...`);
 
     routes.forEach((route: Route) => {
       this.router.use(route.path, this.buildController(route.controller));
     });
+  }
+
+  /**
+   * Loads the services from `plugins/services.ts`.
+   */
+  private loadServices() {
+    const module = importModule(`${this.path}/services`);
+
+    if (!module) {
+      return;
+    }
+
+    console.log(`Loading services for "${this.path}" ...`);
+    const { services } = module;
+
+    for (const name in services) {
+      container.registerService(name, services[name]);
+    }
   }
 
   /**

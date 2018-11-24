@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-import { Request } from '@puro/http';
-import { Controller } from '@puro/controller';
-import { schema } from '@puro/protocol';
+import { Request } from '../../../src/http';
+import { Controller } from '../../../src/controller';
+import { Schema } from '../../../src/protocol';
 
 import { User } from '../entities/User';
 
@@ -37,7 +37,7 @@ const readSchema = {
 };
 
 export class UserController extends Controller {
-  @schema(readSchema)
+  @Schema(readSchema)
   async read(request: Request) {
     return request.entities.user;
   }
