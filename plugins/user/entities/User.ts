@@ -33,24 +33,24 @@ import { Entity, Column } from 'typeorm';
 @Entity()
 export class User extends Resource {
   @schema()
-  @Column('varchar', { length: 254 })
+  @Column({ length: 254 })
   email!: string;
 
-  @Column('varchar', { length: 40 })
+  @Column({ length: 40 })
   password!: string;
 
-  @Column('varchar', { length: 40 })
+  @Column({ length: 40 })
   salt!: string;
 
   @schema()
-  @Column('varchar', { length: 128 })
+  @Column({ length: 128 })
   displayName!: string;
 
   @schema()
-  @Column('varchar', { length: 64 })
+  @Column({ length: 64 })
   firstName!: string;
 
   @schema()
-  @Column('varchar', { length: 64 })
+  @Column({ length: 64 })
   lastName!: string;
 }

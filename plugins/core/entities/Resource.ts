@@ -37,13 +37,13 @@ export class Resource {
   @Column('datetime')
   createdOn!: Date;
 
-  @Column('datetime', { nullable: true })
+  @Column({ nullable: true })
   modifiedOn!: Date;
 
-  @Column('datetime', { nullable: true })
+  @Column({ nullable: true })
   deletedOn!: Date;
 
-  @Column('tinyint', { width: 1, default: 0 })
+  @Column()
   isDeleted!: boolean;
 
   @BeforeInsert()
