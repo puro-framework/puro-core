@@ -26,24 +26,31 @@
 
 import { configs } from './configs';
 
-import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
+import { Connection, ConnectionOptions, createConnection } from 'typeorm';
 
-const connectionManager = new ConnectionManager();
-let connection: Connection;
+/**
+ * The connection instance.
+ */
+let connection: Connection | undefined;
 
+/**
+ * Returns the connection to the database (lazy method).
+ */
 export const getConnection = async () => {
-  if (!connection || !connection.isConnected) {
+  if (!connection) {
     const connectionOptions = configs.get<ConnectionOptions>('database');
-    connection = connectionManager.create(connectionOptions);
-
-    await connection.connect();
+    connection = await createConnection(connectionOptions);
   }
 
   return connection;
 };
 
+/**
+ * Closes the connection to the database.
+ */
 export const closeConnection = async () => {
-  if (connection.isConnected) {
+  if (connection) {
     await connection.close();
+    connection = undefined;
   }
 };
