@@ -26,8 +26,50 @@
 
 import { configs } from '../configs';
 
+import * as fs from 'fs';
+
 describe('configs', () => {
-  it('can TODO', async () => {
-    expect(1).toBe(1);
+  let readFileSyncSpy: Function;
+
+  beforeEach(() => {
+    readFileSyncSpy = spyOn(fs, 'readFileSync').and.returnValue(
+      '{ "a": { "b": { "c": 1 } } }'
+    );
+  });
+
+  afterEach(() => {
+    configs.reload();
+  });
+
+  it('can load the configs from the default path', async () => {
+    configs.get('a');
+    expect(readFileSyncSpy).toBeCalledWith('config/params.json', 'utf8');
+  });
+
+  it('can load the configs from a custom path', async () => {
+    process.env.PURO_PARAMS_PATH = 'custom/path/params.json';
+    configs.get('a');
+    expect(readFileSyncSpy).toBeCalledWith(
+      process.env.PURO_PARAMS_PATH,
+      'utf8'
+    );
+  });
+
+  it('can get a config node according to a path', async () => {
+    const node = configs.get('a.b');
+    expect(node).toEqual({ c: 1 });
+  });
+
+  it('can cache the configs', async () => {
+    configs.get('a');
+    configs.get('a');
+    expect(readFileSyncSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('can force to reload the configs', async () => {
+    configs.get('a');
+    configs.reload();
+    configs.get('a');
+    expect(readFileSyncSpy).toHaveBeenCalledTimes(2);
   });
 });

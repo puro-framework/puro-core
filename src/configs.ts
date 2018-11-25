@@ -44,6 +44,13 @@ class Configs {
   }
 
   /**
+   * Forces to reload the configuration.
+   */
+  reload() {
+    this.data = undefined;
+  }
+
+  /**
    * Lazy-loads the configuration from the files.
    */
   private loadConfig() {
