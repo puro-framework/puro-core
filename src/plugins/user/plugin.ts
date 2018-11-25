@@ -30,7 +30,7 @@ import { ProfileController } from './controllers/ProfileController';
 
 import { Plugin } from '../../plugin';
 
-export default class UserPlugin extends Plugin {
+export class UserPlugin extends Plugin {
   protected getRoutes() {
     return [
       { path: '/users/me', controller: ProfileController },
@@ -39,3 +39,5 @@ export default class UserPlugin extends Plugin {
     ];
   }
 }
+
+export default UserPlugin;

@@ -29,7 +29,7 @@ import { SessionController } from './controllers/SessionController';
 
 import { Plugin } from '../../plugin';
 
-export default class CorePlugin extends Plugin {
+export class CorePlugin extends Plugin {
   protected getRoutes() {
     return [
       { path: '/status', controller: StatusController },
@@ -37,3 +37,5 @@ export default class CorePlugin extends Plugin {
     ];
   }
 }
+
+export default CorePlugin;
