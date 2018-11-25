@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { HttpExceptionHints } from '../src/http';
+import { IHttpExceptionHints } from '../src/http';
 
 export class Request {
   method?: string;
@@ -39,7 +39,9 @@ export class Request {
 export class Response {
   status = jest.fn<Response>((code: number) => this);
   send = jest.fn<Response>((body?: any) => this);
-  prepare? = jest.fn<Response>((body: any, hints?: HttpExceptionHints) => this);
+  prepare? = jest.fn<Response>(
+    (body: any, hints?: IHttpExceptionHints) => this
+  );
 }
 
 export interface NextFunction {

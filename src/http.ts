@@ -38,7 +38,7 @@ import '../typings/express';
  * It represents a list of hints for an HTTP exception (i.e. a list of invalid
  * parameters with errors).
  */
-export interface HttpExceptionHints {
+export interface IHttpExceptionHints {
   [key: string]: string[];
 }
 
@@ -53,9 +53,13 @@ export interface HttpExceptionHints {
  */
 export class HttpException extends Error {
   statusCode: number = 500;
-  hints?: HttpExceptionHints;
+  hints?: IHttpExceptionHints;
 
-  constructor(statusCode: number, message: string, hints?: HttpExceptionHints) {
+  constructor(
+    statusCode: number,
+    message: string,
+    hints?: IHttpExceptionHints
+  ) {
     super(message);
 
     this.statusCode = statusCode;
@@ -67,7 +71,7 @@ export class HttpException extends Error {
  * It represents a standard HTTP status code "400 Bad Request".
  */
 export class BadRequestException extends HttpException {
-  constructor(message = 'Bad Request', hints?: HttpExceptionHints) {
+  constructor(message = 'Bad Request', hints?: IHttpExceptionHints) {
     super(400, message, hints);
   }
 }
@@ -76,7 +80,7 @@ export class BadRequestException extends HttpException {
  * It represents an exception caused by an improper request parameter.
  */
 export class InvalidParameterException extends HttpException {
-  constructor(message = 'Invalid Parameter', hints?: HttpExceptionHints) {
+  constructor(message = 'Invalid Parameter', hints?: IHttpExceptionHints) {
     super(400, message, hints);
   }
 }
@@ -85,7 +89,7 @@ export class InvalidParameterException extends HttpException {
  * It represents a standard HTTP status code "403 Forbidden".
  */
 export class AccessDeniedHttpException extends HttpException {
-  constructor(message = 'Forbidden', hints?: HttpExceptionHints) {
+  constructor(message = 'Forbidden', hints?: IHttpExceptionHints) {
     super(403, message, hints);
   }
 }
@@ -94,7 +98,7 @@ export class AccessDeniedHttpException extends HttpException {
  * It represents a standard HTTP status code "404 Not Found".
  */
 export class NotFoundHttpException extends HttpException {
-  constructor(message = 'Not Found', hints?: HttpExceptionHints) {
+  constructor(message = 'Not Found', hints?: IHttpExceptionHints) {
     super(404, message, hints);
   }
 }
@@ -103,7 +107,7 @@ export class NotFoundHttpException extends HttpException {
  * It represents a standard HTTP status code "405 Method Not Allowed".
  */
 export class MethodNotAllowedHttpException extends HttpException {
-  constructor(message = 'Method Not Allowed', hints?: HttpExceptionHints) {
+  constructor(message = 'Method Not Allowed', hints?: IHttpExceptionHints) {
     super(405, message, hints);
   }
 }
@@ -136,7 +140,7 @@ export const responseHandler = async (
   response.prepare = function(
     statusCode: number,
     body: any,
-    hints?: HttpExceptionHints
+    hints?: IHttpExceptionHints
   ) {
     return prepareResponse(response, statusCode, body, hints);
   };

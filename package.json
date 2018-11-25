@@ -13,9 +13,6 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testMatch": [
-      "**/?(*.)+(spec|test).ts?(x)"
-    ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "<rootDir>/testing/"

@@ -1,5 +1,5 @@
 /**
- * @file src/http.spec.ts
+ * @file src/__tests__/http.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,8 +24,13 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction, Middleware } from '../testing/mocks';
-import { mock } from '../testing/mocks';
+import {
+  Request,
+  Response,
+  NextFunction,
+  Middleware
+} from '../../testing/mocks';
+import { mock } from '../../testing/mocks';
 
 import {
   HttpException,
@@ -34,14 +39,14 @@ import {
   AccessDeniedHttpException,
   NotFoundHttpException,
   MethodNotAllowedHttpException
-} from './http';
+} from '../http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from './http';
+} from '../http';
 
 describe('http', () => {
   let request: Request;

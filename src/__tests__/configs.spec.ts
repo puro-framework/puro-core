@@ -1,5 +1,5 @@
 /**
- * @file src/database.ts
+ * @file src/__tests__/configs.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,26 +24,10 @@
  * SOFTWARE.
  */
 
-import { configs } from './configs';
+import { configs } from '../configs';
 
-import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
-
-const connectionManager = new ConnectionManager();
-let connection: Connection;
-
-export const getConnection = async () => {
-  if (!connection || !connection.isConnected) {
-    const connectionOptions = configs.get<ConnectionOptions>('database');
-    connection = connectionManager.create(connectionOptions);
-
-    await connection.connect();
-  }
-
-  return connection;
-};
-
-export const closeConnection = async () => {
-  if (connection.isConnected) {
-    await connection.close();
-  }
-};
+describe('configs', () => {
+  it('can TODO', async () => {
+    expect(1).toBe(1);
+  });
+});

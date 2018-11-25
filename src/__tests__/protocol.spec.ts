@@ -1,5 +1,5 @@
 /**
- * @file src/protocol.spec.ts
+ * @file src/__tests__/protocol.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,12 +24,17 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '../testing/mocks';
-import { mock } from '../testing/mocks';
+import { Request, Response } from '../../testing/mocks';
+import { mock } from '../../testing/mocks';
 
-import { InvalidParameterException } from './http';
+import { InvalidParameterException } from '../http';
 
-import { prepareRequest, prepareResponse, Schema, getSchema } from './protocol';
+import {
+  prepareRequest,
+  prepareResponse,
+  Schema,
+  getSchema
+} from '../protocol';
 
 describe('protocol', () => {
   let request: Request;

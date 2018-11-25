@@ -1,5 +1,5 @@
 /**
- * @file src/plugin.spec.ts
+ * @file src/__tests__/plugin.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Plugin } from './plugin';
+import { Plugin } from '../plugin';
 
 describe('plugin', () => {
   let plugin: Plugin;

@@ -62,4 +62,4 @@ class Configs {
   }
 }
 
-export default new Configs();
+export const configs = new Configs();

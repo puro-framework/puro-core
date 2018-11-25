@@ -25,9 +25,10 @@
  */
 
 import { Request, Response, NextFunction, Router } from './http';
-import { ControllerRoute } from './controller';
-
+import { IControllerRoute } from './controller';
 import { container } from './container';
+
+import { forOwn as _forOwn } from 'lodash';
 
 /**
  * The plugin class.
@@ -55,19 +56,19 @@ export abstract class Plugin {
   /**
    * Returns the definition for the routes.
    */
-  protected getRoutes(): ControllerRoute[] {
+  protected getRoutes(): IControllerRoute[] {
     return [];
   }
 
   private compile() {
-    this.getRoutes().forEach((route: ControllerRoute) => {
+    this.getRoutes().forEach((route: IControllerRoute) => {
       this.router.use(route.path, this.buildController(route.controller));
     });
 
-    const services: any = this.getServices();
+    const services = this.getServices();
 
-    Object.keys(services).forEach((name: string) => {
-      container.registerService(name, services[name]);
+    _forOwn(services, (definition: any, name: string) => {
+      container.define(name, definition);
     });
   }
 

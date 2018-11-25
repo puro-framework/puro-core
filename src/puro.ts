@@ -34,13 +34,25 @@ import {
   error404Handler
 } from './http';
 
-import { container } from './container';
 import { Plugin } from './plugin';
+
+import { container } from './container';
+
+import { getConnection, closeConnection } from './database';
+
+container.define('database', {
+  load: async () => {
+    return getConnection();
+  },
+  unload: async () => {
+    return closeConnection();
+  }
+});
 
 /**
  * The definition for Puro's server options.
  */
-export interface PuroOptions {
+export interface IPuroOptions {
   [key: string]: any;
 }
 
@@ -61,14 +73,14 @@ export class Puro {
   /**
    * The server options.
    */
-  options: PuroOptions = {
+  options: IPuroOptions = {
     basepath: '/api/'
   };
 
   /**
    * Constructor method.
    */
-  constructor(options?: PuroOptions) {
+  constructor(options?: IPuroOptions) {
     this.options = Object.assign(this.options, options);
     this.server = Server();
   }

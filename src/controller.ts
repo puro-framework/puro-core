@@ -33,7 +33,7 @@ import { container } from './container';
 /**
  * The route interface.
  */
-export interface ControllerRoute {
+export interface IControllerRoute {
   path: string;
   controller: typeof Controller;
 }
@@ -67,7 +67,7 @@ export abstract class Controller {
   /**
    * Returns a services by name.
    */
-  protected container = container.getService.bind(container);
+  protected container = container.get.bind(container);
 
   /**
    * This method is the entrypoint for the router.

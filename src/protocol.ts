@@ -25,7 +25,7 @@
  */
 
 import { Request, Response } from './http';
-import { InvalidParameterException, HttpExceptionHints } from './http';
+import { InvalidParameterException, IHttpExceptionHints } from './http';
 import { Validator } from './validator';
 
 import 'reflect-metadata';
@@ -83,7 +83,7 @@ export const prepareResponse = (
   response: Response,
   statusCode: number,
   body: any,
-  hints?: HttpExceptionHints
+  hints?: IHttpExceptionHints
 ): Response => {
   return response.status(statusCode).send({
     status: statusCode,

@@ -1,5 +1,5 @@
 /**
- * @file src/controller.spec.ts
+ * @file src/__tests__/controller.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,12 +24,12 @@
  * SOFTWARE.
  */
 
-import { Request, Response, Middleware } from '../testing/mocks';
-import { mock } from '../testing/mocks';
+import { Request, Response, Middleware } from '../../testing/mocks';
+import { mock } from '../../testing/mocks';
 
-import { Request as HttpRequest } from './http';
-import { MethodNotAllowedHttpException } from './http';
-import { Controller } from './controller';
+import { Request as HttpRequest } from '../http';
+import { MethodNotAllowedHttpException } from '../http';
+import { Controller } from '../controller';
 
 describe('controller', () => {
   let request: Request;

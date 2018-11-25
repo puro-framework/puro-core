@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { HttpExceptionHints } from '../src/http';
+import { IHttpExceptionHints } from '../src/http';
 
 declare global {
   namespace Express {
@@ -46,7 +46,7 @@ declare global {
       /**
        * Sets the content of the response.
        */
-      prepare(code: number, body: any, hints?: HttpExceptionHints): Response;
+      prepare(code: number, body: any, hints?: IHttpExceptionHints): Response;
     }
   }
 }

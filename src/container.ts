@@ -24,26 +24,64 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection } from './database';
+import { forOwn as _forOwn } from 'lodash';
 
+export type IServiceBase = Function;
+
+export interface IServiceExtended {
+  load: Function;
+  unload: Function;
+}
+
+export type IService = IServiceBase | IServiceExtended;
+
+export interface IServiceDef {
+  [key: string]: IService;
+}
+
+/**
+ * The service container.
+ */
 class Container {
-  protected services: any = {
-    connection: async () => {
-      return getConnection();
+  /**
+   * The defined services.
+   */
+  protected services: IServiceDef = {};
+
+  /**
+   * Defines a new service.
+   */
+  define(name: string, def: IService) {
+    this.services[name] = def;
+    return this;
+  }
+
+  /**
+   * Loads and returns a service.
+   */
+  async get(name: string) {
+    const def = this.services[name];
+
+    if (typeof def === 'undefined') {
+      throw new Error(`The service "${name}" is not defined`);
     }
-  };
 
-  registerService(name: string, handler: Function) {
-    this.services[name] = handler;
+    if (typeof def === 'function') {
+      return def.call(this);
+    }
+
+    return def.load.call(this);
   }
 
-  async getService(name: string) {
-    // TODO: throw an exception here
-    return this.services[name].call(this);
-  }
-
-  shoutdown() {
-    return closeConnection();
+  /**
+   * Shutdown the services.
+   */
+  async shoutdown() {
+    _forOwn(this.services, async (def: any) => {
+      if (typeof def !== 'function') {
+        await def.unload.call(this);
+      }
+    });
   }
 }
 
