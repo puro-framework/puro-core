@@ -34,19 +34,17 @@ import {
   error404Handler
 } from './http';
 
-import { Plugin } from './plugin';
-
 import { Container } from './container';
-
-import { getConnection, closeConnection } from './database';
+import { DatabaseDef } from './database';
+import { Plugin } from './plugin';
 
 import { forOwn as _forOwn } from 'lodash';
 
 /**
- * The definition for Puro's server options.
+ * The Puro's options.
  */
 export interface IPuroOptions {
-  [key: string]: any;
+  basepath: string;
 }
 
 /**
@@ -63,7 +61,9 @@ export class Puro {
    */
   plugins: Plugin[] = [];
 
-  // TODO
+  /**
+   * The container instance.
+   */
   container: Container;
 
   /**
@@ -77,71 +77,54 @@ export class Puro {
    * Constructor method.
    */
   constructor(options?: IPuroOptions) {
-    this.options = Object.assign(this.options, options);
     this.server = Server();
+    this.options = Object.assign(this.options, options);
     this.container = new Container();
   }
 
   /**
-   * Installs a plugin into the server.
+   * Installs a plugin on the server.
    */
   install(plugin: Plugin) {
     this.plugins.push(plugin);
   }
 
   /**
+   * Prepares the server.
+   */
+  prepare() {
+    this.container.define('database', DatabaseDef);
+
+    this.server.use(requestHandler);
+    this.server.use(responseHandler);
+
+    this.setupPlugins();
+
+    this.server.use(errorHandler);
+    this.server.use(error404Handler);
+  }
+
+  /**
    * Listens for connections on the specified host and port.
    */
   listen(port: number, hostname?: string) {
-    this.setupServer();
     return this.server.listen(port, hostname);
   }
 
   /**
-   * Sets up the server.
+   * Sets up the plugins.
    */
-  private setupServer() {
-    this.container.define('database', {
-      load: async () => {
-        return getConnection();
-      },
-      unload: async () => {
-        return closeConnection();
-      }
-    });
-
-    // Install the request and response handlers
-    this.server.use(requestHandler);
-    this.server.use(responseHandler);
-
-    // Install the plugin routers
+  private setupPlugins() {
     this.plugins.forEach(plugin => {
       plugin.prepare(this.container);
+
+      // Use the plugin router
       this.server.use(this.options.basepath, plugin.router);
 
+      // Load the plugin services
       _forOwn(plugin.services, (definition: any, name: string) => {
         this.container.define(name, definition);
       });
     });
-
-    // Install the plugin services
-    this.plugins.forEach(plugin => {
-      this.server.use(this.options.basepath, plugin.router);
-    });
-
-    // Install the error handlers
-    this.server.use(errorHandler);
-    this.server.use(error404Handler);
-
-    // Install the middleware for cleaning up the container services
-    this.server.use(
-      async (request: Request, response: Response, next: NextFunction) => {
-        response.on('finish', async () => {
-          await this.container.shoutdown();
-        });
-
-        next();
-      }
-    );
   }
 }

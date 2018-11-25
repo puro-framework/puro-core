@@ -24,8 +24,7 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection } from '../database';
-
+import { getConnection, closeConnection, DatabaseDef } from '../database';
 import { configs } from '../configs';
 
 import * as typeorm from 'typeorm';
@@ -75,6 +74,14 @@ describe('database', () => {
     expect(conn).toBe(connection);
 
     await closeConnection();
+    expect(connection.close).toBeCalled();
+  });
+
+  it('defines the service', async () => {
+    await DatabaseDef.load();
+    expect(createConnectionSpy).toBeCalled();
+
+    await DatabaseDef.unload();
     expect(connection.close).toBeCalled();
   });
 });

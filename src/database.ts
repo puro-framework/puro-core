@@ -27,6 +27,7 @@
 import { configs } from './configs';
 
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
+import { IService, IServiceExtended } from './container';
 
 /**
  * The connection instance.
@@ -52,5 +53,17 @@ export const closeConnection = async () => {
   if (connection) {
     await connection.close();
     connection = undefined;
+  }
+};
+
+/**
+ * Definition for the service.
+ */
+export const DatabaseDef: IServiceExtended = {
+  load: async () => {
+    return getConnection();
+  },
+  unload: async () => {
+    return closeConnection();
   }
 };
