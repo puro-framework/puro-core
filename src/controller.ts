@@ -27,8 +27,8 @@
 import { Request, Response } from './http';
 import { MethodNotAllowedHttpException } from './http';
 
+import { Container } from './container';
 import { getSchema } from './protocol';
-import { container } from './container';
 
 /**
  * The route interface.
@@ -41,7 +41,7 @@ export interface IControllerRoute {
 /**
  * The controller class.
  */
-export abstract class Controller {
+export class Controller {
   /**
    * The CRUD functions.
    */
@@ -67,7 +67,16 @@ export abstract class Controller {
   /**
    * Returns a services by name.
    */
-  protected container = container.get.bind(container);
+  protected container: Function;
+
+  /**
+   * Constructor method
+   *
+   * @param {Container} container The container instance.
+   */
+  constructor(container: Container) {
+    this.container = container.get.bind(container);
+  }
 
   /**
    * This method is the entrypoint for the router.
@@ -81,15 +90,18 @@ export abstract class Controller {
 
     const handler = this.getHandler(options.hook);
 
+    // Prepare the request according to its schema
     const methodSchema = getSchema(this, options.hook) || {};
     request.prepare(methodSchema);
 
+    // Handle the request and its output
     const output = await this.processOutput(
       await handler(request, response),
       response,
       options
     );
 
+    // Prepare the response
     response.prepare(options.defaultStatusCode, output);
   }
 

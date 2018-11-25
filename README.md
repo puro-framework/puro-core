@@ -15,7 +15,30 @@ away, when a body has been stripped down to its nakedness.
 - Don't repeat yourself!
 - Don't write what you don't have to!
 
-## Examples
+## The CRUD Functions
+
+| CRUD Function | Target                 | HTTP Method | HTTP Status Code |
+|---------------|------------------------|-------------|------------------|
+| CREATE        | Collection             | POST        |              201 |
+| READ          | Resource or Collection | GET         |              200 |
+| UPDATE        | Resource               | PUT         |              204 |
+| DELETE        | Resource or Collection | DELETE      |              204 |
+
+## HTTP Exceptions
+
+| Exception Class               | HTTP Status Code | HTTP Response Message |
+|-------------------------------|------------------|-----------------------|
+| HttpException                 |                - | -                     |
+| BadRequestHttpException       |              400 | "Bad Request"         |
+| AccessDeniedHttpException     |              403 | "Forbidden"           |
+| NotFoundHttpException         |              404 | "Not Found"           |
+| MethodNotAllowedHttpException |              405 | "Method Not Allowed"  |
+| InvalidParameterHttpException |              422 | "Invalid Parameter"   |
+
+## Getting Started
+
+## Define a Controller
+
 ```ts
 // controllers/HelloController.ts
 
@@ -44,29 +67,13 @@ $ curl http://127.0.0.1/v1/hello
 
 ![Request - Life Cycle](https://github.com/Wicker25/puro/blob/master/doc/life-cycle.png)
 
-## Request Validation
+## The Request
 
 TODO
 
-## CRUD Methods
+## The Response
 
-| CRUD Function | Target                 | HTTP Method | HTTP Status Code |
-|---------------|------------------------|-------------|------------------|
-| CREATE        | Collection             | POST        |              201 |
-| READ          | Resource or Collection | GET         |              200 |
-| UPDATE        | Resource               | PUT         |              204 |
-| DELETE        | Resource or Collection | DELETE      |              204 |
-
-## Exceptions
-
-| Exception Class               | HTTP Status Code | HTTP Response Message |
-|-------------------------------|------------------|-----------------------|
-| HttpException                 |                - | -                     |
-| BadRequestException           |              400 | "Bad Request"         |
-| InvalidParameterException     |              400 | "Invalid Parameter"   |
-| AccessDeniedHttpException     |              403 | "Forbidden"           |
-| NotFoundHttpException         |              404 | "Not Found"           |
-| MethodNotAllowedHttpException |              405 | "Method Not Allowed"  |
+TODO
 
 ## Authors
 

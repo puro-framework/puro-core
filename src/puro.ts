@@ -36,18 +36,11 @@ import {
 
 import { Plugin } from './plugin';
 
-import { container } from './container';
+import { Container } from './container';
 
 import { getConnection, closeConnection } from './database';
 
-container.define('database', {
-  load: async () => {
-    return getConnection();
-  },
-  unload: async () => {
-    return closeConnection();
-  }
-});
+import { forOwn as _forOwn } from 'lodash';
 
 /**
  * The definition for Puro's server options.
@@ -70,6 +63,9 @@ export class Puro {
    */
   plugins: Plugin[] = [];
 
+  // TODO
+  container: Container;
+
   /**
    * The server options.
    */
@@ -83,6 +79,7 @@ export class Puro {
   constructor(options?: IPuroOptions) {
     this.options = Object.assign(this.options, options);
     this.server = Server();
+    this.container = new Container();
   }
 
   /**
@@ -104,11 +101,30 @@ export class Puro {
    * Sets up the server.
    */
   private setupServer() {
+    this.container.define('database', {
+      load: async () => {
+        return getConnection();
+      },
+      unload: async () => {
+        return closeConnection();
+      }
+    });
+
     // Install the request and response handlers
     this.server.use(requestHandler);
     this.server.use(responseHandler);
 
     // Install the plugin routers
+    this.plugins.forEach(plugin => {
+      plugin.prepare(this.container);
+      this.server.use(this.options.basepath, plugin.router);
+
+      _forOwn(plugin.services, (definition: any, name: string) => {
+        this.container.define(name, definition);
+      });
+    });
+
+    // Install the plugin services
     this.plugins.forEach(plugin => {
       this.server.use(this.options.basepath, plugin.router);
     });
@@ -121,7 +137,7 @@ export class Puro {
     this.server.use(
       async (request: Request, response: Response, next: NextFunction) => {
         response.on('finish', async () => {
-          await container.shoutdown();
+          await this.container.shoutdown();
         });
 
         next();

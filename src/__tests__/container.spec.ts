@@ -24,9 +24,15 @@
  * SOFTWARE.
  */
 
-import { container } from '../container';
+import { Container } from '../container';
 
 describe('container', () => {
+  let container: Container;
+
+  beforeEach(() => {
+    container = new Container();
+  });
+
   it('can define and access a service', async () => {
     container.define('service', async () => {
       return { o: 1 };

@@ -24,25 +24,41 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from '../../testing/mocks';
+import {
+  Request,
+  Response,
+  NextFunction,
+  Middleware
+} from '../../testing/mocks';
+
 import { mock } from '../../testing/mocks';
 
-import { InvalidParameterException } from '../http';
+import {
+  MethodNotAllowedHttpException,
+  InvalidParameterHttpException,
+  Request as HttpRequest
+} from '../http';
+
+import { Controller } from '../controller';
+import { Container } from '../container';
 
 import {
+  Schema,
+  getSchema,
   prepareRequest,
   prepareResponse,
-  Schema,
-  getSchema
+  buildControllerMiddleware
 } from '../protocol';
 
 describe('protocol', () => {
   let request: Request;
   let response: Response;
+  let next: NextFunction;
 
   beforeEach(() => {
     request = new Request();
     response = new Response();
+    next = jest.fn();
   });
 
   it('can annotate controller handlers', async () => {
@@ -86,11 +102,32 @@ describe('protocol', () => {
     });
   });
 
-  it('can handle invalid parameters', async () => {
+  it('can handle invalid request parameters', async () => {
     try {
       request = mock(prepareRequest)(request, { param: { isRequired: {} } });
     } catch (e) {
-      expect(e).toBeInstanceOf(InvalidParameterException);
+      expect(e).toBeInstanceOf(InvalidParameterHttpException);
     }
+  });
+
+  it('can build the controller middleware', async () => {
+    class CreateController extends Controller {
+      async create(request: HttpRequest) {
+        return 'Response Content';
+      }
+    }
+
+    const container = new Container();
+    const middleware = buildControllerMiddleware(CreateController, container);
+
+    // Successful
+    request.method = 'POST';
+    await mock<Middleware>(middleware)(request, response, next);
+    expect(next).not.toBeCalled();
+
+    // Unsuccessful
+    request.method = 'DELETE';
+    await mock<Middleware>(middleware)(request, response, next);
+    expect(next).toBeCalledWith(new MethodNotAllowedHttpException());
   });
 });

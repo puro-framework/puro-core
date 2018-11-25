@@ -24,26 +24,31 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction, Router } from './http';
+import { Router } from './http';
 import { IControllerRoute } from './controller';
-import { container } from './container';
-
-import { forOwn as _forOwn } from 'lodash';
+import { Container, IServiceDef } from './container';
+import { buildControllerMiddleware } from './protocol';
 
 /**
  * The plugin class.
  */
 export abstract class Plugin {
   /**
-   * The router containing the plugin routes.
+   * The plugin router.
    */
-  router: any = Router();
+  router: any;
 
   /**
-   * Constructor method.
+   * The plugin services.
    */
-  constructor() {
-    this.compile();
+  services: IServiceDef = {};
+
+  /**
+   * Returns the definition for the routes.
+   */
+  prepare(container: Container) {
+    this.router = this.buildRouter(container);
+    this.services = this.getServices();
   }
 
   /**
@@ -60,29 +65,21 @@ export abstract class Plugin {
     return [];
   }
 
-  private compile() {
-    this.getRoutes().forEach((route: IControllerRoute) => {
-      this.router.use(route.path, this.buildController(route.controller));
-    });
-
-    const services = this.getServices();
-
-    _forOwn(services, (definition: any, name: string) => {
-      container.define(name, definition);
-    });
-  }
-
   /**
-   * Builds the controller and wraps it inside a middleware.
+   * Builds the plugin router.
    */
-  private buildController = (ControllerClass: any) => {
-    return async (request: Request, response: Response, next: NextFunction) => {
-      try {
-        let instance = new ControllerClass();
-        await instance.handleRequest(request, response);
-      } catch (e) {
-        next(e);
-      }
-    };
+  private buildRouter = (container: Container) => {
+    const router = Router();
+
+    this.getRoutes().forEach((route: IControllerRoute) => {
+      const controllerMiddleware = buildControllerMiddleware(
+        route.controller,
+        container
+      );
+
+      router.use(route.path, controllerMiddleware);
+    });
+
+    return router;
   };
 }

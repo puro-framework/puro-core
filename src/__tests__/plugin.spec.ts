@@ -25,15 +25,74 @@
  */
 
 import { Plugin } from '../plugin';
+import { Controller } from '../controller';
+import { Container } from '../container';
 
 describe('plugin', () => {
   let plugin: Plugin;
+  let container: Container;
 
   beforeEach(() => {
-    //plugin = new Request();
+    container = new Container();
+
+    class TestPlugin extends Plugin {
+      protected getServices() {
+        return {
+          service1: async () => {},
+          service2: {
+            load: async () => {},
+            unload: async () => {}
+          }
+        };
+      }
+
+      protected getRoutes() {
+        return [
+          { path: '/collection/:resourceId', controller: Controller },
+          { path: '/collection', controller: Controller }
+        ];
+      }
+    }
+
+    plugin = new TestPlugin();
   });
 
-  it('can TODO', async () => {
-    expect(1).toBe(1);
+  it('can define the services', async () => {
+    const services = (plugin as any).getServices();
+    expect(Object.keys(services)).toEqual(['service1', 'service2']);
+  });
+
+  it('can define the routes', async () => {
+    const routes = (plugin as any).getRoutes();
+    expect(routes).toEqual([
+      { path: '/collection/:resourceId', controller: Controller },
+      { path: '/collection', controller: Controller }
+    ]);
+  });
+
+  it('can omit the definition for the services', async () => {
+    class TestPlugin extends Plugin {}
+    plugin = new TestPlugin();
+
+    const services = (plugin as any).getServices();
+    expect(services).toEqual({});
+  });
+
+  it('can omit the definition for the routes', async () => {
+    class TestPlugin extends Plugin {}
+    plugin = new TestPlugin();
+
+    const routes = (plugin as any).getRoutes();
+    expect(routes).toEqual([]);
+  });
+
+  it('can prepare the router', async () => {
+    plugin.prepare(container);
+    expect(typeof plugin.router).toBe('function');
+  });
+
+  it('can prepare the services', async () => {
+    plugin.prepare(container);
+    expect(Object.keys(plugin.services)).toEqual(['service1', 'service2']);
   });
 });

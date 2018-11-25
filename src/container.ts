@@ -42,7 +42,7 @@ export interface IServiceDef {
 /**
  * The service container.
  */
-class Container {
+export class Container {
   /**
    * The defined services.
    */
@@ -84,5 +84,3 @@ class Container {
     });
   }
 }
-
-export const container = new Container();

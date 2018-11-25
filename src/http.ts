@@ -70,17 +70,8 @@ export class HttpException extends Error {
 /**
  * It represents a standard HTTP status code "400 Bad Request".
  */
-export class BadRequestException extends HttpException {
+export class BadRequestHttpException extends HttpException {
   constructor(message = 'Bad Request', hints?: IHttpExceptionHints) {
-    super(400, message, hints);
-  }
-}
-
-/**
- * It represents an exception caused by an improper request parameter.
- */
-export class InvalidParameterException extends HttpException {
-  constructor(message = 'Invalid Parameter', hints?: IHttpExceptionHints) {
     super(400, message, hints);
   }
 }
@@ -109,6 +100,15 @@ export class NotFoundHttpException extends HttpException {
 export class MethodNotAllowedHttpException extends HttpException {
   constructor(message = 'Method Not Allowed', hints?: IHttpExceptionHints) {
     super(405, message, hints);
+  }
+}
+
+/**
+ * It represents an exception caused by an improper request parameter.
+ */
+export class InvalidParameterHttpException extends HttpException {
+  constructor(message = 'Invalid Parameter', hints?: IHttpExceptionHints) {
+    super(422, message, hints);
   }
 }
 

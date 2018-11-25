@@ -29,19 +29,21 @@ import { mock } from '../../testing/mocks';
 
 import { Request as HttpRequest } from '../http';
 import { MethodNotAllowedHttpException } from '../http';
+import { Container } from '../container';
 import { Controller } from '../controller';
 
 describe('controller', () => {
   let request: Request;
   let response: Response;
+  let container: Container;
   let controller: any;
 
   beforeEach(() => {
     request = new Request();
     response = new Response();
+    container = new Container();
 
-    class TestController extends Controller {}
-    controller = new TestController();
+    controller = new Controller(container);
     controller.handleRequest = controller.handleRequest.bind(controller);
   });
 
@@ -131,7 +133,7 @@ describe('controller', () => {
       }
     }
 
-    controller = new CreateController();
+    controller = new CreateController(container);
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
@@ -147,7 +149,7 @@ describe('controller', () => {
       }
     }
 
-    controller = new UpdateController();
+    controller = new UpdateController(container);
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
@@ -163,7 +165,7 @@ describe('controller', () => {
       }
     }
 
-    controller = new UpdateController();
+    controller = new UpdateController(container);
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);
@@ -179,7 +181,7 @@ describe('controller', () => {
       }
     }
 
-    controller = new DeleteController();
+    controller = new DeleteController(container);
     controller.handleRequest = controller.handleRequest.bind(controller);
 
     await mock<Middleware>(controller.handleRequest)(request, response);

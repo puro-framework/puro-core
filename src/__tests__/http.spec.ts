@@ -30,12 +30,13 @@ import {
   NextFunction,
   Middleware
 } from '../../testing/mocks';
+
 import { mock } from '../../testing/mocks';
 
 import {
   HttpException,
-  BadRequestException,
-  InvalidParameterException,
+  BadRequestHttpException,
+  InvalidParameterHttpException,
   AccessDeniedHttpException,
   NotFoundHttpException,
   MethodNotAllowedHttpException
@@ -115,21 +116,10 @@ describe('http', () => {
   });
 
   it('can handle BadRequestException', async () => {
-    const exception = new BadRequestException();
+    const exception = new BadRequestHttpException();
 
     await mock<Middleware>(errorHandler)(exception, request, response, next);
     expect(response.prepare).toBeCalledWith(400, 'Bad Request', undefined);
-  });
-
-  it('can handle InvalidParameterException', async () => {
-    const exception = new InvalidParameterException();
-
-    await mock<Middleware>(errorHandler)(exception, request, response, next);
-    expect(response.prepare).toBeCalledWith(
-      400,
-      'Invalid Parameter',
-      undefined
-    );
   });
 
   it('can handle AccessDeniedHttpException', async () => {
@@ -153,6 +143,17 @@ describe('http', () => {
     expect(response.prepare).toBeCalledWith(
       405,
       'Method Not Allowed',
+      undefined
+    );
+  });
+
+  it('can handle InvalidParameterException', async () => {
+    const exception = new InvalidParameterHttpException();
+
+    await mock<Middleware>(errorHandler)(exception, request, response, next);
+    expect(response.prepare).toBeCalledWith(
+      422,
+      'Invalid Parameter',
       undefined
     );
   });

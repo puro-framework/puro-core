@@ -24,8 +24,10 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from './http';
-import { InvalidParameterException, IHttpExceptionHints } from './http';
+import { Request, Response, NextFunction } from './http';
+import { InvalidParameterHttpException, IHttpExceptionHints } from './http';
+import { Controller } from './controller';
+import { Container } from './container';
 import { Validator } from './validator';
 
 import 'reflect-metadata';
@@ -70,7 +72,7 @@ export const prepareRequest = (request: Request, schema: any): Request => {
   const hints = validator.validateRequest(request, schema);
 
   if (Object.keys(hints).length > 0) {
-    throw new InvalidParameterException('Invalid Parameter', hints);
+    throw new InvalidParameterHttpException('Invalid Parameter', hints);
   }
 
   return request;
@@ -90,4 +92,24 @@ export const prepareResponse = (
     content: body,
     hints: hints
   });
+};
+
+/**
+ * Builds the middleware for executing a controller.
+ *
+ * @param {typeof Controller} controllerClass The controller class.
+ * @param {Container}         container       The container instance
+ */
+export const buildControllerMiddleware = (
+  controllerClass: typeof Controller,
+  container: Container
+) => {
+  return async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const instance = new controllerClass(container);
+      await instance.handleRequest(request, response);
+    } catch (e) {
+      next(e);
+    }
+  };
 };
