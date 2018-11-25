@@ -1,5 +1,5 @@
 /**
- * @file src/express.ts
+ * @file typings/express.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

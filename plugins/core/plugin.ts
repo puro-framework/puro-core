@@ -1,5 +1,5 @@
 /**
- * @file user/routes.ts
+ * @file core/routes.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,14 +24,16 @@
  * SOFTWARE.
  */
 
-import { Route } from '../../src/plugin';
+import { StatusController } from './controllers/StatusController';
+import { SessionController } from './controllers/SessionController';
 
-import { UserController } from './controllers/UserController';
-import { UserCollectionController } from './controllers/UserCollectionController';
-import { ProfileController } from './controllers/ProfileController';
+import { Plugin } from '../../src/plugin';
 
-export const routes: Route[] = [
-  { path: '/users/me', controller: ProfileController },
-  { path: '/users/:userId', controller: UserController },
-  { path: '/users', controller: UserCollectionController }
-];
+export default class CorePlugin extends Plugin {
+  protected getRoutes() {
+    return [
+      { path: '/status', controller: StatusController },
+      { path: '/session', controller: SessionController }
+    ];
+  }
+}

@@ -76,8 +76,8 @@ export class Puro {
   /**
    * Installs a plugin into the server.
    */
-  install(path: string) {
-    this.plugins.push(new Plugin(path));
+  install(plugin: Plugin) {
+    this.plugins.push(plugin);
   }
 
   /**

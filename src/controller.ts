@@ -31,6 +31,14 @@ import { getSchema } from './protocol';
 import { container } from './container';
 
 /**
+ * The route interface.
+ */
+export interface ControllerRoute {
+  path: string;
+  controller: typeof Controller;
+}
+
+/**
  * The controller class.
  */
 export abstract class Controller {
@@ -57,7 +65,7 @@ export abstract class Controller {
   };
 
   /**
-   * Reference to the service container.
+   * Returns a services by name.
    */
   protected container = container.getService.bind(container);
 

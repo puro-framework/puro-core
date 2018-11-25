@@ -1,5 +1,5 @@
 /**
- * @file src/container.ts
+ * @file src/plugin.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,27 +24,16 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection } from './database';
+import { Plugin } from './plugin';
 
-class Container {
-  protected services: any = {
-    connection: async () => {
-      return getConnection();
-    }
-  };
+describe('plugin', () => {
+  let plugin: Plugin;
 
-  registerService(name: string, handler: Function) {
-    this.services[name] = handler;
-  }
+  beforeEach(() => {
+    //plugin = new Request();
+  });
 
-  async getService(name: string) {
-    // TODO: throw an exception here
-    return this.services[name].call(this);
-  }
-
-  shoutdown() {
-    return closeConnection();
-  }
-}
-
-export const container = new Container();
+  it('can TODO', async () => {
+    expect(1).toBe(1);
+  });
+});

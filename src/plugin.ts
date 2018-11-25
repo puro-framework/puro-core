@@ -25,81 +25,50 @@
  */
 
 import { Request, Response, NextFunction, Router } from './http';
-import { Controller } from './controller';
+import { ControllerRoute } from './controller';
 
 import { container } from './container';
 
-// TODO: improve this shit
-// TODO: check for absolute path
-const importModule = (path: string) => {
-  try {
-    return require(path);
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 /**
- * The definition for a route.
+ * The plugin class.
  */
-export interface Route {
-  path: string;
-  controller: typeof Controller;
-}
-
-/**
- * The Puro's plugin.
- */
-export class Plugin {
-  path: string;
-  router: any;
+export abstract class Plugin {
+  /**
+   * The router containing the plugin routes.
+   */
+  router: any = Router();
 
   /**
    * Constructor method.
    */
-  constructor(path: string) {
-    this.path = path;
-    this.router = Router();
-
-    this.loadRoutes();
-    this.loadServices();
+  constructor() {
+    this.compile();
   }
 
   /**
-   * Loads the routes from `plugins/routes.ts`.
+   * Returns the definition for the services.
    */
-  private loadRoutes() {
-    const module = importModule(`${this.path}/routes`);
+  protected getServices() {
+    return {};
+  }
 
-    if (!module) {
-      return;
-    }
+  /**
+   * Returns the definition for the routes.
+   */
+  protected getRoutes(): ControllerRoute[] {
+    return [];
+  }
 
-    const { routes } = module;
-    console.log(`Loading routes for "${this.path}" ...`);
-
-    routes.forEach((route: Route) => {
+  private compile() {
+    this.getRoutes().forEach((route: ControllerRoute) => {
       this.router.use(route.path, this.buildController(route.controller));
     });
-  }
 
-  /**
-   * Loads the services from `plugins/services.ts`.
-   */
-  private loadServices() {
-    const module = importModule(`${this.path}/services`);
+    const services: any = this.getServices();
 
-    if (!module) {
-      return;
-    }
-
-    console.log(`Loading services for "${this.path}" ...`);
-    const { services } = module;
-
-    for (const name in services) {
+    Object.keys(services).forEach((name: string) => {
       container.registerService(name, services[name]);
-    }
+    });
   }
 
   /**

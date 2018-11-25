@@ -1,5 +1,5 @@
 /**
- * @file src/container.ts
+ * @file src/configs.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,27 +24,42 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection } from './database';
+import * as fs from 'fs';
+import { get as _get } from 'lodash';
 
-class Container {
-  protected services: any = {
-    connection: async () => {
-      return getConnection();
+/**
+ * The configuration manager.
+ */
+class Configs {
+  /**
+   * The loaded configuration.
+   */
+  protected data: any;
+
+  /**
+   * Returns a configuration node according to a path.
+   */
+  get<T = any>(path: string): T {
+    return _get(this.loadConfig(), path) as T;
+  }
+
+  /**
+   * Lazy-loads the configuration from the files.
+   */
+  private loadConfig() {
+    if (this.data) {
+      return this.data;
     }
-  };
 
-  registerService(name: string, handler: Function) {
-    this.services[name] = handler;
-  }
+    const path = process.env.PURO_PARAMS_PATH
+      ? process.env.PURO_PARAMS_PATH
+      : 'config/params.json';
 
-  async getService(name: string) {
-    // TODO: throw an exception here
-    return this.services[name].call(this);
-  }
+    const contents = fs.readFileSync(path, 'utf8');
+    this.data = JSON.parse(contents);
 
-  shoutdown() {
-    return closeConnection();
+    return this.data;
   }
 }
 
-export const container = new Container();
+export default new Configs();

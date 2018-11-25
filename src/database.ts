@@ -24,21 +24,7 @@
  * SOFTWARE.
  */
 
-const db: any = {
-  type: 'mariadb',
-  host: '127.0.0.1',
-  port: 3306,
-  username: 'root',
-  password: 'root',
-  database: 'todo_db',
-  entities: [
-    'src/*/entities/*.ts',
-    'plugins/*/entities/*.ts',
-    'src/todo/entities/*.ts'
-  ],
-  synchronize: true,
-  logging: false
-};
+import configs from './configs';
 
 import { Connection, ConnectionManager, ConnectionOptions } from 'typeorm';
 
@@ -46,9 +32,10 @@ const connectionManager = new ConnectionManager();
 let connection: Connection;
 
 export const getConnection = async () => {
-  connection = connectionManager.create(db as ConnectionOptions);
+  if (!connection || !connection.isConnected) {
+    const connectionOptions = configs.get<ConnectionOptions>('database');
+    connection = connectionManager.create(connectionOptions);
 
-  if (!connection.isConnected) {
     await connection.connect();
   }
 
