@@ -1,5 +1,5 @@
 /**
- * @file src/__tests__/protocol.spec.ts
+ * @file protocol.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -29,18 +29,18 @@ import {
   Response,
   NextFunction,
   Middleware
-} from '../../testing/mocks';
+} from '../src/testing/mocks';
 
-import { mock } from '../../testing/mocks';
+import { mock } from '../src/testing/mocks';
 
 import {
   MethodNotAllowedHttpException,
   InvalidParameterHttpException,
   Request as HttpRequest
-} from '../http';
+} from '../src/http';
 
-import { Controller } from '../controller';
-import { Container } from '../container';
+import { Controller } from '../src/controller';
+import { Container } from '../src/container';
 
 import {
   Schema,
@@ -48,7 +48,7 @@ import {
   prepareRequest,
   prepareResponse,
   buildControllerMiddleware
-} from '../protocol';
+} from '../src/protocol';
 
 describe('protocol', () => {
   let request: Request;

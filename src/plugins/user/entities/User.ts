@@ -1,5 +1,5 @@
 /**
- * @file core/routes.ts
+ * @file user/entities/User.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,16 +24,33 @@
  * SOFTWARE.
  */
 
-import { StatusController } from './controllers/StatusController';
-import { SessionController } from './controllers/SessionController';
+import { Schema } from '../../../protocol';
 
-import { Plugin } from '../../src/plugin';
+import { Resource } from '../../core/entities/Resource';
 
-export default class CorePlugin extends Plugin {
-  protected getRoutes() {
-    return [
-      { path: '/status', controller: StatusController },
-      { path: '/session', controller: SessionController }
-    ];
-  }
+import { Entity, Column } from 'typeorm';
+
+@Entity()
+export class User extends Resource {
+  @Schema()
+  @Column({ length: 254 })
+  email!: string;
+
+  @Column({ length: 40 })
+  password!: string;
+
+  @Column({ length: 40 })
+  salt!: string;
+
+  @Schema()
+  @Column({ length: 128 })
+  displayName!: string;
+
+  @Schema()
+  @Column({ length: 64 })
+  firstName!: string;
+
+  @Schema()
+  @Column({ length: 64 })
+  lastName!: string;
 }

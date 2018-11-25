@@ -1,5 +1,5 @@
 /**
- * @file src/http.ts
+ * @file http.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -32,7 +32,7 @@ import { Request, Response, NextFunction } from 'express';
 export { Server, Request, Response, NextFunction };
 export { Router } from 'express';
 
-import '../typings/express';
+import './typings/express';
 
 /**
  * It represents a list of hints for an HTTP exception (i.e. a list of invalid

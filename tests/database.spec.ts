@@ -1,5 +1,5 @@
 /**
- * @file src/__tests__/database.spec.ts
+ * @file database.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection, DatabaseDef } from '../database';
-import { configs } from '../configs';
+import { getConnection, closeConnection, DatabaseDef } from '../src/database';
+import { configs } from '../src/configs';
 
 import * as typeorm from 'typeorm';
 

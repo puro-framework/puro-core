@@ -1,5 +1,5 @@
 /**
- * @file core/entities/Resource.ts
+ * @file core/controllers/SessionController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,41 +24,11 @@
  * SOFTWARE.
  */
 
-import { Schema } from '../../../src/protocol';
+import { Request } from '../../../http';
+import { Controller } from '../../../controller';
 
-import { PrimaryGeneratedColumn, Column } from 'typeorm';
-import { BeforeInsert, BeforeUpdate, BeforeRemove } from 'typeorm';
-
-export class Resource {
-  @Schema()
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @Column('datetime')
-  createdOn!: Date;
-
-  @Column({ nullable: true })
-  modifiedOn!: Date;
-
-  @Column({ nullable: true })
-  deletedOn!: Date;
-
-  @Column()
-  isDeleted: boolean = false;
-
-  @BeforeInsert()
-  updateCreatedOn() {
-    this.createdOn = new Date();
-  }
-
-  @BeforeUpdate()
-  updateModifiedOn() {
-    this.modifiedOn = new Date();
-  }
-
-  @BeforeRemove()
-  updateDeletedOn() {
-    this.deletedOn = new Date();
-    this.isDeleted = true;
+export class SessionController extends Controller {
+  async read(request: Request) {
+    return `Authenticated as User [${request.user.id}]`;
   }
 }

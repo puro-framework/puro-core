@@ -4,20 +4,14 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "baseUrl": ".",
-    "outDir": "lib",
+    "baseUrl": "./src",
+    "outDir": "./lib",
     "strict": true,
     "noImplicitAny": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
   "include": [
-    "src/**/*",
-    "plugins/**/*",
-    "typings/**/*"
-  ],
-  "exclude": [
-    "src/**/*.spec.ts",
-    "plugins/**/*.spec.ts"
+    "src/**/*"
   ]
 }

@@ -1,5 +1,5 @@
 /**
- * @file src/__tests__/configs.spec.ts
+ * @file configs.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { configs } from '../configs';
+import { configs } from '../src/configs';
 
 import * as fs from 'fs';
 

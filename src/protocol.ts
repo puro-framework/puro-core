@@ -1,5 +1,5 @@
 /**
- * @file src/protocol.ts
+ * @file protocol.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

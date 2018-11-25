@@ -1,5 +1,5 @@
 /**
- * @file src/puro.ts
+ * @file puro.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

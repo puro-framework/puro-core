@@ -1,5 +1,5 @@
 /**
- * @file src/controller.ts
+ * @file controller.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

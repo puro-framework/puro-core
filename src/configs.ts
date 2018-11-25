@@ -1,5 +1,5 @@
 /**
- * @file src/configs.ts
+ * @file configs.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

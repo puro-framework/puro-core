@@ -1,5 +1,5 @@
 /**
- * @file user/entities/User.ts
+ * @file user/plugin.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,33 +24,18 @@
  * SOFTWARE.
  */
 
-import { Schema } from '../../../src/protocol';
+import { UserController } from './controllers/UserController';
+import { UserCollectionController } from './controllers/UserCollectionController';
+import { ProfileController } from './controllers/ProfileController';
 
-import { Resource } from '../../core/entities/Resource';
+import { Plugin } from '../../plugin';
 
-import { Entity, Column } from 'typeorm';
-
-@Entity()
-export class User extends Resource {
-  @Schema()
-  @Column({ length: 254 })
-  email!: string;
-
-  @Column({ length: 40 })
-  password!: string;
-
-  @Column({ length: 40 })
-  salt!: string;
-
-  @Schema()
-  @Column({ length: 128 })
-  displayName!: string;
-
-  @Schema()
-  @Column({ length: 64 })
-  firstName!: string;
-
-  @Schema()
-  @Column({ length: 64 })
-  lastName!: string;
+export default class UserPlugin extends Plugin {
+  protected getRoutes() {
+    return [
+      { path: '/users/me', controller: ProfileController },
+      { path: '/users/:userId', controller: UserController },
+      { path: '/users', controller: UserCollectionController }
+    ];
+  }
 }

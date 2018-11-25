@@ -1,5 +1,5 @@
 /**
- * @file src/__tests__/puro.spec.ts
+ * @file puro.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,19 +24,19 @@
  * SOFTWARE.
  */
 
-import { Puro } from '../puro';
+import { Puro } from '../src/puro';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
   error404Handler
-} from '../http';
+} from '../src/http';
 
-import { Controller } from '../controller';
-import { Container } from '../container';
+import { Controller } from '../src/controller';
+import { Container } from '../src/container';
 
-import { Plugin } from '../plugin';
+import { Plugin } from '../src/plugin';
 
 describe('puro', () => {
   let puro: Puro;

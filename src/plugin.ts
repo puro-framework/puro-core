@@ -1,5 +1,5 @@
 /**
- * @file src/plugin.ts
+ * @file plugin.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

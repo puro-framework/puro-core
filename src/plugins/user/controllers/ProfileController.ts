@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-import { Request } from '../../../src/http';
-import { Controller } from '../../../src/controller';
-import { Schema } from '../../../src/protocol';
+import { Request } from '../../../http';
+import { Controller } from '../../../controller';
+import { Schema } from '../../../protocol';
 
 const updateSchema = {
   displayName: {

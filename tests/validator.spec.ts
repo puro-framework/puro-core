@@ -1,5 +1,5 @@
 /**
- * @file src/__tests__/validator.spec.ts
+ * @file validator.spec.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,8 +24,8 @@
  * SOFTWARE.
  */
 
-import { Request } from '../../testing/mocks';
-import { Validator } from '../validator';
+import { Request } from '../src/testing/mocks';
+import { Validator } from '../src/validator';
 
 describe('validator', () => {
   let validator: Validator;

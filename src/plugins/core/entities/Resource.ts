@@ -1,5 +1,5 @@
 /**
- * @file typings/express.ts
+ * @file core/entities/Resource.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,29 +24,41 @@
  * SOFTWARE.
  */
 
-import { IHttpExceptionHints } from '../src/http';
+import { Schema } from '../../../protocol';
 
-declare global {
-  namespace Express {
-    /**
-     * It represents the HTTP request.
-     */
-    export interface Request {
-      bucket: any;
-      user: any;
-      entities: any;
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, BeforeRemove } from 'typeorm';
 
-      prepare(schema: any): Request;
-    }
+export class Resource {
+  @Schema()
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-    /**
-     * It represents the HTTP response that will be sent.
-     */
-    export interface Response {
-      /**
-       * Sets the content of the response.
-       */
-      prepare(code: number, body: any, hints?: IHttpExceptionHints): Response;
-    }
+  @Column('datetime')
+  createdOn!: Date;
+
+  @Column({ nullable: true })
+  modifiedOn!: Date;
+
+  @Column({ nullable: true })
+  deletedOn!: Date;
+
+  @Column()
+  isDeleted: boolean = false;
+
+  @BeforeInsert()
+  updateCreatedOn() {
+    this.createdOn = new Date();
+  }
+
+  @BeforeUpdate()
+  updateModifiedOn() {
+    this.modifiedOn = new Date();
+  }
+
+  @BeforeRemove()
+  updateDeletedOn() {
+    this.deletedOn = new Date();
+    this.isDeleted = true;
   }
 }

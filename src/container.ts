@@ -1,5 +1,5 @@
 /**
- * @file src/container.ts
+ * @file container.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *

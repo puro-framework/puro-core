@@ -1,5 +1,5 @@
 /**
- * @file user/routes.ts
+ * @file typings/express.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,18 +24,29 @@
  * SOFTWARE.
  */
 
-import { UserController } from './controllers/UserController';
-import { UserCollectionController } from './controllers/UserCollectionController';
-import { ProfileController } from './controllers/ProfileController';
+import { IHttpExceptionHints } from '../http';
 
-import { Plugin } from '../../src/plugin';
+declare global {
+  namespace Express {
+    /**
+     * It represents the HTTP request.
+     */
+    export interface Request {
+      bucket: any;
+      user: any;
+      entities: any;
 
-export default class UserPlugin extends Plugin {
-  protected getRoutes() {
-    return [
-      { path: '/users/me', controller: ProfileController },
-      { path: '/users/:userId', controller: UserController },
-      { path: '/users', controller: UserCollectionController }
-    ];
+      prepare(schema: any): Request;
+    }
+
+    /**
+     * It represents the HTTP response that will be sent.
+     */
+    export interface Response {
+      /**
+       * Sets the content of the response.
+       */
+      prepare(code: number, body: any, hints?: IHttpExceptionHints): Response;
+    }
   }
 }

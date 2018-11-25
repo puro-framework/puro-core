@@ -1,5 +1,5 @@
 /**
- * @file core/controllers/StatusController.ts
+ * @file user/controllers/UserCollectionController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,10 +24,11 @@
  * SOFTWARE.
  */
 
-import { Controller } from '../../../src/controller';
+import { Request } from '../../../http';
+import { Controller } from '../../../controller';
 
-export class StatusController extends Controller {
-  async read() {
-    return 'ok';
+export class UserCollectionController extends Controller {
+  async read(request: Request) {
+    return (await this.container('userProvider')).find();
   }
 }

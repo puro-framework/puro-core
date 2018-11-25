@@ -1,5 +1,5 @@
 /**
- * @file testing/mocks.ts
+ * @file core/controllers/StatusController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,39 +24,10 @@
  * SOFTWARE.
  */
 
-import { IHttpExceptionHints } from '../src/http';
+import { Controller } from '../../../controller';
 
-export class Request {
-  method?: string;
-  query?: any;
-  body?: any;
-  params?: any;
-  bucket?: any;
-  user?: any;
-  prepare? = jest.fn<Response>((schema: any) => this);
+export class StatusController extends Controller {
+  async read() {
+    return 'ok';
+  }
 }
-
-export class Response {
-  status = jest.fn<Response>((code: number) => this);
-  send = jest.fn<Response>((body?: any) => this);
-  prepare? = jest.fn<Response>(
-    (body: any, hints?: IHttpExceptionHints) => this
-  );
-}
-
-export interface NextFunction {
-  (error?: any): void;
-}
-
-export interface Middleware {
-  (request: Request, response: Response): Promise<void>;
-  (request: Request, response: Response, next: NextFunction): Promise<void>;
-  (
-    error: any,
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void>;
-}
-
-export const mock = <T = any>(target: any) => (target as unknown) as T;

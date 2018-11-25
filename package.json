@@ -8,14 +8,15 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "prettify": "prettier --single-quote --write 'src/**/*.ts' 'plugins/**/*.ts' 'testing/**/*.ts'",
+    "prettify": "prettier --single-quote --write 'src/**/*.ts'",
     "test": "jest"
   },
   "jest": {
     "preset": "ts-jest",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "<rootDir>/testing/"
+      "<rootDir>/src/plugins/",
+      "<rootDir>/src/testing/"
     ]
   },
   "husky": {

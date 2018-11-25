@@ -1,5 +1,5 @@
 /**
- * @file src/database.ts
+ * @file database.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -27,7 +27,7 @@
 import { configs } from './configs';
 
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
-import { IService, IServiceExtended } from './container';
+import { IServiceExtended } from './container';
 
 /**
  * The connection instance.

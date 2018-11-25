@@ -1,5 +1,5 @@
 /**
- * @file core/controllers/SessionController.ts
+ * @file user/controllers/UserController.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,11 +24,21 @@
  * SOFTWARE.
  */
 
-import { Request } from '../../../src/http';
-import { Controller } from '../../../src/controller';
+import { Request } from '../../../http';
+import { Controller } from '../../../controller';
+import { Schema } from '../../../protocol';
 
-export class SessionController extends Controller {
+import { User } from '../entities/User';
+
+const readSchema = {
+  userId: {
+    isEntity: { type: User }
+  }
+};
+
+export class UserController extends Controller {
+  @Schema(readSchema)
   async read(request: Request) {
-    return `Authenticated as User [${request.user.id}]`;
+    return request.entities.user;
   }
 }

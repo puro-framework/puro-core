@@ -1,5 +1,5 @@
 /**
- * @file user/controllers/UserCollectionController.ts
+ * @file core/plugin.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
@@ -24,11 +24,16 @@
  * SOFTWARE.
  */
 
-import { Request } from '../../../src/http';
-import { Controller } from '../../../src/controller';
+import { StatusController } from './controllers/StatusController';
+import { SessionController } from './controllers/SessionController';
 
-export class UserCollectionController extends Controller {
-  async read(request: Request) {
-    return (await this.container('userProvider')).find();
+import { Plugin } from '../../plugin';
+
+export default class CorePlugin extends Plugin {
+  protected getRoutes() {
+    return [
+      { path: '/status', controller: StatusController },
+      { path: '/session', controller: SessionController }
+    ];
   }
 }

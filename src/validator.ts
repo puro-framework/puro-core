@@ -1,5 +1,5 @@
 /**
- * @file src/validator.ts
+ * @file validator.ts
  *
  * Copyright (C) 2018 | Giacomo Trudu aka `Wicker25`
  *
