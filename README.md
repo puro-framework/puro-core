@@ -8,12 +8,33 @@ away, when a body has been stripped down to its nakedness.
 
 ## Introduction
 
-*Puro* is an API-driven REST Framework.
+*Puro* is an API-driven REST Framework for building robust and scalable
+Web APIs.
+
+The framework is built on top of [Express](https://expressjs.com/) and
+[TypeORM](https://github.com/typeorm/typeorm). It follows the *Model-View-Controller*
+pattern, where the *View* has been replaced by a simpler *Schema* (*MSC*?).
+
+Finally, to make things dead simple, it speaks only two languages: *HTTP* and *JSON*.
 
 ## Principles
 
 - Don't repeat yourself!
 - Don't write what you don't have to!
+- Do one thing and do it well!
+
+## Features
+
+- Plugin-oriented architecture;
+- Comfortable Object-Oriented design, thank to [Typescript](https://www.typescriptlang.org/);
+- Automatic request validation;
+- Automatic ORM entity resolution (*WIP*);
+- Automatic response serialization (*WIP*);
+- Built-in service container (*WIP*);
+- Built-in logging (*WIP*);
+- High-quality code and full test coverage;
+
+## Getting Started
 
 ## The CRUD Functions
 
@@ -35,43 +56,23 @@ away, when a body has been stripped down to its nakedness.
 | MethodNotAllowedHttpException |              405 | "Method Not Allowed"  |
 | InvalidParameterHttpException |              422 | "Invalid Parameter"   |
 
-## Getting Started
-
-## Define a Controller
-
-```ts
-// controllers/HelloController.ts
-
-import { Request } from 'pure/http';
-import { Controller } from 'pure/controller';
-
-export class HelloController extends Controller {
-  async read(request: Request) {
-    return `Hello ${request.user.displayName}!`;
-  }
-}
-```
-
-```
-$ curl http://127.0.0.1/v1/hello
-```
-
-```json
-{
-  "status": 200,
-  "content": "Hello John!"
-}
-```
-
 ## Under the Hood
 
-![Request - Life Cycle](https://github.com/Wicker25/puro/blob/master/doc/life-cycle.png)
+![Request - Life Cycle](doc/life-cycle.png)
 
 ## The Request
 
 TODO
 
+## Validating the Request
+
+TODO
+
 ## The Response
+
+TODO
+
+## The Plugin
 
 TODO
 
@@ -81,3 +82,7 @@ TODO
 
 See also the list of [contributors](https://github.com/Wicker25/puro/contributors)
 who participated in this project.
+
+## License
+
+Puro is [MIT licensed](LICENSE).
