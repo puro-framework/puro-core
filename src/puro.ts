@@ -25,7 +25,6 @@
  */
 
 import { Server } from './http';
-import { Request, Response, NextFunction } from './http';
 
 import {
   requestHandler,
@@ -39,6 +38,8 @@ import { DatabaseDef } from './database';
 import { Plugin } from './plugin';
 
 import { forOwn as _forOwn } from 'lodash';
+
+import * as express from 'express';
 
 /**
  * The Puro's options.
@@ -95,6 +96,7 @@ export class Puro {
   prepare() {
     this.container.define('database', DatabaseDef);
 
+    this.server.use(express.json());
     this.server.use(requestHandler);
     this.server.use(responseHandler);
 

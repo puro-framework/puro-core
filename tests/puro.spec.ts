@@ -38,6 +38,8 @@ import { Container } from '../src/container';
 
 import { Plugin } from '../src/plugin';
 
+import * as express from 'express';
+
 describe('puro', () => {
   let puro: Puro;
   let server: any;
@@ -121,16 +123,20 @@ describe('puro', () => {
   });
 
   it('can prepare the server', async () => {
+    const jsonParser = {};
+    spyOn(express as any, 'json').and.returnValue(jsonParser);
+
     puro.prepare();
 
     expect(container.define).toHaveBeenCalled();
     expect(container.define.mock.calls[0][0]).toBe('database');
 
-    expect(server.use).toHaveBeenCalledTimes(4);
-    expect(server.use.mock.calls[0][0]).toBe(requestHandler);
-    expect(server.use.mock.calls[1][0]).toBe(responseHandler);
-    expect(server.use.mock.calls[2][0]).toBe(errorHandler);
-    expect(server.use.mock.calls[3][0]).toBe(error404Handler);
+    expect(server.use).toHaveBeenCalledTimes(5);
+    expect(server.use.mock.calls[0][0]).toBe(jsonParser);
+    expect(server.use.mock.calls[1][0]).toBe(requestHandler);
+    expect(server.use.mock.calls[2][0]).toBe(responseHandler);
+    expect(server.use.mock.calls[3][0]).toBe(errorHandler);
+    expect(server.use.mock.calls[4][0]).toBe(error404Handler);
   });
 
   it('can listen for connections', async () => {
