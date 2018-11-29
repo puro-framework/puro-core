@@ -50,12 +50,14 @@ import {
 } from '../src/http';
 
 describe('http', () => {
+  let errorSpy: Function;
+
   let request: Request;
   let response: Response;
   let next: NextFunction;
 
   beforeEach(() => {
-    console.error = jest.fn();
+    errorSpy = spyOn(console, 'error');
 
     request = new Request();
     response = new Response();
@@ -168,7 +170,7 @@ describe('http', () => {
       undefined
     );
 
-    expect(console.error).toHaveBeenCalledWith(exception);
+    expect(errorSpy).toHaveBeenCalledWith(exception);
   });
 
   it('can handle native not found exceptions', async () => {

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "prettify": "prettier --single-quote --write 'src/**/*.ts'",
+    "prettify": "prettier --single-quote --write 'src/**/*.ts' 'tests/**/*.ts'",
     "test": "jest"
   },
   "jest": {

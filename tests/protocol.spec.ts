@@ -45,20 +45,37 @@ import { Container } from '../src/container';
 import {
   Schema,
   getSchema,
+  serialize,
   prepareRequest,
   prepareResponse,
   buildControllerMiddleware
 } from '../src/protocol';
 
+import * as _ from 'lodash';
+
 describe('protocol', () => {
+  let warnSpy: Function;
+
   let request: Request;
   let response: Response;
   let next: NextFunction;
 
   beforeEach(() => {
+    warnSpy = spyOn(console, 'warn');
+
     request = new Request();
     response = new Response();
     next = jest.fn();
+  });
+
+  it('can annotate class properties', async () => {
+    class TestClass {
+      @Schema('annotation')
+      property1?: string;
+    }
+
+    const createSchema = getSchema(new TestClass(), 'property1');
+    expect(createSchema).toEqual('annotation');
   });
 
   it('can annotate controller handlers', async () => {
@@ -69,6 +86,135 @@ describe('protocol', () => {
 
     const createSchema = getSchema(new TestController(), 'create');
     expect(createSchema).toEqual({ key: 'value' });
+  });
+
+  it('can serialize numbers', async () => {
+    const input: any = 15.3;
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toBe(15.3);
+  });
+
+  it('can serialize strings', async () => {
+    const input: any = 'string';
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toBe('string');
+  });
+
+  it('can serialize booleans', async () => {
+    const input: any = true;
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(typeof output.content).toBe('boolean');
+  });
+
+  it('can serialize dates', async () => {
+    const input: any = new Date(2018, 12, 25, 5, 30, 10);
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toBe('2019-01-25T05:30:10.000Z');
+  });
+
+  it('can serialize arrays', async () => {
+    const input: any = [1, 2, 3];
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual([1, 2, 3]);
+  });
+
+  it('can serialize plain objects', async () => {
+    const input: any = { key: 'value' };
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual({ key: 'value' });
+  });
+
+  it('can serialize schema objects', async () => {
+    class TestEntity {
+      property1: string = 'value1'; // Hidden property
+
+      @Schema()
+      property2: string = 'value2'; // Default name
+
+      @Schema('customProperty3')
+      property3: string = 'value3'; // Custom name
+    }
+
+    const input: any = new TestEntity();
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual({
+      property2: 'value2',
+      customProperty3: 'value3'
+    });
+  });
+
+  it('can serialize derived schema objects', async () => {
+    class TestBase {
+      @Schema()
+      property1: string = 'value1';
+    }
+    class TestDerived extends TestBase {
+      @Schema()
+      property2: string = 'value2';
+    }
+
+    const input: any = new TestDerived();
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual({
+      property1: 'value1',
+      property2: 'value2'
+    });
+  });
+
+  it('can serialize nested schema objects', async () => {
+    class TestUser {
+      @Schema('name')
+      name?: string;
+    }
+    class TestBook {
+      @Schema('author')
+      author?: TestUser;
+    }
+
+    const user = new TestUser();
+    user.name = 'John Doe';
+
+    const book = new TestBook();
+    book.author = user;
+
+    const input: any = book;
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual({
+      author: {
+        name: 'John Doe'
+      }
+    });
+  });
+
+  it('can handle unserializable objects', async () => {
+    spyOn(_ as any, 'isBoolean').and.returnValue(false);
+
+    const input: any = true;
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Unable to serialize "content" of type "boolean"'
+    );
   });
 
   it('can prepare the request', async () => {

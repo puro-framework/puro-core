@@ -32,6 +32,16 @@ import { Validator } from './validator';
 
 import 'reflect-metadata';
 
+import {
+  isNumber as _isNumber,
+  isString as _isString,
+  isBoolean as _isBoolean,
+  isArray as _isArray,
+  isDate as _isDate,
+  isPlainObject as _isPlainObject,
+  isObjectLike as _isObjectLike
+} from 'lodash';
+
 /**
  * The schema symbol.
  */
@@ -45,10 +55,63 @@ export const Schema = (rules?: any): Function => {
 };
 
 /**
+ * Returns true if the object has a schema applied on the specified property.
+ */
+export const hasSchema = (target: any, propertyKey: string) => {
+  return Reflect.hasMetadata(schemaSymbol, target, propertyKey);
+};
+
+/**
  * Gets the schema from an object property/method.
  */
 export const getSchema = (target: any, propertyKey: string) => {
   return Reflect.getMetadata(schemaSymbol, target, propertyKey);
+};
+
+/**
+ * Serializes an object by using the protocol rules.
+ */
+export const serialize = (
+  input: any,
+  inputKey: any,
+  output: any,
+  outputKey?: any
+): any => {
+  let node: any = input[inputKey];
+
+  if (!outputKey) {
+    outputKey = inputKey;
+  }
+
+  if (_isNumber(node) || _isString(node) || _isBoolean(node)) {
+    output[outputKey] = node;
+  } else if (_isDate(node)) {
+    output[outputKey] = (node as Date).toISOString();
+  } else if (_isArray(node)) {
+    output[outputKey] = [];
+
+    for (const k in node) {
+      serialize(node, k, output[inputKey]);
+    }
+  } else if (_isPlainObject(node)) {
+    // Serialize plain objects
+    output[outputKey] = {};
+
+    for (const k in node) {
+      serialize(node, k, output[inputKey]);
+    }
+  } else if (_isObjectLike(node)) {
+    // Serialize schema objects
+    output[outputKey] = {};
+
+    for (const k in node) {
+      if (hasSchema(node, k)) {
+        serialize(node, k, output[inputKey], getSchema(node, k) || k);
+      }
+    }
+  } else {
+    console.warn(`Unable to serialize "${inputKey}" of type "${typeof node}"`);
+  }
 };
 
 /**
@@ -87,9 +150,12 @@ export const prepareResponse = (
   body: any,
   hints?: IHttpExceptionHints
 ): Response => {
+  const output: any = {};
+  serialize({ content: body }, 'content', output);
+
   return response.status(statusCode).send({
     status: statusCode,
-    content: body,
+    content: output['content'],
     hints: hints
   });
 };
