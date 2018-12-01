@@ -41,7 +41,7 @@ describe('validator', () => {
       isHash: { algorithm: 'md5' }
     };
 
-    const result = validator.validateValue('1', constraints);
+    const result = await validator.validateValue('1', constraints);
 
     expect(result).toEqual([
       'The parameter must contain only letters',
@@ -76,7 +76,7 @@ describe('validator', () => {
       }
     };
 
-    const result = (validator as any).validateRequest(request, schema);
+    const result = await (validator as any).validateRequest(request, schema);
 
     expect(result).toEqual({
       param1: ['The parameter must be a number'],
@@ -89,7 +89,7 @@ describe('validator', () => {
 
   it('can handle unknown constraints', async () => {
     try {
-      validator.validateValue('0', { unknown: {} });
+      await validator.validateValue('0', { unknown: {} });
     } catch (e) {
       expect(e).toEqual(new Error('The constraint "unknown" does not exist'));
     }

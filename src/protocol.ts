@@ -122,7 +122,10 @@ const validator = new Validator();
 /**
  * Prepare the request.
  */
-export const prepareRequest = (request: Request, schema: any): Request => {
+export const prepareRequest = async (
+  request: Request,
+  schema: any
+): Promise<Request> => {
   // Fill the property bucket with all request data
   request.bucket = Object.assign(
     {},
@@ -132,7 +135,7 @@ export const prepareRequest = (request: Request, schema: any): Request => {
   );
 
   // Validate the request by using the schema
-  const hints = validator.validateRequest(request, schema);
+  const hints = await validator.validateRequest(request, schema);
 
   if (Object.keys(hints).length > 0) {
     throw new InvalidParameterHttpException('Invalid Parameter', hints);
@@ -144,12 +147,12 @@ export const prepareRequest = (request: Request, schema: any): Request => {
 /**
  * Prepare the response.
  */
-export const prepareResponse = (
+export const prepareResponse = async (
   response: Response,
   statusCode: number,
   body: any,
   hints?: IHttpExceptionHints
-): Response => {
+): Promise<Response> => {
   const output: any = {};
   serialize({ content: body }, 'content', output);
 

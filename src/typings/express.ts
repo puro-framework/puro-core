@@ -36,7 +36,7 @@ declare global {
       user: any;
       entities: any;
 
-      prepare(schema: any): Request;
+      prepare(schema: any): Promise<Request>;
     }
 
     /**
@@ -46,7 +46,11 @@ declare global {
       /**
        * Sets the content of the response.
        */
-      prepare(code: number, body: any, hints?: IHttpExceptionHints): Response;
+      prepare(
+        code: number,
+        body: any,
+        hints?: IHttpExceptionHints
+      ): Promise<Response>;
     }
   }
 }

@@ -35,53 +35,62 @@ const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
  */
 /* istanbul ignore next */
 const ConstraintMethods: any = {
-  isAfter: (v: string, o: any) => !v.length || validator.isAfter(v, o.date),
-  isAlpha: (v: string, o: any) => !v.length || validator.isAlpha(v, o.locale),
-  isAlphanumeric: (v: string, o: any) =>
+  isAfter: async (v: string, o: any) =>
+    !v.length || validator.isAfter(v, o.date),
+  isAlpha: async (v: string, o: any) =>
+    !v.length || validator.isAlpha(v, o.locale),
+  isAlphanumeric: async (v: string, o: any) =>
     !v.length || validator.isAlphanumeric(v, o.locale),
-  isAscii: (v: any) => !v.length || validator.isAscii(v),
-  isBase64: (v: any) => !v.length || validator.isBase64(v),
-  isBefore: (v: string, o: any) => !v.length || validator.isBefore(v, o.date),
-  isBoolean: (v: any) => !v.length || validator.isBoolean(v),
-  isByteLength: (v: string, o: any) =>
+  isAscii: async (v: string) => !v.length || validator.isAscii(v),
+  isBase64: async (v: string) => !v.length || validator.isBase64(v),
+  isBefore: async (v: string, o: any) =>
+    !v.length || validator.isBefore(v, o.date),
+  isBoolean: async (v: string) => !v.length || validator.isBoolean(v),
+  isByteLength: async (v: string, o: any) =>
     !v.length || validator.isByteLength(v, o),
-  isCreditCard: (v: any) => !v.length || validator.isCreditCard(v),
-  isCurrency: (v: string, o: any) => !v.length || validator.isCurrency(v, o),
-  isDecimal: (v: string, o: any) => !v.length || validator.isDecimal(v, o),
-  isEmail: (v: string, o: any) => !v.length || validator.isEmail(v, o),
-  isFQDN: (v: string, o: any) => !v.length || validator.isFQDN(v, o),
-  isFloat: (v: string, o: any) => !v.length || validator.isFloat(v, o),
-  isHash: (v: string, o: any) => !v.length || validator.isHash(v, o.algorithm),
-  isHexadecimal: (v: any) => !v.length || validator.isHexadecimal(v),
-  isIdentityCard: (v: string, o: any) =>
+  isCreditCard: async (v: string) => !v.length || validator.isCreditCard(v),
+  isCurrency: async (v: string, o: any) =>
+    !v.length || validator.isCurrency(v, o),
+  isDecimal: async (v: string, o: any) =>
+    !v.length || validator.isDecimal(v, o),
+  isEmail: async (v: string, o: any) => !v.length || validator.isEmail(v, o),
+  isFQDN: async (v: string, o: any) => !v.length || validator.isFQDN(v, o),
+  isFloat: async (v: string, o: any) => !v.length || validator.isFloat(v, o),
+  isHash: async (v: string, o: any) =>
+    !v.length || validator.isHash(v, o.algorithm),
+  isHexadecimal: async (v: string) => !v.length || validator.isHexadecimal(v),
+  isIdentityCard: async (v: string, o: any) =>
     !v.length || (validator as any).isIdentityCard(v, o.locale),
-  isIP: (v: string, o: any) => !v.length || validator.isIP(v, o.version),
-  isIPRange: (v: any) => !v.length || (validator as any).isIPRange(v),
-  isISO8601: (v: any) => !v.length || validator.isISO8601(v),
-  isRequired: (v: any) => v && v.length > 0,
-  isRFC3339: (v: any) => !v.length || (validator as any).isRFC3339(v),
-  isISO31661Alpha2: (v: any) => !v.length || validator.isISO31661Alpha2(v),
-  isISO31661Alpha3: (v: any) =>
+  isIP: async (v: string, o: any) => !v.length || validator.isIP(v, o.version),
+  isIPRange: async (v: string) => !v.length || (validator as any).isIPRange(v),
+  isISO8601: async (v: string) => !v.length || validator.isISO8601(v),
+  isRequired: async (v: string) => v && v.length > 0,
+  isRFC3339: async (v: string) => !v.length || (validator as any).isRFC3339(v),
+  isISO31661Alpha2: async (v: string) =>
+    !v.length || validator.isISO31661Alpha2(v),
+  isISO31661Alpha3: async (v: string) =>
     !v.length || (validator as any).isISO31661Alpha3(v),
-  isIn: (v: string, o: any) => !v.length || validator.isIn(v, o.values),
-  isInt: (v: string, o: any) => !v.length || validator.isInt(v, o),
-  isJSON: (v: any) => !v.length || validator.isJSON(v),
-  isJWT: (v: any) => !v.length || (validator as any).isJWT(v),
-  isLatLong: (v: any) => !v.length || validator.isLatLong(v),
-  isLength: (v: string, o: any) => !v.length || validator.isLength(v, o),
-  isLowercase: (v: any) => !v.length || validator.isLowercase(v),
-  isMACAddress: (v: any) => !v.length || validator.isMACAddress(v),
-  isMimeType: (v: any) => !v.length || validator.isMimeType(v),
-  isMobilePhone: (v: string, o: any) =>
+  isIn: async (v: string, o: any) => !v.length || validator.isIn(v, o.values),
+  isInt: async (v: string, o: any) => !v.length || validator.isInt(v, o),
+  isJSON: async (v: string) => !v.length || validator.isJSON(v),
+  isJWT: async (v: string) => !v.length || (validator as any).isJWT(v),
+  isLatLong: async (v: string) => !v.length || validator.isLatLong(v),
+  isLength: async (v: string, o: any) => !v.length || validator.isLength(v, o),
+  isLowercase: async (v: string) => !v.length || validator.isLowercase(v),
+  isMACAddress: async (v: string) => !v.length || validator.isMACAddress(v),
+  isMimeType: async (v: string) => !v.length || validator.isMimeType(v),
+  isMobilePhone: async (v: string, o: any) =>
     !v.length || validator.isMobilePhone(v, o.locale, o),
-  isNumeric: (v: string, o: any) => !v.length || validator.isNumeric(v, o),
-  isPort: (v: any) => !v.length || validator.isPort(v),
-  isPostalCode: (v: string, o: any) =>
+  isNumeric: async (v: string, o: any) =>
+    !v.length || validator.isNumeric(v, o),
+  isPort: async (v: string) => !v.length || validator.isPort(v),
+  isPostalCode: async (v: string, o: any) =>
     !v.length || validator.isPostalCode(v, o.locale),
-  isURL: (v: string, o: any) => !v.length || validator.isURL(v, o),
-  isUUID: (v: string, o: any) => !v.length || validator.isUUID(v, o.version),
-  isUppercase: (v: any) => !v.length || validator.isUppercase(v),
-  isWhitelisted: (v: string, o: any) =>
+  isURL: async (v: string, o: any) => !v.length || validator.isURL(v, o),
+  isUUID: async (v: string, o: any) =>
+    !v.length || validator.isUUID(v, o.version),
+  isUppercase: async (v: string) => !v.length || validator.isUppercase(v),
+  isWhitelisted: async (v: string, o: any) =>
     !v.length || validator.isWhitelisted(v, o.chars)
 };
 
@@ -141,8 +150,10 @@ export class Validator {
   /**
    * Validates a value against a list of constraints.
    */
-  validateValue(value: string, constraints: any): string[] {
-    return Object.keys(constraints).reduce((hints: string[], name: string) => {
+  async validateValue(value: string, constraints: any): Promise<string[]> {
+    let hints: string[] = [];
+
+    for (const name in constraints) {
       const method = ConstraintMethods[name];
 
       if (!method) {
@@ -150,21 +161,24 @@ export class Validator {
       }
 
       const options = constraints[name];
+      const result = await method(value, options);
 
-      if (!method(value, options)) {
-        return hints.concat(this.prepareHint(name, options));
+      if (!result) {
+        hints = hints.concat(this.prepareHint(name, options));
       }
+    }
 
-      return hints;
-    }, []);
+    return hints;
   }
 
   /**
    * Validates the request against a list of constraints in a schema.
    */
-  validateRequest(request: Request, schema: any) {
-    return Object.keys(schema).reduce((output: any, name: string) => {
-      const hints = this.validateValue(
+  async validateRequest(request: Request, schema: any) {
+    const output: any = {};
+
+    for (const name in schema) {
+      const hints = await this.validateValue(
         String(request.bucket[name] || ''),
         schema[name]
       );
@@ -172,9 +186,9 @@ export class Validator {
       if (hints.length > 0) {
         output[name] = hints;
       }
+    }
 
-      return output;
-    }, {});
+    return output;
   }
 
   /**

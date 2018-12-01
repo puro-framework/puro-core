@@ -222,7 +222,7 @@ describe('protocol', () => {
     request.body = { b: 2, c: 2 };
     request.params = { c: 3 };
 
-    request = mock(prepareRequest)(request, {});
+    request = await mock(prepareRequest)(request, {});
     expect(request.bucket).toEqual({ a: 1, b: 2, c: 3 });
   });
 
@@ -233,7 +233,7 @@ describe('protocol', () => {
       hint3: ['message3']
     };
 
-    response = mock(prepareResponse)(
+    response = await mock(prepareResponse)(
       response,
       123,
       'Response Content',
@@ -250,7 +250,9 @@ describe('protocol', () => {
 
   it('can handle invalid request parameters', async () => {
     try {
-      request = mock(prepareRequest)(request, { param: { isRequired: {} } });
+      request = await mock(prepareRequest)(request, {
+        param: { isRequired: {} }
+      });
     } catch (e) {
       expect(e).toBeInstanceOf(InvalidParameterHttpException);
     }

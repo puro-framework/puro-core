@@ -121,7 +121,7 @@ export const requestHandler = async (
   next: NextFunction
 ) => {
   // Add a new method for preparing the request
-  request.prepare = function(schema: any) {
+  request.prepare = async function(schema: any) {
     return prepareRequest(this, schema);
   };
 
@@ -137,7 +137,7 @@ export const responseHandler = async (
   next: NextFunction
 ) => {
   // Add a new method for preparing the response
-  response.prepare = function(
+  response.prepare = async function(
     statusCode: number,
     body: any,
     hints?: IHttpExceptionHints
@@ -169,7 +169,7 @@ export const errorHandler = async (
     ];
   }
 
-  response.prepare(statusCode, message, hints);
+  await response.prepare(statusCode, message, hints);
 
   if (statusCode >= 500) {
     console.error(exception);
@@ -180,5 +180,5 @@ export const errorHandler = async (
  * The 404 error handler.
  */
 export const error404Handler = async (request: Request, response: Response) => {
-  response.prepare(404, 'Not Found');
+  await response.prepare(404, 'Not Found');
 };
