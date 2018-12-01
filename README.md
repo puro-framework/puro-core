@@ -26,7 +26,7 @@ Finally, to make things dead simple, it speaks only two languages: *HTTP* and *J
 ## Features
 
 - Plugin-oriented architecture;
-- Comfortable Object-Oriented design, thank to [Typescript](https://www.typescriptlang.org/);
+- Comfortable Object-Oriented design, thanks to [Typescript](https://www.typescriptlang.org/);
 - Automatic request validation;
 - Automatic ORM entity resolution (*WIP*);
 - Automatic response serialization (*WIP*);
