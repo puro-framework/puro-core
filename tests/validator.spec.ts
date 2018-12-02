@@ -271,17 +271,32 @@ describe('validator', () => {
   it('can use "isEntityId" constraint', async () => {
     class TestClass {}
 
+    const entity: any = {};
+    const getEntitySpy = spyOn(database, 'getEntity').and.returnValue(entity);
+
+    const hints = await validator.validateValue('id', {
+      isEntityId: {
+        type: TestClass,
+        name: 'entityName'
+      }
+    });
+
+    expect(getEntitySpy).toBeCalledWith(TestClass, 'id');
+    expect(hints.length).toBeFalsy();
+  });
+
+  it('can use "isEntityId" constraint (with context)', async () => {
+    class TestClass {}
+
     const request = new Request();
     request.entities = {};
 
-    const findOne = jest.fn(async () => 'entityInstance');
-    const getRepositorySpy = spyOn(database, 'getRepository').and.returnValue({
-      findOne
-    });
+    const entity: any = {};
+    const getEntitySpy = spyOn(database, 'getEntity').and.returnValue(entity);
 
     const context = { request };
     const hints = await validator.validateValue(
-      'entityId',
+      'id',
       {
         isEntityId: {
           type: TestClass,
@@ -291,39 +306,33 @@ describe('validator', () => {
       context
     );
 
-    expect(getRepositorySpy).toBeCalledWith(TestClass);
-    expect(findOne).toBeCalledWith('entityId');
+    expect(getEntitySpy).toBeCalledWith(TestClass, 'id');
     expect(hints.length).toBeFalsy();
+
     expect(request.entities).toEqual({
-      entityName: 'entityInstance'
+      entityName: entity
     });
   });
 
   it('can use "isEntityId" constraint (hint)', async () => {
     class TestClass {}
 
-    const request = new Request();
-    request.entities = {};
+    const repository: any = {
+      findOne: jest.fn(async () => {})
+    };
 
-    const findOne = jest.fn(async () => undefined);
-    const getRepositorySpy = spyOn(database, 'getRepository').and.returnValue({
-      findOne
-    });
-
-    const context = { request };
-    const hints = await validator.validateValue(
-      'entityId',
-      {
-        isEntityId: {
-          type: TestClass,
-          name: 'entityName'
-        }
-      },
-      context
+    const getEntitySpy = spyOn(database, 'getEntity').and.returnValue(
+      undefined
     );
 
-    expect(getRepositorySpy).toBeCalledWith(TestClass);
-    expect(findOne).toBeCalledWith('entityId');
+    const hints = await validator.validateValue('id', {
+      isEntityId: {
+        type: TestClass,
+        name: 'entityName'
+      }
+    });
+
+    expect(getEntitySpy).toBeCalledWith(TestClass, 'id');
     expect(hints).toEqual(['The parameter must be a valid entity ID']);
   });
 
@@ -755,9 +764,7 @@ describe('validator', () => {
   });
 
   it("shouldn't check empty values", async () => {
-    spyOn(database, 'getRepository').and.returnValue({
-      findOne: jest.fn(async () => 'entityInstance')
-    });
+    spyOn(database, 'getEntity').and.returnValue(undefined);
 
     await validator.validateValue('', {
       isAfter: {},

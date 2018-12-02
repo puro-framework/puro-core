@@ -25,7 +25,7 @@
  */
 
 import { Request } from './http';
-import { getRepository } from './database';
+import { getEntity } from './database';
 
 import * as validator from 'validator';
 
@@ -91,8 +91,7 @@ const ConstraintMethods: any = {
   isWhitelisted: async (v: string, o: any) =>
     !v.length || validator.isWhitelisted(v, o.chars),
   isEntityId: async (v: string, o: any, c: any) => {
-    const repository = await getRepository(o.type);
-    const entity = await repository.findOne(v);
+    const entity = await getEntity(o.type, v);
 
     if (!entity) {
       return false;

@@ -58,6 +58,33 @@ export const closeConnection = async () => {
 };
 
 /**
+ * Returns the entity repository for a specific entity.
+ */
+export const getRepository = async <Entity>(type: ObjectType<Entity>) => {
+  return (await getConnection()).getRepository(type);
+};
+
+/**
+ * Returns an entity by its class and ID.
+ */
+export const getEntity = async <Entity>(
+  type: ObjectType<Entity>,
+  id: string
+) => {
+  const repository = await getRepository(type);
+  const entity = await repository.findOne(id);
+
+  if (entity) {
+    // Add shortcut method to the entity instance
+    (entity as any).save = async function() {
+      return repository.save(this);
+    };
+
+    return entity;
+  }
+};
+
+/**
  * Definition for the service.
  */
 export const DatabaseDef: IServiceExtended = {
@@ -67,11 +94,4 @@ export const DatabaseDef: IServiceExtended = {
   unload: async () => {
     return closeConnection();
   }
-};
-
-/**
- * Returns the entity repository for a specific entity.
- */
-export const getRepository = async <Entity>(type: ObjectType<Entity>) => {
-  return (await getConnection()).getRepository(type);
 };

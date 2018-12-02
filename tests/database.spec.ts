@@ -27,8 +27,9 @@
 import {
   getConnection,
   closeConnection,
-  DatabaseDef,
-  getRepository
+  getRepository,
+  getEntity,
+  DatabaseDef
 } from '../src/database';
 
 import { configs } from '../src/configs';
@@ -39,10 +40,19 @@ describe('database', () => {
   let connection: any;
   let connectionOptions: typeorm.ConnectionOptions;
   let createConnectionSpy: Function;
+  let repository: any;
+  let entity: any;
 
   beforeEach(() => {
+    entity = {};
+
+    repository = {
+      findOne: jest.fn(async () => entity),
+      save: jest.fn(async () => {})
+    };
+
     connection = {
-      getRepository: jest.fn(),
+      getRepository: jest.fn(async () => repository),
       close: jest.fn()
     };
 
@@ -94,7 +104,28 @@ describe('database', () => {
 
   it('can get the entity repository for a specific entity', async () => {
     class TestType {}
-    const repository = await getRepository(TestType);
+    await getRepository(TestType);
     expect(connection.getRepository).toBeCalledWith(TestType);
+  });
+
+  it('can get an entity by its class and ID', async () => {
+    class TestType {}
+    const entity: any = await getEntity(TestType, 'id');
+    expect(connection.getRepository).toBeCalledWith(TestType);
+    expect(repository.findOne).toBeCalledWith('id');
+
+    expect(typeof entity.save).toBe('function');
+    await entity.save();
+    expect(repository.save).toHaveBeenCalled();
+  });
+
+  it('can get an entity by its class and ID (unable to find)', async () => {
+    repository.findOne = jest.fn(async () => undefined);
+
+    class TestType {}
+    const entity: any = await getEntity(TestType, 'id');
+    expect(connection.getRepository).toBeCalledWith(TestType);
+    expect(repository.findOne).toBeCalledWith('id');
+    expect(entity).toBeUndefined();
   });
 });
