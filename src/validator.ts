@@ -34,7 +34,6 @@ const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
 /**
  * The constraint methods.
  */
-/* istanbul ignore next */
 const ConstraintMethods: any = {
   isAfter: async (v: string, o: any) =>
     !v.length || validator.isAfter(v, o.date),
@@ -60,12 +59,10 @@ const ConstraintMethods: any = {
   isHash: async (v: string, o: any) =>
     !v.length || validator.isHash(v, o.algorithm),
   isHexadecimal: async (v: string) => !v.length || validator.isHexadecimal(v),
-  isIdentityCard: async (v: string, o: any) =>
-    !v.length || (validator as any).isIdentityCard(v, o.locale),
   isIP: async (v: string, o: any) => !v.length || validator.isIP(v, o.version),
   isIPRange: async (v: string) => !v.length || (validator as any).isIPRange(v),
   isISO8601: async (v: string) => !v.length || validator.isISO8601(v),
-  isRequired: async (v: string) => v && v.length > 0,
+  isNotEmpty: async (v: string) => v && v.length > 0,
   isRFC3339: async (v: string) => !v.length || (validator as any).isRFC3339(v),
   isISO31661Alpha2: async (v: string) =>
     !v.length || validator.isISO31661Alpha2(v),
@@ -103,7 +100,10 @@ const ConstraintMethods: any = {
 
     // Add the resolved entity to the response
     const request = c.request;
-    request.entities[o.name] = entity;
+
+    if (request) {
+      request.entities[o.name] = entity;
+    }
 
     return true;
   }
@@ -130,11 +130,10 @@ const ConstraintHints: { [key: string]: string } = {
   isFloat: 'The parameter must be a floating-point number',
   isHash: 'The parameter must be a valid %algorithm% hash',
   isHexadecimal: 'The parameter must be a hexadecimal number',
-  isIdentityCard: 'The parameter must be a valid identity card code',
   isIP: 'The parameter must be a valid IP address',
   isIPRange: 'The parameter must be a valid IP address range',
   isISO8601: 'The parameter must be a valid ISO 8601 date',
-  isRequired: 'The parameter is required',
+  isNotEmpty: 'The parameter cannot be empty',
   isRFC3339: 'The parameter must be a valid RFC 3339 date',
   isISO31661Alpha2:
     'The parameter must be a valid ISO 3166-1 alpha-2 country code',
@@ -156,7 +155,7 @@ const ConstraintHints: { [key: string]: string } = {
   isURL: 'The parameter must be a valid URL',
   isUUID: 'The parameter must be a valid UUID',
   isUppercase: 'The parameter must be an uppercase string',
-  isWhitelisted: 'The parameter must contain only %chars%'
+  isWhitelisted: 'The parameter must contain only the characters "%chars%"'
 };
 
 /**
@@ -169,7 +168,7 @@ export class Validator {
   async validateValue(
     value: string,
     constraints: any,
-    context?: any
+    context: any = {}
   ): Promise<string[]> {
     let hints: string[] = [];
 

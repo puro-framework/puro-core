@@ -33,6 +33,7 @@ export class Request {
   params?: any;
   bucket?: any;
   user?: any;
+  entities: any;
   prepare? = jest.fn<Response>((schema: any) => this);
 }
 
