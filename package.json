@@ -24,7 +24,6 @@
     "preset": "ts-jest",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "<rootDir>/src/plugins/",
       "<rootDir>/src/testing/"
     ]
   },
