@@ -92,7 +92,7 @@ export class Controller {
 
     // Prepare the request according to its schema
     const methodSchema = getSchema(this, options.hook) || {};
-    request.prepare(methodSchema);
+    await request.prepare(methodSchema);
 
     // Handle the request and its output
     const output = await this.processOutput(
@@ -102,7 +102,7 @@ export class Controller {
     );
 
     // Prepare the response
-    response.prepare(options.defaultStatusCode, output);
+    await response.prepare(options.defaultStatusCode, output);
   }
 
   /**

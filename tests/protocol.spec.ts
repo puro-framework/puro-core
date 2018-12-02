@@ -34,6 +34,7 @@ import {
 import { mock } from '../src/testing/mocks';
 
 import {
+  NotFoundHttpException,
   MethodNotAllowedHttpException,
   InvalidParameterHttpException,
   Request as HttpRequest
@@ -248,13 +249,32 @@ describe('protocol', () => {
     });
   });
 
-  it('can handle invalid request parameters', async () => {
+  it('can handle invalid request URL parameters', async () => {
+    request.params = { param: 'value' };
+
     try {
       request = await mock(prepareRequest)(request, {
-        param: { isRequired: {} }
+        param: { isUppercase: {} }
+      });
+      fail();
+    } catch (e) {
+      expect(e).toBeInstanceOf(NotFoundHttpException);
+    }
+  });
+
+  it('can handle invalid request parameters', async () => {
+    request.params = {};
+    request.body = { param: 'value' };
+
+    try {
+      request = await mock(prepareRequest)(request, {
+        param: { isUppercase: {} }
       });
     } catch (e) {
       expect(e).toBeInstanceOf(InvalidParameterHttpException);
+      expect(e.hints).toEqual({
+        param: ['The parameter must be an uppercase string']
+      });
     }
   });
 

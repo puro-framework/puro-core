@@ -25,7 +25,13 @@
  */
 
 import { Request, Response, NextFunction } from './http';
-import { InvalidParameterHttpException, IHttpExceptionHints } from './http';
+
+import {
+  NotFoundHttpException,
+  InvalidParameterHttpException,
+  IHttpExceptionHints
+} from './http';
+
 import { Controller } from './controller';
 import { Container } from './container';
 import { Validator } from './validator';
@@ -120,6 +126,25 @@ export const serialize = (
 const validator = new Validator();
 
 /**
+ * Validates the request and, if necessary, sends back a 4xx status code.
+ */
+export const validateRequest = async (request: Request, schema: any) => {
+  const hints = await validator.validateRequest(request, schema);
+  const params = Object.keys(hints);
+
+  if (params.length > 0) {
+    // If there's any invalid URL parameters responds with a 404, otherwise 422
+    const urlParams = Object.keys(request.params);
+
+    if (params.some(name => urlParams.includes(name))) {
+      throw new NotFoundHttpException();
+    }
+
+    throw new InvalidParameterHttpException('Invalid Parameter', hints);
+  }
+};
+
+/**
  * Prepare the request.
  */
 export const prepareRequest = async (
@@ -134,12 +159,10 @@ export const prepareRequest = async (
     request.params
   );
 
-  // Validate the request by using the schema
-  const hints = await validator.validateRequest(request, schema);
+  // Create the container for the resolved entities
+  request.entities = {};
 
-  if (Object.keys(hints).length > 0) {
-    throw new InvalidParameterHttpException('Invalid Parameter', hints);
-  }
+  await validateRequest(request, schema);
 
   return request;
 };

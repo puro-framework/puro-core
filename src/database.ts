@@ -25,9 +25,10 @@
  */
 
 import { configs } from './configs';
+import { IServiceExtended } from './container';
 
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
-import { IServiceExtended } from './container';
+import { ObjectType } from 'typeorm/common/ObjectType';
 
 /**
  * The connection instance.
@@ -66,4 +67,11 @@ export const DatabaseDef: IServiceExtended = {
   unload: async () => {
     return closeConnection();
   }
+};
+
+/**
+ * Returns the entity repository for a specific entity.
+ */
+export const getRepository = async <Entity>(type: ObjectType<Entity>) => {
+  return (await getConnection()).getRepository(type);
 };

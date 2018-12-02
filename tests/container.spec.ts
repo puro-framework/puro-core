@@ -57,6 +57,7 @@ describe('container', () => {
   it('can handle undefined service', async () => {
     try {
       await container.get('undefined');
+      fail();
     } catch (e) {
       expect(e).toEqual(new Error('The service "undefined" is not defined'));
     }

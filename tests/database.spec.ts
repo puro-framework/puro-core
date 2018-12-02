@@ -24,7 +24,13 @@
  * SOFTWARE.
  */
 
-import { getConnection, closeConnection, DatabaseDef } from '../src/database';
+import {
+  getConnection,
+  closeConnection,
+  DatabaseDef,
+  getRepository
+} from '../src/database';
+
 import { configs } from '../src/configs';
 
 import * as typeorm from 'typeorm';
@@ -36,6 +42,7 @@ describe('database', () => {
 
   beforeEach(() => {
     connection = {
+      getRepository: jest.fn(),
       close: jest.fn()
     };
 
@@ -83,5 +90,11 @@ describe('database', () => {
 
     await DatabaseDef.unload();
     expect(connection.close).toBeCalled();
+  });
+
+  it('can get the entity repository for a specific entity', async () => {
+    class TestType {}
+    const repository = await getRepository(TestType);
+    expect(connection.getRepository).toBeCalledWith(TestType);
   });
 });

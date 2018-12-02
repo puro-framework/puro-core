@@ -90,6 +90,7 @@ describe('validator', () => {
   it('can handle unknown constraints', async () => {
     try {
       await validator.validateValue('0', { unknown: {} });
+      fail();
     } catch (e) {
       expect(e).toEqual(new Error('The constraint "unknown" does not exist'));
     }

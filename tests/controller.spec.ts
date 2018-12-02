@@ -83,6 +83,7 @@ describe('controller', () => {
     try {
       request.method = 'POST';
       await mock<Middleware>(controller.handleRequest)(request, response);
+      fail();
     } catch (e) {
       expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
@@ -92,6 +93,7 @@ describe('controller', () => {
     try {
       request.method = 'GET';
       await mock<Middleware>(controller.handleRequest)(request, response);
+      fail();
     } catch (e) {
       expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
@@ -101,6 +103,7 @@ describe('controller', () => {
     try {
       request.method = 'PUT';
       await mock<Middleware>(controller.handleRequest)(request, response);
+      fail();
     } catch (e) {
       expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
@@ -110,6 +113,7 @@ describe('controller', () => {
     try {
       request.method = 'DELETE';
       await mock<Middleware>(controller.handleRequest)(request, response);
+      fail();
     } catch (e) {
       expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }
@@ -119,6 +123,7 @@ describe('controller', () => {
     try {
       request.method = 'unknown';
       await mock<Middleware>(controller.handleRequest)(request, response);
+      fail();
     } catch (e) {
       expect(e).toBeInstanceOf(MethodNotAllowedHttpException);
     }

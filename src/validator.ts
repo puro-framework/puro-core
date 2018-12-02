@@ -25,6 +25,7 @@
  */
 
 import { Request } from './http';
+import { getRepository } from './database';
 
 import * as validator from 'validator';
 
@@ -91,7 +92,21 @@ const ConstraintMethods: any = {
     !v.length || validator.isUUID(v, o.version),
   isUppercase: async (v: string) => !v.length || validator.isUppercase(v),
   isWhitelisted: async (v: string, o: any) =>
-    !v.length || validator.isWhitelisted(v, o.chars)
+    !v.length || validator.isWhitelisted(v, o.chars),
+  isEntityId: async (v: string, o: any, c: any) => {
+    const repository = await getRepository(o.type);
+    const entity = await repository.findOne(v);
+
+    if (!entity) {
+      return false;
+    }
+
+    // Add the resolved entity to the response
+    const request = c.request;
+    request.entities[o.name] = entity;
+
+    return true;
+  }
 };
 
 /**
@@ -110,6 +125,7 @@ const ConstraintHints: { [key: string]: string } = {
   isCurrency: 'The parameter must be a valid currency amount',
   isDecimal: 'The parameter must be a decimal',
   isEmail: 'The parameter must be a valid email',
+  isEntityId: 'The parameter must be a valid entity ID',
   isFQDN: 'The parameter must be a fully qualified domain name',
   isFloat: 'The parameter must be a floating-point number',
   isHash: 'The parameter must be a valid %algorithm% hash',
@@ -150,7 +166,11 @@ export class Validator {
   /**
    * Validates a value against a list of constraints.
    */
-  async validateValue(value: string, constraints: any): Promise<string[]> {
+  async validateValue(
+    value: string,
+    constraints: any,
+    context?: any
+  ): Promise<string[]> {
     let hints: string[] = [];
 
     for (const name in constraints) {
@@ -161,7 +181,7 @@ export class Validator {
       }
 
       const options = constraints[name];
-      const result = await method(value, options);
+      const result = await method(value, options, context);
 
       if (!result) {
         hints = hints.concat(this.prepareHint(name, options));
@@ -176,11 +196,13 @@ export class Validator {
    */
   async validateRequest(request: Request, schema: any) {
     const output: any = {};
+    const context: any = { request };
 
     for (const name in schema) {
       const hints = await this.validateValue(
         String(request.bucket[name] || ''),
-        schema[name]
+        schema[name],
+        context
       );
 
       if (hints.length > 0) {
