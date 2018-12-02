@@ -75,9 +75,13 @@ export const getEntity = async <Entity>(
   const entity = await repository.findOne(id);
 
   if (entity) {
-    // Add shortcut method to the entity instance
+    // Add shortcut methods to the entity instance
     (entity as any).save = async function() {
       return repository.save(this);
+    };
+
+    (entity as any).remove = async function() {
+      return repository.remove(this);
     };
 
     return entity;

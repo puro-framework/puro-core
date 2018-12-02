@@ -48,7 +48,8 @@ describe('database', () => {
 
     repository = {
       findOne: jest.fn(async () => entity),
-      save: jest.fn(async () => {})
+      save: jest.fn(async () => {}),
+      remove: jest.fn(async () => {})
     };
 
     connection = {
@@ -116,7 +117,11 @@ describe('database', () => {
 
     expect(typeof entity.save).toBe('function');
     await entity.save();
-    expect(repository.save).toHaveBeenCalled();
+    expect(repository.save).toHaveBeenCalledWith(entity);
+
+    expect(typeof entity.remove).toBe('function');
+    await entity.remove();
+    expect(repository.remove).toHaveBeenCalledWith(entity);
   });
 
   it('can get an entity by its class and ID (unable to find)', async () => {
