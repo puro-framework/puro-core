@@ -1,8 +1,16 @@
 {
-  "name": "puro",
+  "name": "@puro/core",
   "version": "0.1.0",
   "description": "Puro REST Framework",
   "license": "MIT",
+  "author": {
+    "name": "Giacomo Trudu aka Wicker25",
+    "email": "wicker25@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wicker25/puro.git"
+  },
   "engines": {
     "node": "8"
   },
