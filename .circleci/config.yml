@@ -27,7 +27,9 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
-      - run: yarn test --verbose --coverage
+      - run: |
+          yarn test --verbose --coverage
+          cat coverage/lcov.info | yarn coveralls
 
 workflows:
   version: 2
