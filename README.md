@@ -1,7 +1,7 @@
-# Puro REST Framework [![CircleCI](https://circleci.com/gh/Wicker25/puro.svg?style=svg)](https://circleci.com/gh/Wicker25/puro)
+# Puro REST Framework [![CircleCI](https://circleci.com/gh/puro-framework/puro.svg?style=svg)](https://circleci.com/gh/puro-framework/puro)
 
 [![npm version](https://badge.fury.io/js/%40puro%2Fcore.svg)](https://badge.fury.io/js/%40puro%2Fcore)
-[![Coverage Status](https://coveralls.io/repos/github/Wicker25/puro/badge.svg?branch=master)](https://coveralls.io/github/Wicker25/puro?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/puro-framework/puro/badge.svg?branch=master)](https://coveralls.io/github/puro-framework/puro?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > In anything at all, perfection is finally attained not when there is
