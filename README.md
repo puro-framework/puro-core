@@ -1,7 +1,7 @@
-# Puro REST Framework [![CircleCI](https://circleci.com/gh/puro-framework/puro.svg?style=svg)](https://circleci.com/gh/puro-framework/puro)
+# Puro REST Framework [![CircleCI](https://circleci.com/gh/puro-framework/puro-core.svg?style=svg)](https://circleci.com/gh/puro-framework/puro-core)
 
 [![npm version](https://badge.fury.io/js/%40puro%2Fcore.svg)](https://badge.fury.io/js/%40puro%2Fcore)
-[![Coverage Status](https://coveralls.io/repos/github/puro-framework/puro/badge.svg?branch=master)](https://coveralls.io/github/puro-framework/puro?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/puro-framework/puro-core/badge.svg?branch=master)](https://coveralls.io/github/puro-framework/puro-core?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > In anything at all, perfection is finally attained not when there is
@@ -39,6 +39,15 @@ Finally, to make things dead simple, it speaks only two languages: *HTTP* and *J
 - High-quality code and full test coverage;
 
 ## Getting Started
+
+To get started, create a new project from template with [Puro CLI](https://github.com/puro-framework/puro-cli):
+
+```
+$ yarn global add @puro/cli
+```
+```
+$ puro create-project <targetDir>
+```
 
 ## The CRUD Functions
 
