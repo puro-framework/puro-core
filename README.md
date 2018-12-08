@@ -33,62 +33,15 @@ Finally, to make things dead simple, it speaks only two languages: *HTTP* and *J
 - Plugin-oriented architecture;
 - Comfortable Object-Oriented design, thanks to [Typescript](https://www.typescriptlang.org/);
 - Automatic request validation;
-- Automatic ORM entity resolution (*WIP*);
-- Automatic response serialization (*WIP*);
+- Automatic ORM entity resolution;
+- Automatic response serialization;
 - Built-in service container (*WIP*);
 - Built-in logging (*WIP*);
 - High-quality code and full test coverage;
 
-## Getting Started
+## Documentation
 
-To get started, create a new project from template with [Puro CLI](https://github.com/puro-framework/puro-cli):
-
-```
-$ yarn global add @puro/cli
-```
-```
-$ puro create-project <targetDir>
-```
-
-## The CRUD Functions
-
-| CRUD Function | Target                 | HTTP Method | HTTP Status Code |
-|---------------|------------------------|-------------|------------------|
-| CREATE        | Collection             | POST        |              201 |
-| READ          | Resource or Collection | GET         |              200 |
-| UPDATE        | Resource               | PUT         |              204 |
-| DELETE        | Resource or Collection | DELETE      |              204 |
-
-## HTTP Exceptions
-
-| Exception Class               | HTTP Status Code | HTTP Response Message |
-|-------------------------------|------------------|-----------------------|
-| HttpException                 |                - | -                     |
-| BadRequestHttpException       |              400 | "Bad Request"         |
-| AccessDeniedHttpException     |              403 | "Forbidden"           |
-| NotFoundHttpException         |              404 | "Not Found"           |
-| MethodNotAllowedHttpException |              405 | "Method Not Allowed"  |
-| InvalidParameterHttpException |              422 | "Invalid Parameter"   |
-
-## Under the Hood
-
-![Request - Life Cycle](doc/life-cycle.png)
-
-## The Request
-
-TODO
-
-## Validating the Request
-
-TODO
-
-## The Response
-
-TODO
-
-## The Plugin
-
-TODO
+See [Puro REST Framework's documentation](https://docs.puro-framework.com/).
 
 ## Authors
 
