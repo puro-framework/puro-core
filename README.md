@@ -1,6 +1,7 @@
 # Puro REST Framework [![CircleCI](https://circleci.com/gh/puro-framework/puro-core.svg?style=svg)](https://circleci.com/gh/puro-framework/puro-core)
 
 [![npm version](https://badge.fury.io/js/%40puro%2Fcore.svg)](https://badge.fury.io/js/%40puro%2Fcore)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/puro-framework/puro-core.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/puro-framework/puro-core/context:javascript)
 [![Coverage Status](https://coveralls.io/repos/github/puro-framework/puro-core/badge.svg?branch=master)](https://coveralls.io/github/puro-framework/puro-core?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
