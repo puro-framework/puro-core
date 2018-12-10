@@ -1,3 +1,5 @@
+<img src="doc/logo.png" align="right" />
+
 # Puro REST Framework [![CircleCI](https://circleci.com/gh/puro-framework/puro-core.svg?style=svg)](https://circleci.com/gh/puro-framework/puro-core)
 
 [![npm version](https://badge.fury.io/js/%40puro%2Fcore.svg)](https://badge.fury.io/js/%40puro%2Fcore)
