@@ -36,12 +36,12 @@ export abstract class Plugin {
   /**
    * The plugin router.
    */
-  router: any;
+  router?: Router;
 
   /**
    * The plugin services.
    */
-  services: IServiceDef = {};
+  services?: IServiceDef;
 
   /**
    * Returns the definition for the routes.
@@ -72,12 +72,18 @@ export abstract class Plugin {
     const router = Router();
 
     this.getRoutes().forEach((route: IControllerRoute) => {
-      const controllerMiddleware = buildControllerMiddleware(
-        route.controller,
-        container
-      );
+      if (typeof route.controller !== 'undefined') {
+        route.middleware = buildControllerMiddleware(
+          route.controller,
+          container
+        );
+      }
 
-      router.use(route.path, controllerMiddleware);
+      if (typeof route.middleware === 'undefined') {
+        throw new Error(`Unable to find middleware for "${route.path}"`);
+      }
+
+      router.use(route.path, route.middleware);
     });
 
     return router;

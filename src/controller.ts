@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from './http';
+import { Request, Response, IMiddleware } from './http';
 import { MethodNotAllowedHttpException } from './http';
 
 import { Container } from './container';
@@ -35,7 +35,8 @@ import { getSchema } from './protocol';
  */
 export interface IControllerRoute {
   path: string;
-  controller: typeof Controller;
+  controller?: typeof Controller;
+  middleware?: IMiddleware;
 }
 
 /**

@@ -24,6 +24,8 @@
  * SOFTWARE.
  */
 
+import { Request, Response, IMiddleware } from '../src/http';
+
 import { Plugin } from '../src/plugin';
 import { Controller } from '../src/controller';
 import { Container } from '../src/container';
@@ -31,9 +33,11 @@ import { Container } from '../src/container';
 describe('plugin', () => {
   let plugin: Plugin;
   let container: Container;
+  let middleware: IMiddleware;
 
   beforeEach(() => {
     container = new Container();
+    middleware = (request: Request, response: Response) => {};
 
     class TestPlugin extends Plugin {
       protected getServices() {
@@ -49,7 +53,8 @@ describe('plugin', () => {
       protected getRoutes() {
         return [
           { path: '/collection/:resourceId', controller: Controller },
-          { path: '/collection', controller: Controller }
+          { path: '/collection', controller: Controller },
+          { path: '/resource', middleware }
         ];
       }
     }
@@ -66,7 +71,8 @@ describe('plugin', () => {
     const routes = (plugin as any).getRoutes();
     expect(routes).toEqual([
       { path: '/collection/:resourceId', controller: Controller },
-      { path: '/collection', controller: Controller }
+      { path: '/collection', controller: Controller },
+      { path: '/resource', middleware }
     ]);
   });
 
@@ -86,13 +92,29 @@ describe('plugin', () => {
     expect(routes).toEqual([]);
   });
 
+  it('can prepare the services', async () => {
+    plugin.prepare(container);
+    expect(Object.keys(plugin.services as any)).toEqual([
+      'service1',
+      'service2'
+    ]);
+  });
+
   it('can prepare the router', async () => {
     plugin.prepare(container);
     expect(typeof plugin.router).toBe('function');
   });
 
-  it('can prepare the services', async () => {
-    plugin.prepare(container);
-    expect(Object.keys(plugin.services)).toEqual(['service1', 'service2']);
+  it('can handle undefined middlewares', async () => {
+    class TestPlugin2 extends Plugin {
+      protected getRoutes() {
+        return [{ path: '/resource' }];
+      }
+    }
+
+    expect(() => {
+      plugin = new TestPlugin2();
+      plugin.prepare(container);
+    }).toThrow();
   });
 });

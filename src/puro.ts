@@ -39,7 +39,7 @@ import { Plugin } from './plugin';
 
 import { forOwn as _forOwn } from 'lodash';
 
-import * as express from 'express';
+import { Application, RequestHandler } from 'express';
 
 /**
  * The Puro's options.
@@ -55,7 +55,7 @@ export class Puro {
   /**
    * The Express' instance.
    */
-  server: any;
+  server: Application;
 
   /**
    * The installed plugins.
@@ -96,7 +96,7 @@ export class Puro {
   prepare() {
     this.container.define('database', DatabaseDef);
 
-    this.server.use(express.json());
+    this.server.use(Server.json());
     this.server.use(requestHandler);
     this.server.use(responseHandler);
 
@@ -109,7 +109,7 @@ export class Puro {
   /**
    * Listens for connections on the specified host and port.
    */
-  listen(port: number, hostname?: string) {
+  listen(port: number, hostname: string) {
     return this.server.listen(port, hostname);
   }
 
@@ -121,7 +121,7 @@ export class Puro {
       plugin.prepare(this.container);
 
       // Use the plugin router
-      this.server.use(this.options.basepath, plugin.router);
+      this.server.use(this.options.basepath, plugin.router as RequestHandler);
 
       // Load the plugin services
       _forOwn(plugin.services, (definition: any, name: string) => {
