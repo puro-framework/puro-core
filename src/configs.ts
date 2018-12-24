@@ -24,7 +24,9 @@
  * SOFTWARE.
  */
 
-import * as fs from 'fs';
+import fs = require('fs');
+import path = require('path');
+
 import { get as _get } from 'lodash';
 
 /**
@@ -39,8 +41,8 @@ class Configs {
   /**
    * Returns a configuration node according to a path.
    */
-  get<T = any>(path: string): T {
-    return _get(this.loadConfig(), path) as T;
+  get<T = any>(filePath: string): T {
+    return _get(this.loadConfig(), filePath) as T;
   }
 
   /**
@@ -58,11 +60,11 @@ class Configs {
       return this.data;
     }
 
-    const path = process.env.PURO_PARAMS_PATH
+    const filePath = process.env.PURO_PARAMS_PATH
       ? process.env.PURO_PARAMS_PATH
-      : 'config/params.json';
+      : path.join(process.cwd(), 'config/params.json');
 
-    const contents = fs.readFileSync(path, 'utf8');
+    const contents = fs.readFileSync(filePath, 'utf8');
     this.data = JSON.parse(contents);
 
     return this.data;

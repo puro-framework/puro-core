@@ -43,7 +43,10 @@ describe('configs', () => {
 
   it('can load the configs from the default path', async () => {
     configs.get('a');
-    expect(readFileSyncSpy).toBeCalledWith('config/params.json', 'utf8');
+    expect(readFileSyncSpy).toBeCalledWith(
+      process.env.PWD + '/config/params.json',
+      'utf8'
+    );
   });
 
   it('can load the configs from a custom path', async () => {
