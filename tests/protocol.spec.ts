@@ -52,7 +52,7 @@ import {
   buildControllerMiddleware
 } from '../src/protocol';
 
-import * as _ from 'lodash';
+import _ = require('lodash');
 
 describe('protocol', () => {
   let warnSpy: Function;

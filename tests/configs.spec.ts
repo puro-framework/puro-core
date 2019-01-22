@@ -26,7 +26,7 @@
 
 import { configs } from '../src/configs';
 
-import * as fs from 'fs';
+import fs = require('fs');
 
 describe('configs', () => {
   let readFileSyncSpy: Function;

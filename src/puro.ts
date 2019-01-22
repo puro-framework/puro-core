@@ -34,12 +34,13 @@ import {
 } from './http';
 
 import { Container } from './container';
-import { DatabaseDef } from './database';
+import { DatabaseServiceDef } from './database';
+import { Firewall } from './firewall';
 import { Plugin } from './plugin';
 
 import { forOwn as _forOwn } from 'lodash';
 
-import { Application, RequestHandler } from 'express';
+import { Application } from 'express';
 
 /**
  * The Puro's options.
@@ -68,6 +69,11 @@ export class Puro {
   container: Container;
 
   /**
+   * The firewall instance.
+   */
+  firewall: Firewall;
+
+  /**
    * The server options.
    */
   options: IPuroOptions = {
@@ -81,6 +87,7 @@ export class Puro {
     this.server = Server();
     this.options = Object.assign(this.options, options);
     this.container = new Container();
+    this.firewall = new Firewall(this.container);
   }
 
   /**
@@ -94,13 +101,14 @@ export class Puro {
    * Prepares the server.
    */
   prepare() {
-    this.container.define('database', DatabaseDef);
+    this.container.define('database', DatabaseServiceDef);
 
     this.server.use(Server.json());
+    this.server.use(this.firewall.initialize());
     this.server.use(requestHandler);
     this.server.use(responseHandler);
 
-    this.setupPlugins();
+    this.loadPlugins();
 
     this.server.use(errorHandler);
     this.server.use(error404Handler);
@@ -114,16 +122,22 @@ export class Puro {
   }
 
   /**
-   * Sets up the plugins.
+   * Loads the plugins.
    */
-  private setupPlugins() {
+  private loadPlugins() {
     this.plugins.forEach(plugin => {
       plugin.prepare(this.container);
+    });
 
-      // Use the plugin router
-      this.server.use(this.options.basepath, plugin.router as RequestHandler);
+    // Load the routers behind the firewall
+    const { basepath } = this.options;
 
-      // Load the plugin services
+    this.plugins.forEach(plugin => {
+      this.server.use(basepath, this.firewall.middleware, plugin.router);
+    });
+
+    // Load the services
+    this.plugins.forEach(plugin => {
       _forOwn(plugin.services, (definition: any, name: string) => {
         this.container.define(name, definition);
       });

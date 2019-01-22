@@ -25,9 +25,9 @@
  */
 
 import { Router } from './http';
+import { buildControllerMiddleware } from './protocol';
 import { IControllerRoute } from './controller';
 import { Container, IServiceDef } from './container';
-import { buildControllerMiddleware } from './protocol';
 
 /**
  * The plugin class.
@@ -36,20 +36,33 @@ export abstract class Plugin {
   /**
    * The plugin router.
    */
-  router?: Router;
+  router!: Router;
 
   /**
    * The plugin services.
    */
-  services?: IServiceDef;
+  services!: IServiceDef;
+
+  /**
+   * The container instance.
+   */
+  container!: Container;
 
   /**
    * Returns the definition for the routes.
    */
   prepare(container: Container) {
-    this.router = this.buildRouter(container);
+    this.configure();
+
+    this.container = container;
+    this.router = this.buildRouter();
     this.services = this.getServices();
   }
+
+  /**
+   * Configures the plugin.
+   */
+  protected configure() {}
 
   /**
    * Returns the definition for the services.
@@ -68,14 +81,14 @@ export abstract class Plugin {
   /**
    * Builds the plugin router.
    */
-  private buildRouter = (container: Container) => {
+  private buildRouter = () => {
     const router = Router();
 
     this.getRoutes().forEach((route: IControllerRoute) => {
       if (typeof route.controller !== 'undefined') {
         route.middleware = buildControllerMiddleware(
           route.controller,
-          container
+          this.container
         );
       }
 

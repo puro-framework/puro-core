@@ -1,6 +1,6 @@
 {
   "name": "@puro/core",
-  "version": "0.1.0-alpha5",
+  "version": "0.1.0-alpha7",
   "description": "Puro REST Framework",
   "license": "MIT",
   "author": {
@@ -42,6 +42,8 @@
   "dependencies": {
     "express": "^4.16.4",
     "lodash": "^4.17.11",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "typeorm": "^0.2.9",
     "typescript": "^3.1.6",
     "validator": "^10.9.0"
@@ -51,6 +53,8 @@
     "@types/jest": "^23.3.9",
     "@types/lodash": "^4.14.118",
     "@types/node": "^10.12.5",
+    "@types/passport": "^1.0.0",
+    "@types/passport-jwt": "^3.0.1",
     "@types/validator": "^9.4.3",
     "coveralls": "^3.0.2",
     "husky": "^1.1.3",

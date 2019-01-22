@@ -91,7 +91,7 @@ export const getEntity = async <Entity>(
 /**
  * Definition for the service.
  */
-export const DatabaseDef: IServiceExtended = {
+export const DatabaseServiceDef: IServiceExtended = {
   load: async () => {
     return getConnection();
   },

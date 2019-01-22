@@ -27,7 +27,7 @@
 import { Request } from './http';
 import { getEntity } from './database';
 
-import * as validator from 'validator';
+import validator = require('validator');
 
 const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
 

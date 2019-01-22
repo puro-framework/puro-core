@@ -28,6 +28,7 @@ export * from './configs';
 export * from './container';
 export * from './controller';
 export * from './database';
+export * from './firewall';
 export * from './http';
 export * from './plugin';
 export * from './protocol';

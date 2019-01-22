@@ -35,6 +35,7 @@ export class Request {
   user?: any;
   entities: any;
   prepare? = jest.fn<Response>((schema: any) => this);
+  login = jest.fn<Response>((user: any, handler: Function) => this);
 }
 
 export class Response {

@@ -26,7 +26,8 @@
 
 import { prepareRequest, prepareResponse } from './protocol';
 
-import * as Server from 'express';
+import Server = require('express');
+
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 
 export { Server, Request, Response, NextFunction };
@@ -174,11 +175,11 @@ export const errorHandler = async (
     ];
   }
 
-  await response.prepare(statusCode, message, hints);
-
   if (statusCode >= 500) {
     console.error(exception);
   }
+
+  await response.prepare(statusCode, message, hints);
 };
 
 /**

@@ -38,7 +38,9 @@ import { Container } from '../src/container';
 
 import { Plugin } from '../src/plugin';
 
-import * as express from 'express';
+import fs = require('fs');
+import express = require('express');
+import passport = require('passport');
 
 describe('puro', () => {
   let puro: Puro;
@@ -46,6 +48,10 @@ describe('puro', () => {
   let container: any;
 
   beforeEach(() => {
+    spyOn(fs, 'readFileSync').and.returnValue(
+      '{ "app": { "secret": "c2VjcmV0" } }'
+    );
+
     server = {
       use: jest.fn(),
       listen: jest.fn()
@@ -93,10 +99,11 @@ describe('puro', () => {
 
     const plugin = new TestPlugin();
     puro.install(plugin);
-    (puro as any).setupPlugins();
+    (puro as any).loadPlugins();
 
     expect(server.use).toHaveBeenCalledWith(
       puro.options.basepath,
+      puro.firewall.middleware,
       plugin.router
     );
   });
@@ -115,7 +122,7 @@ describe('puro', () => {
     }
 
     puro.install(new TestPlugin());
-    (puro as any).setupPlugins();
+    (puro as any).loadPlugins();
 
     expect(container.define).toHaveBeenCalledTimes(2);
     expect(container.define.mock.calls[0][0]).toBe('service1');
@@ -126,17 +133,21 @@ describe('puro', () => {
     const jsonParser = {};
     spyOn(express as any, 'json').and.returnValue(jsonParser);
 
+    const passportInitializer = {};
+    spyOn(passport, 'initialize').and.returnValue(passportInitializer);
+
     puro.prepare();
 
     expect(container.define).toHaveBeenCalled();
     expect(container.define.mock.calls[0][0]).toBe('database');
 
-    expect(server.use).toHaveBeenCalledTimes(5);
+    expect(server.use).toHaveBeenCalledTimes(6);
     expect(server.use.mock.calls[0][0]).toBe(jsonParser);
-    expect(server.use.mock.calls[1][0]).toBe(requestHandler);
-    expect(server.use.mock.calls[2][0]).toBe(responseHandler);
-    expect(server.use.mock.calls[3][0]).toBe(errorHandler);
-    expect(server.use.mock.calls[4][0]).toBe(error404Handler);
+    expect(server.use.mock.calls[1][0]).toBe(passportInitializer);
+    expect(server.use.mock.calls[2][0]).toBe(requestHandler);
+    expect(server.use.mock.calls[3][0]).toBe(responseHandler);
+    expect(server.use.mock.calls[4][0]).toBe(errorHandler);
+    expect(server.use.mock.calls[5][0]).toBe(error404Handler);
   });
 
   it('can listen for connections', async () => {

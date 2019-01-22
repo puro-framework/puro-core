@@ -29,7 +29,7 @@ import {
   closeConnection,
   getRepository,
   getEntity,
-  DatabaseDef
+  DatabaseServiceDef
 } from '../src/database';
 
 import { configs } from '../src/configs';
@@ -96,10 +96,10 @@ describe('database', () => {
   });
 
   it('defines the service', async () => {
-    await DatabaseDef.load();
+    await DatabaseServiceDef.load();
     expect(createConnectionSpy).toBeCalled();
 
-    await DatabaseDef.unload();
+    await DatabaseServiceDef.unload();
     expect(connection.close).toBeCalled();
   });
 
