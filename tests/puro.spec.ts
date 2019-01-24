@@ -103,7 +103,6 @@ describe('puro', () => {
 
     expect(server.use).toHaveBeenCalledWith(
       puro.options.basepath,
-      puro.firewall.middleware,
       plugin.router
     );
   });
@@ -125,8 +124,16 @@ describe('puro', () => {
     (puro as any).loadPlugins();
 
     expect(container.define).toHaveBeenCalledTimes(2);
-    expect(container.define.mock.calls[0][0]).toBe('service1');
-    expect(container.define.mock.calls[1][0]).toBe('service2');
+    expect(container.define).toHaveBeenNthCalledWith(
+      1,
+      'service1',
+      expect.any(Function)
+    );
+    expect(container.define).toHaveBeenNthCalledWith(
+      2,
+      'service2',
+      expect.any(Object)
+    );
   });
 
   it('can prepare the server', async () => {
@@ -139,15 +146,18 @@ describe('puro', () => {
     puro.prepare();
 
     expect(container.define).toHaveBeenCalled();
-    expect(container.define.mock.calls[0][0]).toBe('database');
+    expect(container.define).toHaveBeenCalledWith(
+      'database',
+      expect.any(Object)
+    );
 
     expect(server.use).toHaveBeenCalledTimes(6);
-    expect(server.use.mock.calls[0][0]).toBe(jsonParser);
-    expect(server.use.mock.calls[1][0]).toBe(passportInitializer);
-    expect(server.use.mock.calls[2][0]).toBe(requestHandler);
-    expect(server.use.mock.calls[3][0]).toBe(responseHandler);
-    expect(server.use.mock.calls[4][0]).toBe(errorHandler);
-    expect(server.use.mock.calls[5][0]).toBe(error404Handler);
+    expect(server.use).toHaveBeenNthCalledWith(1, jsonParser);
+    expect(server.use).toHaveBeenNthCalledWith(2, passportInitializer);
+    expect(server.use).toHaveBeenNthCalledWith(3, requestHandler);
+    expect(server.use).toHaveBeenNthCalledWith(4, responseHandler);
+    expect(server.use).toHaveBeenNthCalledWith(5, errorHandler);
+    expect(server.use).toHaveBeenNthCalledWith(6, error404Handler);
   });
 
   it('can listen for connections', async () => {

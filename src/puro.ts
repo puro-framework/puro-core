@@ -126,14 +126,14 @@ export class Puro {
    */
   private loadPlugins() {
     this.plugins.forEach(plugin => {
-      plugin.prepare(this.container);
+      plugin.prepare(this.container, this.firewall);
     });
 
     // Load the routers behind the firewall
     const { basepath } = this.options;
 
     this.plugins.forEach(plugin => {
-      this.server.use(basepath, this.firewall.middleware, plugin.router);
+      this.server.use(basepath, plugin.router);
     });
 
     // Load the services

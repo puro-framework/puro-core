@@ -29,14 +29,19 @@ import { Request, Response, IMiddleware } from '../src/http';
 import { Plugin } from '../src/plugin';
 import { Controller } from '../src/controller';
 import { Container } from '../src/container';
+import { Firewall } from '../src/firewall';
+
+import * as http from '../src/http';
 
 describe('plugin', () => {
   let plugin: Plugin;
   let container: Container;
+  let firewall: Firewall;
   let middleware: IMiddleware;
 
   beforeEach(() => {
     container = new Container();
+    firewall = new Firewall(container);
     middleware = (request: Request, response: Response) => {};
 
     class TestPlugin extends Plugin {
@@ -54,7 +59,8 @@ describe('plugin', () => {
         return [
           { path: '/collection/:resourceId', controller: Controller },
           { path: '/collection', controller: Controller },
-          { path: '/resource', middleware }
+          { path: '/resource', middleware },
+          { path: '/login', middleware, anonymous: true }
         ];
       }
     }
@@ -72,7 +78,8 @@ describe('plugin', () => {
     expect(routes).toEqual([
       { path: '/collection/:resourceId', controller: Controller },
       { path: '/collection', controller: Controller },
-      { path: '/resource', middleware }
+      { path: '/resource', middleware },
+      { path: '/login', middleware, anonymous: true }
     ]);
   });
 
@@ -93,7 +100,7 @@ describe('plugin', () => {
   });
 
   it('can prepare the services', async () => {
-    plugin.prepare(container);
+    plugin.prepare(container, firewall);
     expect(Object.keys(plugin.services as any)).toEqual([
       'service1',
       'service2'
@@ -101,8 +108,42 @@ describe('plugin', () => {
   });
 
   it('can prepare the router', async () => {
-    plugin.prepare(container);
-    expect(typeof plugin.router).toBe('function');
+    const routerMock = {
+      use: jest.fn()
+    };
+
+    spyOn(http, 'Router').and.returnValue(routerMock);
+
+    plugin.prepare(container, firewall);
+
+    const routes = (plugin as any).getRoutes();
+
+    expect(routerMock.use).toHaveBeenCalledTimes(4);
+    expect(routerMock.use).toHaveBeenNthCalledWith(
+      1,
+      routes[0].path,
+      firewall.middleware,
+      expect.any(Function)
+    );
+    expect(routerMock.use).toHaveBeenNthCalledWith(
+      2,
+      routes[1].path,
+      firewall.middleware,
+      expect.any(Function)
+    );
+    expect(routerMock.use).toHaveBeenNthCalledWith(
+      3,
+      routes[2].path,
+      firewall.middleware,
+      expect.any(Function)
+    );
+    expect(routerMock.use).toHaveBeenNthCalledWith(
+      4,
+      routes[3].path,
+      expect.any(Function)
+    );
+
+    expect(plugin.router).toBe(routerMock);
   });
 
   it('can handle undefined middlewares', async () => {
@@ -114,7 +155,7 @@ describe('plugin', () => {
 
     expect(() => {
       plugin = new TestPlugin2();
-      plugin.prepare(container);
+      plugin.prepare(container, firewall);
     }).toThrow();
   });
 });

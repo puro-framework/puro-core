@@ -37,6 +37,7 @@ export interface IControllerRoute {
   path: string;
   controller?: typeof Controller;
   middleware?: IMiddleware;
+  anonymous?: boolean;
 }
 
 /**

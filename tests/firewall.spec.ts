@@ -87,8 +87,7 @@ describe('firewall', () => {
     const authHandler = (buildAuthHandler as any)(request, response, next);
 
     authHandler(null, user);
-    expect(request.login).toHaveBeenCalled();
-    expect(request.login.mock.calls[0][0]).toEqual(user);
+    expect(request.login).toHaveBeenCalledWith(user, expect.any(Function));
     expect(next).not.toHaveBeenCalled();
 
     const loginHandler = request.login.mock.calls[0][1];
@@ -116,10 +115,11 @@ describe('firewall', () => {
     );
 
     await mock<Middleware>(firewall.middleware)(request, response, next);
-
-    expect(authenticateSpy).toHaveBeenCalled();
-    expect(authenticateSpy.calls.argsFor(0)[0]).toEqual('jwt');
-    expect(authenticateSpy.calls.argsFor(0)[1]).toEqual({ session: false });
+    expect(authenticateSpy).toHaveBeenCalledWith(
+      'jwt',
+      { session: false },
+      expect.any(Function)
+    );
   });
 
   it('can be initialized', async () => {

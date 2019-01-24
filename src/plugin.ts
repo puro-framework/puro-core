@@ -28,6 +28,7 @@ import { Router } from './http';
 import { buildControllerMiddleware } from './protocol';
 import { IControllerRoute } from './controller';
 import { Container, IServiceDef } from './container';
+import { Firewall } from './firewall';
 
 /**
  * The plugin class.
@@ -49,12 +50,19 @@ export abstract class Plugin {
   container!: Container;
 
   /**
+   * The firewall instance.
+   */
+  firewall!: Firewall;
+
+  /**
    * Returns the definition for the routes.
    */
-  prepare(container: Container) {
+  prepare(container: Container, firewall: Firewall) {
     this.configure();
 
     this.container = container;
+    this.firewall = firewall;
+
     this.router = this.buildRouter();
     this.services = this.getServices();
   }
@@ -96,7 +104,12 @@ export abstract class Plugin {
         throw new Error(`Unable to find middleware for "${route.path}"`);
       }
 
-      router.use(route.path, route.middleware);
+      // Put the not anonymous routes behind the firewall middleware
+      if (route.anonymous) {
+        router.use(route.path, route.middleware);
+      } else {
+        router.use(route.path, this.firewall.middleware, route.middleware);
+      }
     });
 
     return router;
