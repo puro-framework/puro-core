@@ -89,6 +89,14 @@ describe('protocol', () => {
     expect(createSchema).toEqual({ key: 'value' });
   });
 
+  it('can serialize null values', async () => {
+    const input: any = null;
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toBeNull();
+  });
+
   it('can serialize numbers', async () => {
     const input: any = 15.3;
     const output: any = {};
