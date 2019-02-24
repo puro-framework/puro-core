@@ -58,7 +58,8 @@ describe('validator', () => {
       param0: 'string',
       param1: 'string',
       param2: 'string',
-      param3: 0 // Ensure casting to string
+      param3: 0, // Ensure the casting to string
+      param4: null
     };
 
     const schema: any = {
@@ -79,8 +80,10 @@ describe('validator', () => {
         isAlpha: {}
       },
       param4: {
-        isNotEmpty: {},
-        isAlpha: {}
+        isNotEmpty: {}
+      },
+      param5: {
+        isNotEmpty: {}
       }
     };
 
@@ -93,7 +96,8 @@ describe('validator', () => {
         'The parameter must be a floating-point number'
       ],
       param3: ['The parameter must contain only letters'],
-      param4: ['The parameter cannot be empty']
+      param4: ['The parameter cannot be empty'],
+      param5: ['The parameter cannot be empty']
     });
   });
 

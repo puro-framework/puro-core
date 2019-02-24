@@ -31,6 +31,8 @@ import validator = require('validator');
 
 const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
 
+import { isNil as _isNil } from 'lodash';
+
 /**
  * The constraint methods.
  */
@@ -197,10 +199,9 @@ export class Validator {
     const context: any = { request };
 
     for (const name in schema) {
-      const value =
-        typeof request.bucket[name] !== 'undefined'
-          ? String(request.bucket[name])
-          : '';
+      const value = !_isNil(request.bucket[name])
+        ? String(request.bucket[name])
+        : '';
 
       const hints = await this.validateValue(value, schema[name], context);
 
