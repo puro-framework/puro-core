@@ -57,7 +57,8 @@ describe('validator', () => {
     request.bucket = {
       param0: 'string',
       param1: 'string',
-      param2: 'string'
+      param2: 'string',
+      param3: 0 // Ensure casting to string
     };
 
     const schema: any = {
@@ -74,6 +75,11 @@ describe('validator', () => {
         isFloat: {}
       },
       param3: {
+        isNotEmpty: {},
+        isAlpha: {}
+      },
+      param4: {
+        isNotEmpty: {},
         isAlpha: {}
       }
     };
@@ -85,7 +91,9 @@ describe('validator', () => {
       param2: [
         'The parameter must be a number',
         'The parameter must be a floating-point number'
-      ]
+      ],
+      param3: ['The parameter must contain only letters'],
+      param4: ['The parameter cannot be empty']
     });
   });
 

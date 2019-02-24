@@ -197,11 +197,12 @@ export class Validator {
     const context: any = { request };
 
     for (const name in schema) {
-      const hints = await this.validateValue(
-        String(request.bucket[name] || ''),
-        schema[name],
-        context
-      );
+      const value =
+        typeof request.bucket[name] !== 'undefined'
+          ? String(request.bucket[name])
+          : '';
+
+      const hints = await this.validateValue(value, schema[name], context);
 
       if (hints.length > 0) {
         output[name] = hints;
