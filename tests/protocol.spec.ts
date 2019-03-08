@@ -265,6 +265,15 @@ describe('protocol', () => {
     });
   });
 
+  it('can handle the response (if it has been already sent)', async () => {
+    response.finished = true;
+
+    response = await mock(prepareResponse)(response, 123, 'Response Content');
+
+    expect(response.status).not.toBeCalledWith();
+    expect(response.send).not.toBeCalledWith();
+  });
+
   it('can handle invalid request URL parameters', async () => {
     request.params = { param: 'value' };
 

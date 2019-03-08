@@ -185,6 +185,10 @@ export const prepareResponse = async (
   body: any,
   hints?: IHttpExceptionHints
 ): Promise<Response> => {
+  if (response.finished) {
+    return response;
+  }
+
   const output: any = {};
   serialize({ content: body }, 'content', output);
 

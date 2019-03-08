@@ -39,6 +39,7 @@ export class Request {
 }
 
 export class Response {
+  finished = false;
   status = jest.fn<Response>((code: number) => this);
   send = jest.fn<Response>((body?: any) => this);
   prepare? = jest.fn<Response>(
