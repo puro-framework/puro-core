@@ -89,6 +89,14 @@ describe('protocol', () => {
     expect(createSchema).toEqual({ key: 'value' });
   });
 
+  it('can serialize undefined values', async () => {
+    const input: any = { key: undefined };
+    const output: any = {};
+
+    serialize({ content: input }, 'content', output);
+    expect(output.content).toEqual({});
+  });
+
   it('can serialize null values', async () => {
     const input: any = null;
     const output: any = {};

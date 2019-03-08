@@ -39,6 +39,7 @@ import { Validator } from './validator';
 import 'reflect-metadata';
 
 import {
+  isUndefined as _isUndefined,
   isNull as _isNull,
   isNumber as _isNumber,
   isString as _isString,
@@ -90,7 +91,14 @@ export const serialize = (
     outputKey = inputKey;
   }
 
-  if (_isNull(node) || _isNumber(node) || _isString(node) || _isBoolean(node)) {
+  if (_isUndefined(node)) {
+    // Ignore undefined values
+  } else if (
+    _isNull(node) ||
+    _isNumber(node) ||
+    _isString(node) ||
+    _isBoolean(node)
+  ) {
     output[outputKey] = node;
   } else if (_isDate(node)) {
     output[outputKey] = (node as Date).toISOString();
