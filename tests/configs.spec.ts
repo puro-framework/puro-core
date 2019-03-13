@@ -38,6 +38,7 @@ describe('configs', () => {
   });
 
   afterEach(() => {
+    process.env = {};
     configs.reload();
   });
 
@@ -56,6 +57,11 @@ describe('configs', () => {
       process.env.PURO_PARAMS_PATH,
       'utf8'
     );
+  });
+
+  it('can load the configs from the env variable', async () => {
+    process.env.PURO_PARAMS = '{ "a": { "b": { "c": 1 } } }';
+    expect(configs.get('a')).toEqual({ b: { c: 1 } });
   });
 
   it('can get a config node according to a path', async () => {

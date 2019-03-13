@@ -60,6 +60,11 @@ class Configs {
       return this.data;
     }
 
+    if (process.env.PURO_PARAMS) {
+      this.data = JSON.parse(process.env.PURO_PARAMS);
+      return this.data;
+    }
+
     const filePath = process.env.PURO_PARAMS_PATH
       ? process.env.PURO_PARAMS_PATH
       : path.join(process.cwd(), 'config/params.json');
