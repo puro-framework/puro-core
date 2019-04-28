@@ -537,10 +537,21 @@ describe('validator', () => {
   });
 
   it('can use "isInt" constraint (hint)', async () => {
-    const hints = await validator.validateValue('text', {
-      isInt: {}
-    });
-    expect(hints).toEqual(['The parameter must be a integer number']);
+    {
+      const hints = await validator.validateValue('text', {
+        isInt: {}
+      });
+      expect(hints).toEqual(['The parameter must be a integer number']);
+    }
+
+    {
+      const hints = await validator.validateValue('20', {
+        isInt: { min: 5, max: 10 }
+      });
+      expect(hints).toEqual([
+        'The parameter must be a integer between 5 and 10'
+      ]);
+    }
   });
 
   it('can use "isJSON" constraint', async () => {

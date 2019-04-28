@@ -130,7 +130,7 @@ describe('protocol', () => {
   });
 
   it('can serialize dates', async () => {
-    const input: any = new Date(2018, 12, 25, 5, 30, 10);
+    const input: any = new Date(Date.UTC(2018, 12, 25, 5, 30, 10));
     const output: any = {};
 
     serialize({ content: input }, 'content', output);

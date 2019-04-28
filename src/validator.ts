@@ -29,8 +29,6 @@ import { getEntity } from './database';
 
 import validator = require('validator');
 
-const ConstraintHintPlaceholderRe = /%([^%]+)%/g;
-
 import { isNil as _isNil } from 'lodash';
 
 /**
@@ -113,50 +111,60 @@ const ConstraintMethods: any = {
 /**
  * The constraint hints.
  */
-const ConstraintHints: { [key: string]: string } = {
-  isAfter: 'The parameter must be a date after %date%',
-  isAlpha: 'The parameter must contain only letters',
-  isAlphanumeric: 'The parameter must contain only letters and numbers',
-  isAscii: 'The parameter must be an ASCII string',
-  isBase64: 'The parameter must be a Base64 string',
-  isBefore: 'The parameter must be a date before %date%',
-  isBoolean: 'The parameter must be a boolean',
-  isByteLength: 'The parameter must be between %min% and %max% bytes',
-  isCreditCard: 'The parameter must be a valid credit card number',
-  isCurrency: 'The parameter must be a valid currency amount',
-  isDecimal: 'The parameter must be a decimal',
-  isEmail: 'The parameter must be a valid email',
-  isEntityId: 'The parameter must be a valid entity ID',
-  isFQDN: 'The parameter must be a fully qualified domain name',
-  isFloat: 'The parameter must be a floating-point number',
-  isHash: 'The parameter must be a valid %algorithm% hash',
-  isHexadecimal: 'The parameter must be a hexadecimal number',
-  isIP: 'The parameter must be a valid IP address',
-  isIPRange: 'The parameter must be a valid IP address range',
-  isISO8601: 'The parameter must be a valid ISO 8601 date',
-  isNotEmpty: 'The parameter cannot be empty',
-  isRFC3339: 'The parameter must be a valid RFC 3339 date',
-  isISO31661Alpha2:
+const ConstraintHintBuilder: { [key: string]: (options: any) => string } = {
+  isAfter: ({ date }) => `The parameter must be a date after ${date}`,
+  isAlpha: () => 'The parameter must contain only letters',
+  isAlphanumeric: () => 'The parameter must contain only letters and numbers',
+  isAscii: () => 'The parameter must be an ASCII string',
+  isBase64: () => 'The parameter must be a Base64 string',
+  isBefore: ({ date }) => `The parameter must be a date before ${date}`,
+  isBoolean: () => 'The parameter must be a boolean',
+  isByteLength: ({ min, max }) =>
+    `The parameter must be between ${min} and ${max} bytes`,
+  isCreditCard: () => 'The parameter must be a valid credit card number',
+  isCurrency: () => 'The parameter must be a valid currency amount',
+  isDecimal: () => 'The parameter must be a decimal',
+  isEmail: () => 'The parameter must be a valid email',
+  isEntityId: () => 'The parameter must be a valid entity ID',
+  isFQDN: () => 'The parameter must be a fully qualified domain name',
+  isFloat: () => 'The parameter must be a floating-point number',
+  isHash: ({ algorithm }) => `The parameter must be a valid ${algorithm} hash`,
+  isHexadecimal: () => 'The parameter must be a hexadecimal number',
+  isIP: () => 'The parameter must be a valid IP address',
+  isIPRange: () => 'The parameter must be a valid IP address range',
+  isISO8601: () => 'The parameter must be a valid ISO 8601 date',
+  isNotEmpty: () => 'The parameter cannot be empty',
+  isRFC3339: () => 'The parameter must be a valid RFC 3339 date',
+  isISO31661Alpha2: () =>
     'The parameter must be a valid ISO 3166-1 alpha-2 country code',
-  isISO31661Alpha3:
+  isISO31661Alpha3: () =>
     'The parameter must be a valid ISO 3166-1 alpha-3 country code',
-  isIn: 'The parameter must be one of %values%',
-  isInt: 'The parameter must be a integer number',
-  isJSON: 'The parameter must be a valid JSON',
-  isJWT: 'The parameter must be a valid JWT',
-  isLatLong: 'The parameter must be a valid latitude-longitude coordinate',
-  isLength: 'The parameter must be between %min% and %max% characters',
-  isLowercase: 'The parameter must be a lowercase string',
-  isMACAddress: 'The parameter must be a valid MAC address',
-  isMimeType: 'The parameter must be a valid MIME type format',
-  isMobilePhone: 'The parameter must be a valid mobile phone number',
-  isNumeric: 'The parameter must be a number',
-  isPort: 'The parameter must be a port number',
-  isPostalCode: 'The parameter must be a valid postal code',
-  isURL: 'The parameter must be a valid URL',
-  isUUID: 'The parameter must be a valid UUID',
-  isUppercase: 'The parameter must be an uppercase string',
-  isWhitelisted: 'The parameter must contain only the characters "%chars%"'
+  isIn: ({ values }) => `The parameter must be one of ${values}`,
+  isInt: ({ min, max }) => {
+    if (!_isNil(min) && !_isNil(max)) {
+      return `The parameter must be a integer between ${min} and ${max}`;
+    }
+
+    return 'The parameter must be a integer number';
+  },
+  isJSON: () => 'The parameter must be a valid JSON',
+  isJWT: () => 'The parameter must be a valid JWT',
+  isLatLong: () =>
+    'The parameter must be a valid latitude-longitude coordinate',
+  isLength: ({ min, max }) =>
+    `The parameter must be between ${min} and ${max} characters`,
+  isLowercase: () => 'The parameter must be a lowercase string',
+  isMACAddress: () => 'The parameter must be a valid MAC address',
+  isMimeType: () => 'The parameter must be a valid MIME type format',
+  isMobilePhone: () => 'The parameter must be a valid mobile phone number',
+  isNumeric: () => 'The parameter must be a number',
+  isPort: () => 'The parameter must be a port number',
+  isPostalCode: () => 'The parameter must be a valid postal code',
+  isURL: () => 'The parameter must be a valid URL',
+  isUUID: () => 'The parameter must be a valid UUID',
+  isUppercase: () => 'The parameter must be an uppercase string',
+  isWhitelisted: ({ chars }) =>
+    `The parameter must contain only the characters "${chars}"`
 };
 
 /**
@@ -217,9 +225,6 @@ export class Validator {
    * Prepares the hint message.
    */
   private prepareHint(constraint: string, options: any) {
-    return ConstraintHints[constraint].replace(
-      ConstraintHintPlaceholderRe,
-      (match, placeholder) => options[placeholder]
-    );
+    return ConstraintHintBuilder[constraint](options);
   }
 }
