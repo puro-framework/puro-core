@@ -58,7 +58,7 @@ export interface IHttpExceptionHints {
  * occurred error (i.e. the validation hints for a form field).
  */
 export class HttpException extends Error {
-  statusCode: number = 500;
+  statusCode: number;
   hints?: IHttpExceptionHints;
 
   constructor(
