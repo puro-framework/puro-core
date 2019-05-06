@@ -33,7 +33,6 @@ declare global {
      */
     export interface Request {
       bucket: any;
-      user?: any;
       entities: any;
 
       prepare(schema: any): Promise<Request>;

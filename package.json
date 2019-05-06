@@ -1,6 +1,6 @@
 {
   "name": "@puro/core",
-  "version": "0.1.0-alpha15",
+  "version": "0.1.0-alpha16",
   "description": "Puro REST Framework",
   "license": "MIT",
   "author": {
@@ -40,6 +40,7 @@
     ]
   },
   "dependencies": {
+    "@puro/cli": "^0.1.0-alpha2",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "passport": "^0.4.0",

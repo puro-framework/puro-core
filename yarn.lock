@@ -16,6 +16,25 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@puro/cli@^0.1.0-alpha2":
+  version "0.1.0-alpha2"
+  resolved "https://registry.npmjs.org/@puro/cli/-/cli-0.1.0-alpha2.tgz#67a481a8056459047bbc3a068dc0284a54d69261"
+  dependencies:
+    "@puro/core" "0.1.0-alpha1"
+    commander "^2.19.0"
+    node-fetch "^2.3.0"
+    tar "^4.4.8"
+
+"@puro/core@0.1.0-alpha1":
+  version "0.1.0-alpha1"
+  resolved "https://registry.npmjs.org/@puro/core/-/core-0.1.0-alpha1.tgz#ba06db1c91b6b882a2926e0de7fa814b6ee4f6b9"
+  dependencies:
+    express "^4.16.4"
+    lodash "^4.17.11"
+    typeorm "^0.2.9"
+    typescript "^3.1.6"
+    validator "^10.9.0"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.npmjs.org/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -727,6 +746,10 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
 commander@^2.14.1, commander@^2.9.0:
   version "2.19.0"
   resolved "https://registry.npmjs.org/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
+
+commander@^2.19.0:
+  version "2.20.0"
+  resolved "https://registry.npmjs.org/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
 
 commander@~2.17.1:
   version "2.17.1"
@@ -2827,6 +2850,10 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.npmjs.org/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
 
+node-fetch@^2.3.0:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.5.0.tgz#8028c49fc1191bba56a07adc6e2a954644a48501"
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
@@ -3870,7 +3897,7 @@ symbol-tree@^3.2.2:
   version "3.2.2"
   resolved "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
 
-tar@^4:
+tar@^4, tar@^4.4.8:
   version "4.4.8"
   resolved "https://registry.npmjs.org/tar/-/tar-4.4.8.tgz#b19eec3fde2a96e64666df9fdb40c5ca1bc3747d"
   dependencies:
