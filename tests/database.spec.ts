@@ -29,7 +29,7 @@ import {
   closeConnection,
   getRepository,
   getEntity,
-  DatabaseServiceDef
+  DatabaseServiceDef,
 } from '../src/database';
 
 import { configs } from '../src/configs';
@@ -49,18 +49,18 @@ describe('database', () => {
     repository = {
       findOne: jest.fn(async () => entity),
       save: jest.fn(async () => {}),
-      remove: jest.fn(async () => {})
+      remove: jest.fn(async () => {}),
     };
 
     connection = {
       getRepository: jest.fn(async () => repository),
-      close: jest.fn()
+      close: jest.fn(),
     };
 
     connectionOptions = {
       type: 'mariadb',
       username: 'root',
-      password: 'password'
+      password: 'password',
     };
 
     spyOn(configs, 'get').and.returnValue(connectionOptions);

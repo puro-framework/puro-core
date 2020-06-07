@@ -28,7 +28,7 @@ import {
   Request,
   Response,
   NextFunction,
-  Middleware
+  Middleware,
 } from '../src/testing/mocks';
 
 import { mock } from '../src/testing/mocks';
@@ -37,7 +37,7 @@ import {
   NotFoundHttpException,
   MethodNotAllowedHttpException,
   InvalidParameterHttpException,
-  Request as HttpRequest
+  Request as HttpRequest,
 } from '../src/http';
 
 import { Controller } from '../src/controller';
@@ -49,7 +49,7 @@ import {
   serialize,
   prepareRequest,
   prepareResponse,
-  buildControllerMiddleware
+  buildControllerMiddleware,
 } from '../src/protocol';
 
 import _ = require('lodash');
@@ -170,7 +170,7 @@ describe('protocol', () => {
     serialize({ content: input }, 'content', output);
     expect(output.content).toEqual({
       property2: 'value2',
-      customProperty3: 'value3'
+      customProperty3: 'value3',
     });
   });
 
@@ -190,7 +190,7 @@ describe('protocol', () => {
     serialize({ content: input }, 'content', output);
     expect(output.content).toEqual({
       property1: 'value1',
-      property2: 'value2'
+      property2: 'value2',
     });
   });
 
@@ -216,8 +216,8 @@ describe('protocol', () => {
     serialize({ content: input }, 'content', output);
     expect(output.content).toEqual({
       author: {
-        name: 'John Doe'
-      }
+        name: 'John Doe',
+      },
     });
   });
 
@@ -247,7 +247,7 @@ describe('protocol', () => {
     const responseHints = {
       hint1: ['message1'],
       hint2: ['message2'],
-      hint3: ['message3']
+      hint3: ['message3'],
     };
 
     response = await mock(prepareResponse)(
@@ -261,7 +261,7 @@ describe('protocol', () => {
     expect(response.send).toBeCalledWith({
       status: 123,
       content: 'Response Content',
-      hints: responseHints
+      hints: responseHints,
     });
   });
 
@@ -279,7 +279,7 @@ describe('protocol', () => {
 
     try {
       request = await mock(prepareRequest)(request, {
-        param: { isUppercase: {} }
+        param: { isUppercase: {} },
       });
       fail();
     } catch (e) {
@@ -293,12 +293,12 @@ describe('protocol', () => {
 
     try {
       request = await mock(prepareRequest)(request, {
-        param: { isUppercase: {} }
+        param: { isUppercase: {} },
       });
     } catch (e) {
       expect(e).toBeInstanceOf(InvalidParameterHttpException);
       expect(e.hints).toEqual({
-        param: ['The parameter must be an uppercase string']
+        param: ['The parameter must be an uppercase string'],
       });
     }
   });

@@ -76,11 +76,11 @@ export const getEntity = async <Entity>(
 
   if (entity) {
     // Add shortcut methods to the entity instance
-    (entity as any).save = async function() {
+    (entity as any).save = async function () {
       return repository.save(this);
     };
 
-    (entity as any).remove = async function() {
+    (entity as any).remove = async function () {
       return repository.remove(this);
     };
 
@@ -97,5 +97,5 @@ export const DatabaseServiceDef: IServiceExtended = {
   },
   unload: async () => {
     return closeConnection();
-  }
+  },
 };

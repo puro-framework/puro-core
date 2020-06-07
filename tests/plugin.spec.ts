@@ -50,8 +50,8 @@ describe('plugin', () => {
           service1: async () => {},
           service2: {
             load: async () => {},
-            unload: async () => {}
-          }
+            unload: async () => {},
+          },
         };
       }
 
@@ -60,7 +60,7 @@ describe('plugin', () => {
           { path: '/collection/:resourceId', controller: Controller },
           { path: '/collection', controller: Controller },
           { path: '/resource', middleware },
-          { path: '/login', middleware, anonymous: true }
+          { path: '/login', middleware, anonymous: true },
         ];
       }
     }
@@ -79,7 +79,7 @@ describe('plugin', () => {
       { path: '/collection/:resourceId', controller: Controller },
       { path: '/collection', controller: Controller },
       { path: '/resource', middleware },
-      { path: '/login', middleware, anonymous: true }
+      { path: '/login', middleware, anonymous: true },
     ]);
   });
 
@@ -103,47 +103,45 @@ describe('plugin', () => {
     plugin.prepare(container, firewall);
     expect(Object.keys(plugin.services as any)).toEqual([
       'service1',
-      'service2'
+      'service2',
     ]);
   });
 
   it('can prepare the router', async () => {
     const routerMock = {
-      use: jest.fn()
+      use: jest.fn(),
     };
 
-    spyOn(http, 'Router').and.returnValue(routerMock);
+    const useSpy = spyOn(http.Router as any, 'use');
 
     plugin.prepare(container, firewall);
 
     const routes = (plugin as any).getRoutes();
 
-    expect(routerMock.use).toHaveBeenCalledTimes(4);
-    expect(routerMock.use).toHaveBeenNthCalledWith(
+    expect(useSpy).toHaveBeenCalledTimes(4);
+    expect(useSpy).toHaveBeenNthCalledWith(
       1,
       routes[0].path,
       firewall.middleware,
       expect.any(Function)
     );
-    expect(routerMock.use).toHaveBeenNthCalledWith(
+    expect(useSpy).toHaveBeenNthCalledWith(
       2,
       routes[1].path,
       firewall.middleware,
       expect.any(Function)
     );
-    expect(routerMock.use).toHaveBeenNthCalledWith(
+    expect(useSpy).toHaveBeenNthCalledWith(
       3,
       routes[2].path,
       firewall.middleware,
       expect.any(Function)
     );
-    expect(routerMock.use).toHaveBeenNthCalledWith(
+    expect(useSpy).toHaveBeenNthCalledWith(
       4,
       routes[3].path,
       expect.any(Function)
     );
-
-    expect(plugin.router).toBe(routerMock);
   });
 
   it('can handle undefined middlewares', async () => {

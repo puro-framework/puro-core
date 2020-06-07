@@ -27,7 +27,45 @@
 import { Request } from './http';
 import { getEntity } from './database';
 
-import validator = require('validator');
+import isAfter from 'validator/lib/isAfter';
+import isAlpha from 'validator/lib/isAlpha';
+import isAlphanumeric from 'validator/lib/isAlphanumeric';
+import isAscii from 'validator/lib/isAscii';
+import isBase64 from 'validator/lib/isBase64';
+import isBefore from 'validator/lib/isBefore';
+import isBoolean from 'validator/lib/isBoolean';
+import isByteLength from 'validator/lib/isByteLength';
+import isCreditCard from 'validator/lib/isCreditCard';
+import isCurrency from 'validator/lib/isCurrency';
+import isDecimal from 'validator/lib/isDecimal';
+import isEmail from 'validator/lib/isEmail';
+import isFQDN from 'validator/lib/isFQDN';
+import isFloat from 'validator/lib/isFloat';
+import isHash from 'validator/lib/isHash';
+import isHexadecimal from 'validator/lib/isHexadecimal';
+import isIP from 'validator/lib/isIP';
+import isIPRange from 'validator/lib/isIPRange';
+import isISO31661Alpha2 from 'validator/lib/isISO31661Alpha2';
+import isISO31661Alpha3 from 'validator/lib/isISO31661Alpha3';
+import isISO8601 from 'validator/lib/isISO8601';
+import isIn from 'validator/lib/isIn';
+import isInt from 'validator/lib/isInt';
+import isJSON from 'validator/lib/isJSON';
+import isJWT from 'validator/lib/isJWT';
+import isLatLong from 'validator/lib/isLatLong';
+import isLength from 'validator/lib/isLength';
+import isLowercase from 'validator/lib/isLowercase';
+import isMACAddress from 'validator/lib/isMACAddress';
+import isMimeType from 'validator/lib/isMimeType';
+import isMobilePhone from 'validator/lib/isMobilePhone';
+import isNumeric from 'validator/lib/isNumeric';
+import isPort from 'validator/lib/isPort';
+import isPostalCode from 'validator/lib/isPostalCode';
+import isRFC3339 from 'validator/lib/isRFC3339';
+import isURL from 'validator/lib/isURL';
+import isUUID from 'validator/lib/isUUID';
+import isUppercase from 'validator/lib/isUppercase';
+import isWhitelisted from 'validator/lib/isWhitelisted';
 
 import { isNil as _isNil } from 'lodash';
 
@@ -35,61 +73,50 @@ import { isNil as _isNil } from 'lodash';
  * The constraint methods.
  */
 const ConstraintMethods: any = {
-  isAfter: async (v: string, o: any) =>
-    !v.length || validator.isAfter(v, o.date),
-  isAlpha: async (v: string, o: any) =>
-    !v.length || validator.isAlpha(v, o.locale),
+  isAfter: async (v: string, o: any) => !v.length || isAfter(v, o.date),
+  isAlpha: async (v: string, o: any) => !v.length || isAlpha(v, o.locale),
   isAlphanumeric: async (v: string, o: any) =>
-    !v.length || validator.isAlphanumeric(v, o.locale),
-  isAscii: async (v: string) => !v.length || validator.isAscii(v),
-  isBase64: async (v: string) => !v.length || validator.isBase64(v),
-  isBefore: async (v: string, o: any) =>
-    !v.length || validator.isBefore(v, o.date),
-  isBoolean: async (v: string) => !v.length || validator.isBoolean(v),
-  isByteLength: async (v: string, o: any) =>
-    !v.length || validator.isByteLength(v, o),
-  isCreditCard: async (v: string) => !v.length || validator.isCreditCard(v),
-  isCurrency: async (v: string, o: any) =>
-    !v.length || validator.isCurrency(v, o),
-  isDecimal: async (v: string, o: any) =>
-    !v.length || validator.isDecimal(v, o),
-  isEmail: async (v: string, o: any) => !v.length || validator.isEmail(v, o),
-  isFQDN: async (v: string, o: any) => !v.length || validator.isFQDN(v, o),
-  isFloat: async (v: string, o: any) => !v.length || validator.isFloat(v, o),
-  isHash: async (v: string, o: any) =>
-    !v.length || validator.isHash(v, o.algorithm),
-  isHexadecimal: async (v: string) => !v.length || validator.isHexadecimal(v),
-  isIP: async (v: string, o: any) => !v.length || validator.isIP(v, o.version),
-  isIPRange: async (v: string) => !v.length || (validator as any).isIPRange(v),
-  isISO8601: async (v: string) => !v.length || validator.isISO8601(v),
+    !v.length || isAlphanumeric(v, o.locale),
+  isAscii: async (v: string) => !v.length || isAscii(v),
+  isBase64: async (v: string) => !v.length || isBase64(v),
+  isBefore: async (v: string, o: any) => !v.length || isBefore(v, o.date),
+  isBoolean: async (v: string) => !v.length || isBoolean(v),
+  isByteLength: async (v: string, o: any) => !v.length || isByteLength(v, o),
+  isCreditCard: async (v: string) => !v.length || isCreditCard(v),
+  isCurrency: async (v: string, o: any) => !v.length || isCurrency(v, o),
+  isDecimal: async (v: string, o: any) => !v.length || isDecimal(v, o),
+  isEmail: async (v: string, o: any) => !v.length || isEmail(v, o),
+  isFQDN: async (v: string, o: any) => !v.length || isFQDN(v, o),
+  isFloat: async (v: string, o: any) => !v.length || isFloat(v, o),
+  isHash: async (v: string, o: any) => !v.length || isHash(v, o.algorithm),
+  isHexadecimal: async (v: string) => !v.length || isHexadecimal(v),
+  isIP: async (v: string, o: any) => !v.length || isIP(v, o.version),
+  isIPRange: async (v: string) => !v.length || isIPRange(v),
+  isISO8601: async (v: string) => !v.length || isISO8601(v),
   isNotEmpty: async (v: string) => v && v.length > 0,
-  isRFC3339: async (v: string) => !v.length || (validator as any).isRFC3339(v),
-  isISO31661Alpha2: async (v: string) =>
-    !v.length || validator.isISO31661Alpha2(v),
-  isISO31661Alpha3: async (v: string) =>
-    !v.length || (validator as any).isISO31661Alpha3(v),
-  isIn: async (v: string, o: any) => !v.length || validator.isIn(v, o.values),
-  isInt: async (v: string, o: any) => !v.length || validator.isInt(v, o),
-  isJSON: async (v: string) => !v.length || validator.isJSON(v),
-  isJWT: async (v: string) => !v.length || (validator as any).isJWT(v),
-  isLatLong: async (v: string) => !v.length || validator.isLatLong(v),
-  isLength: async (v: string, o: any) => !v.length || validator.isLength(v, o),
-  isLowercase: async (v: string) => !v.length || validator.isLowercase(v),
-  isMACAddress: async (v: string) => !v.length || validator.isMACAddress(v),
-  isMimeType: async (v: string) => !v.length || validator.isMimeType(v),
+  isRFC3339: async (v: string) => !v.length || isRFC3339(v),
+  isISO31661Alpha2: async (v: string) => !v.length || isISO31661Alpha2(v),
+  isISO31661Alpha3: async (v: string) => !v.length || isISO31661Alpha3(v),
+  isIn: async (v: string, o: any) => !v.length || isIn(v, o.values),
+  isInt: async (v: string, o: any) => !v.length || isInt(v, o),
+  isJSON: async (v: string) => !v.length || isJSON(v),
+  isJWT: async (v: string) => !v.length || isJWT(v),
+  isLatLong: async (v: string) => !v.length || isLatLong(v),
+  isLength: async (v: string, o: any) => !v.length || isLength(v, o),
+  isLowercase: async (v: string) => !v.length || isLowercase(v),
+  isMACAddress: async (v: string) => !v.length || isMACAddress(v),
+  isMimeType: async (v: string) => !v.length || isMimeType(v),
   isMobilePhone: async (v: string, o: any) =>
-    !v.length || validator.isMobilePhone(v, o.locale, o),
-  isNumeric: async (v: string, o: any) =>
-    !v.length || validator.isNumeric(v, o),
-  isPort: async (v: string) => !v.length || validator.isPort(v),
+    !v.length || isMobilePhone(v, o.locale, o),
+  isNumeric: async (v: string, o: any) => !v.length || isNumeric(v, o),
+  isPort: async (v: string) => !v.length || isPort(v),
   isPostalCode: async (v: string, o: any) =>
-    !v.length || validator.isPostalCode(v, o.locale),
-  isURL: async (v: string, o: any) => !v.length || validator.isURL(v, o),
-  isUUID: async (v: string, o: any) =>
-    !v.length || validator.isUUID(v, o.version),
-  isUppercase: async (v: string) => !v.length || validator.isUppercase(v),
+    !v.length || isPostalCode(v, o.locale),
+  isURL: async (v: string, o: any) => !v.length || isURL(v, o),
+  isUUID: async (v: string, o: any) => !v.length || isUUID(v, o.version),
+  isUppercase: async (v: string) => !v.length || isUppercase(v),
   isWhitelisted: async (v: string, o: any) =>
-    !v.length || validator.isWhitelisted(v, o.chars),
+    !v.length || isWhitelisted(v, o.chars),
   isEntityId: async (v: string, o: any, c: any) => {
     const entity = await getEntity(o.type, v);
 
@@ -105,7 +132,7 @@ const ConstraintMethods: any = {
     }
 
     return true;
-  }
+  },
 };
 
 /**
@@ -164,7 +191,7 @@ const ConstraintHintBuilder: { [key: string]: (options: any) => string } = {
   isUUID: () => 'The parameter must be a valid UUID',
   isUppercase: () => 'The parameter must be an uppercase string',
   isWhitelisted: ({ chars }) =>
-    `The parameter must contain only the characters "${chars}"`
+    `The parameter must contain only the characters "${chars}"`,
 };
 
 /**

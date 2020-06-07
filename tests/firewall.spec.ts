@@ -33,7 +33,7 @@ import {
   buildAuthHandler,
   IUser,
   UserSerializer,
-  Firewall
+  Firewall,
 } from '../src/firewall';
 
 import { Container } from '../src/container';

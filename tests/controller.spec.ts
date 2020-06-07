@@ -196,7 +196,7 @@ describe('controller', () => {
   it('can handle plain object output', async () => {
     const output = { key: 'value' };
     const result = await (controller as any).processOutput(output, response, {
-      defaultStatusCode: 200
+      defaultStatusCode: 200,
     });
     expect(result).toEqual(output);
   });
@@ -204,7 +204,7 @@ describe('controller', () => {
   it('can handle array output', async () => {
     const output = [1, 2, 3];
     const result = await (controller as any).processOutput(output, response, {
-      defaultStatusCode: 200
+      defaultStatusCode: 200,
     });
     expect(result).toEqual(output);
   });
@@ -212,7 +212,7 @@ describe('controller', () => {
   it('can handle async function output', async () => {
     const output = async () => 'value';
     const result = await (controller as any).processOutput(output, response, {
-      defaultStatusCode: 200
+      defaultStatusCode: 200,
     });
     expect(result).toEqual(await output());
   });
@@ -220,7 +220,7 @@ describe('controller', () => {
   it('can handle promise output', async () => {
     const output = Promise.resolve('value');
     const result = await (controller as any).processOutput(output, response, {
-      defaultStatusCode: 200
+      defaultStatusCode: 200,
     });
     expect(result).toEqual(await output);
   });

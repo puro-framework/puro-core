@@ -47,7 +47,7 @@ describe('container', () => {
       load: async () => {
         return { o: 1 };
       },
-      unload: async () => {}
+      unload: async () => {},
     });
 
     const service = await container.get('service');
@@ -70,11 +70,11 @@ describe('container', () => {
       .define('service1', async () => {})
       .define('service2', {
         load: async () => {},
-        unload: async () => unload('service2')
+        unload: async () => unload('service2'),
       })
       .define('service3', {
         load: async () => {},
-        unload: async () => unload('service3')
+        unload: async () => unload('service3'),
       });
 
     await container.shoutdown();

@@ -28,7 +28,7 @@ import {
   Request,
   Response,
   NextFunction,
-  Middleware
+  Middleware,
 } from '../src/testing/mocks';
 
 import { mock } from '../src/testing/mocks';
@@ -39,14 +39,14 @@ import {
   InvalidParameterHttpException,
   AccessDeniedHttpException,
   NotFoundHttpException,
-  MethodNotAllowedHttpException
+  MethodNotAllowedHttpException,
 } from '../src/http';
 
 import {
   requestHandler,
   responseHandler,
   errorHandler,
-  error404Handler
+  error404Handler,
 } from '../src/http';
 
 describe('http', () => {
@@ -100,7 +100,7 @@ describe('http', () => {
     const exceptionHints = {
       hint1: ['message1'],
       hint2: ['message2'],
-      hint3: ['message3']
+      hint3: ['message3'],
     };
 
     const exception = new HttpException(

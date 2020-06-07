@@ -34,17 +34,15 @@ export class Request {
   bucket?: any;
   user?: any;
   entities: any;
-  prepare? = jest.fn<Response>((schema: any) => this);
-  login = jest.fn<Response>((user: any, handler: Function) => this);
+  prepare? = jest.fn((schema: any) => this);
+  login = jest.fn((user: any, handler: Function) => this);
 }
 
 export class Response {
   finished = false;
-  status = jest.fn<Response>((code: number) => this);
-  send = jest.fn<Response>((body?: any) => this);
-  prepare? = jest.fn<Response>(
-    (body: any, hints?: IHttpExceptionHints) => this
-  );
+  status = jest.fn((code: number) => this);
+  send = jest.fn((body?: any) => this);
+  prepare? = jest.fn((body: any, hints?: IHttpExceptionHints) => this);
 }
 
 export interface NextFunction {

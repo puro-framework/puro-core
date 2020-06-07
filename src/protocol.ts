@@ -29,7 +29,7 @@ import { Request, Response, NextFunction } from './http';
 import {
   NotFoundHttpException,
   InvalidParameterHttpException,
-  IHttpExceptionHints
+  IHttpExceptionHints,
 } from './http';
 
 import { Controller } from './controller';
@@ -47,7 +47,7 @@ import {
   isArray as _isArray,
   isDate as _isDate,
   isPlainObject as _isPlainObject,
-  isObjectLike as _isObjectLike
+  isObjectLike as _isObjectLike,
 } from 'lodash';
 
 /**
@@ -145,7 +145,7 @@ export const validateRequest = async (request: Request, schema: any) => {
     // If there's any invalid URL parameters responds with a 404, otherwise 422
     const urlParams = Object.keys(request.params);
 
-    if (params.some(name => urlParams.includes(name))) {
+    if (params.some((name) => urlParams.includes(name))) {
       throw new NotFoundHttpException();
     }
 
@@ -195,7 +195,7 @@ export const prepareResponse = async (
   return response.status(statusCode).send({
     status: statusCode,
     content: output['content'],
-    hints: hints
+    hints: hints,
   });
 };
 

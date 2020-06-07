@@ -28,9 +28,15 @@ import { prepareRequest, prepareResponse } from './protocol';
 
 import Server = require('express');
 
-import { Request, Response, NextFunction, RequestHandler } from 'express';
+import {
+  Request,
+  Response,
+  NextFunction,
+  RequestHandler,
+  Handler,
+} from 'express';
 
-export { Server, Request, Response, NextFunction };
+export { Server, Request, Response, NextFunction, Handler };
 export { Router } from 'express';
 
 import './typings/express';
@@ -127,7 +133,7 @@ export const requestHandler = async (
   next: NextFunction
 ) => {
   // Add a new method for preparing the request
-  request.prepare = async function(schema: any) {
+  request.prepare = async function (schema: any) {
     return prepareRequest(this, schema);
   };
 
@@ -143,7 +149,7 @@ export const responseHandler = async (
   next: NextFunction
 ) => {
   // Add a new method for preparing the response
-  response.prepare = async function(
+  response.prepare = async function (
     statusCode: number,
     body: any,
     hints?: IHttpExceptionHints
@@ -171,7 +177,7 @@ export const errorHandler = async (
     [statusCode, message, hints] = [
       exception.statusCode,
       exception.message,
-      exception.hints
+      exception.hints,
     ];
   }
 

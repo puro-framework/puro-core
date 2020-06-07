@@ -30,7 +30,7 @@ import {
   requestHandler,
   responseHandler,
   errorHandler,
-  error404Handler
+  error404Handler,
 } from '../src/http';
 
 import { Controller } from '../src/controller';
@@ -54,11 +54,11 @@ describe('puro', () => {
 
     server = {
       use: jest.fn(),
-      listen: jest.fn()
+      listen: jest.fn(),
     };
 
     container = {
-      define: jest.fn()
+      define: jest.fn(),
     };
 
     puro = new Puro();
@@ -92,7 +92,7 @@ describe('puro', () => {
       protected getRoutes() {
         return [
           { path: '/collection/:resourceId', controller: Controller },
-          { path: '/collection', controller: Controller }
+          { path: '/collection', controller: Controller },
         ];
       }
     }
@@ -114,8 +114,8 @@ describe('puro', () => {
           service1: async () => {},
           service2: {
             load: async () => {},
-            unload: async () => {}
-          }
+            unload: async () => {},
+          },
         };
       }
     }

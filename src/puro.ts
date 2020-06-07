@@ -30,7 +30,7 @@ import {
   requestHandler,
   responseHandler,
   errorHandler,
-  error404Handler
+  error404Handler,
 } from './http';
 
 import { Container } from './container';
@@ -77,7 +77,7 @@ export class Puro {
    * The server options.
    */
   options: IPuroOptions = {
-    basepath: '/api/'
+    basepath: '/api/',
   };
 
   /**
@@ -125,19 +125,19 @@ export class Puro {
    * Loads the plugins.
    */
   private loadPlugins() {
-    this.plugins.forEach(plugin => {
+    this.plugins.forEach((plugin) => {
       plugin.prepare(this.container, this.firewall);
     });
 
     // Load the routers behind the firewall
     const { basepath } = this.options;
 
-    this.plugins.forEach(plugin => {
+    this.plugins.forEach((plugin) => {
       this.server.use(basepath, plugin.router);
     });
 
     // Load the services
-    this.plugins.forEach(plugin => {
+    this.plugins.forEach((plugin) => {
       _forOwn(plugin.services, (definition: any, name: string) => {
         this.container.define(name, definition);
       });

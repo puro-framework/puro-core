@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-import { Request, Response, NextFunction } from './http';
+import { Request, Response, NextFunction, Handler } from './http';
 import { AccessDeniedHttpException } from './http';
 import { Container } from './container';
 import { configs } from './configs';
@@ -36,13 +36,14 @@ import {
   Strategy,
   StrategyOptions,
   VerifiedCallback,
-  ExtractJwt
+  ExtractJwt,
 } from 'passport-jwt';
 
 /**
  * The application secret used to sign the token.
  */
-const getSecret = () => new Buffer(configs.get('app.secret'), 'base64');
+const getSecret = () =>
+  Buffer.from(configs.get<string>('app.secret'), 'base64');
 
 /**
  * Returns a signed authorization token for a specific user.
@@ -162,10 +163,10 @@ export class Firewall {
   /**
    * The middleware to initialize the authentication.
    */
-  initialize() {
+  initialize(): Handler {
     const strategyOptions: StrategyOptions = {
       secretOrKey: getSecret(),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     };
 
     const strategy = new Strategy(strategyOptions, this.verifyUser);

@@ -40,14 +40,14 @@ describe('validator', () => {
     const constraints = {
       isAlpha: {},
       isNumeric: {},
-      isHash: { algorithm: 'md5' }
+      isHash: { algorithm: 'md5' },
     };
 
     const result = await validator.validateValue('1', constraints);
 
     expect(result).toEqual([
       'The parameter must contain only letters',
-      'The parameter must be a valid md5 hash'
+      'The parameter must be a valid md5 hash',
     ]);
   });
 
@@ -59,32 +59,32 @@ describe('validator', () => {
       param1: 'string',
       param2: 'string',
       param3: 0, // Ensure the casting to string
-      param4: null
+      param4: null,
     };
 
     const schema: any = {
       param0: {
-        isAlpha: {}
+        isAlpha: {},
       },
       param1: {
         isAlpha: {},
-        isNumeric: {}
+        isNumeric: {},
       },
       param2: {
         isAlpha: {},
         isNumeric: {},
-        isFloat: {}
+        isFloat: {},
       },
       param3: {
         isNotEmpty: {},
-        isAlpha: {}
+        isAlpha: {},
       },
       param4: {
-        isNotEmpty: {}
+        isNotEmpty: {},
       },
       param5: {
-        isNotEmpty: {}
-      }
+        isNotEmpty: {},
+      },
     };
 
     const result = await (validator as any).validateRequest(request, schema);
@@ -93,11 +93,11 @@ describe('validator', () => {
       param1: ['The parameter must be a number'],
       param2: [
         'The parameter must be a number',
-        'The parameter must be a floating-point number'
+        'The parameter must be a floating-point number',
       ],
       param3: ['The parameter must contain only letters'],
       param4: ['The parameter cannot be empty'],
-      param5: ['The parameter cannot be empty']
+      param5: ['The parameter cannot be empty'],
     });
   });
 
@@ -112,170 +112,170 @@ describe('validator', () => {
 
   it('can use "isAfter" constraint', async () => {
     const hints = await validator.validateValue('2011-08-03', {
-      isAfter: { date: '2011-08-02' }
+      isAfter: { date: '2011-08-02' },
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isAfter" constraint (hint)', async () => {
     const hints = await validator.validateValue('2011-08-03', {
-      isAfter: { date: '2011-08-04' }
+      isAfter: { date: '2011-08-04' },
     });
     expect(hints).toEqual(['The parameter must be a date after 2011-08-04']);
   });
 
   it('can use "isAlpha" constraint', async () => {
     const hints = await validator.validateValue('text', {
-      isAlpha: {}
+      isAlpha: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isAlpha" constraint (hint)', async () => {
     const hints = await validator.validateValue('100', {
-      isAlpha: {}
+      isAlpha: {},
     });
     expect(hints).toEqual(['The parameter must contain only letters']);
   });
 
   it('can use "isAlphanumeric" constraint', async () => {
     const hints = await validator.validateValue('text100', {
-      isAlphanumeric: {}
+      isAlphanumeric: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isAlphanumeric" constraint (hint)', async () => {
     const hints = await validator.validateValue('!!!', {
-      isAlphanumeric: {}
+      isAlphanumeric: {},
     });
     expect(hints).toEqual([
-      'The parameter must contain only letters and numbers'
+      'The parameter must contain only letters and numbers',
     ]);
   });
 
   it('can use "isAscii" constraint', async () => {
     const hints = await validator.validateValue('text100!!!', {
-      isAscii: {}
+      isAscii: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isAscii" constraint (hint)', async () => {
     const hints = await validator.validateValue('α', {
-      isAscii: {}
+      isAscii: {},
     });
     expect(hints).toEqual(['The parameter must be an ASCII string']);
   });
 
   it('can use "isBase64" constraint', async () => {
     const hints = await validator.validateValue('Zg==', {
-      isBase64: {}
+      isBase64: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isBase64" constraint (hint)', async () => {
     const hints = await validator.validateValue('text100', {
-      isBase64: {}
+      isBase64: {},
     });
     expect(hints).toEqual(['The parameter must be a Base64 string']);
   });
 
   it('can use "isBefore" constraint', async () => {
     const hints = await validator.validateValue('2010-08-04', {
-      isBefore: { date: '2010-08-05' }
+      isBefore: { date: '2010-08-05' },
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isBefore" constraint (hint)', async () => {
     const hints = await validator.validateValue('2010-08-04', {
-      isBefore: { date: '2010-08-03' }
+      isBefore: { date: '2010-08-03' },
     });
     expect(hints).toEqual(['The parameter must be a date before 2010-08-03']);
   });
 
   it('can use "isBoolean" constraint', async () => {
     const hints = await validator.validateValue('true', {
-      isBoolean: {}
+      isBoolean: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isBoolean" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isBoolean: {}
+      isBoolean: {},
     });
     expect(hints).toEqual(['The parameter must be a boolean']);
   });
 
   it('can use "isByteLength" constraint', async () => {
     const hints = await validator.validateValue('xxxx', {
-      isByteLength: { min: 3, max: 5 }
+      isByteLength: { min: 3, max: 5 },
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isByteLength" constraint (hint)', async () => {
     const hints = await validator.validateValue('xxxxxx', {
-      isByteLength: { min: 3, max: 5 }
+      isByteLength: { min: 3, max: 5 },
     });
     expect(hints).toEqual(['The parameter must be between 3 and 5 bytes']);
   });
 
   it('can use "isCreditCard" constraint', async () => {
     const hints = await validator.validateValue('375556917985515', {
-      isCreditCard: {}
+      isCreditCard: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isCreditCard" constraint (hint)', async () => {
     const hints = await validator.validateValue('5398228707871528', {
-      isCreditCard: {}
+      isCreditCard: {},
     });
     expect(hints).toEqual(['The parameter must be a valid credit card number']);
   });
 
   it('can use "isCurrency" constraint', async () => {
     const hints = await validator.validateValue('$10.45', {
-      isCurrency: {}
+      isCurrency: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isCurrency" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isCurrency: {}
+      isCurrency: {},
     });
     expect(hints).toEqual(['The parameter must be a valid currency amount']);
   });
 
   it('can use "isDecimal" constraint', async () => {
     const hints = await validator.validateValue('10.45', {
-      isDecimal: {}
+      isDecimal: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isDecimal" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isDecimal: {}
+      isDecimal: {},
     });
     expect(hints).toEqual(['The parameter must be a decimal']);
   });
 
   it('can use "isEmail" constraint', async () => {
     const hints = await validator.validateValue('foo@bar.com', {
-      isEmail: {}
+      isEmail: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isEmail" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isEmail: {}
+      isEmail: {},
     });
     expect(hints).toEqual(['The parameter must be a valid email']);
   });
@@ -289,8 +289,8 @@ describe('validator', () => {
     const hints = await validator.validateValue('id', {
       isEntityId: {
         type: TestClass,
-        name: 'entityName'
-      }
+        name: 'entityName',
+      },
     });
 
     expect(getEntitySpy).toBeCalledWith(TestClass, 'id');
@@ -312,8 +312,8 @@ describe('validator', () => {
       {
         isEntityId: {
           type: TestClass,
-          name: 'entityName'
-        }
+          name: 'entityName',
+        },
       },
       context
     );
@@ -322,7 +322,7 @@ describe('validator', () => {
     expect(hints.length).toBeFalsy();
 
     expect(request.entities).toEqual({
-      entityName: entity
+      entityName: entity,
     });
   });
 
@@ -330,7 +330,7 @@ describe('validator', () => {
     class TestClass {}
 
     const repository: any = {
-      findOne: jest.fn(async () => {})
+      findOne: jest.fn(async () => {}),
     };
 
     const getEntitySpy = spyOn(database, 'getEntity').and.returnValue(
@@ -340,8 +340,8 @@ describe('validator', () => {
     const hints = await validator.validateValue('id', {
       isEntityId: {
         type: TestClass,
-        name: 'entityName'
-      }
+        name: 'entityName',
+      },
     });
 
     expect(getEntitySpy).toBeCalledWith(TestClass, 'id');
@@ -350,30 +350,30 @@ describe('validator', () => {
 
   it('can use "isFQDN" constraint', async () => {
     const hints = await validator.validateValue('sub.domain.com', {
-      isFQDN: {}
+      isFQDN: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isFQDN" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isFQDN: {}
+      isFQDN: {},
     });
     expect(hints).toEqual([
-      'The parameter must be a fully qualified domain name'
+      'The parameter must be a fully qualified domain name',
     ]);
   });
 
   it('can use "isFloat" constraint', async () => {
     const hints = await validator.validateValue('10.45', {
-      isFloat: {}
+      isFloat: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isFloat" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isFloat: {}
+      isFloat: {},
     });
     expect(hints).toEqual(['The parameter must be a floating-point number']);
   });
@@ -382,7 +382,7 @@ describe('validator', () => {
     const hints = await validator.validateValue(
       'd94f3f016ae679c3008de268209132f2',
       {
-        isHash: { algorithm: 'md5' }
+        isHash: { algorithm: 'md5' },
       }
     );
     expect(hints.length).toBeFalsy();
@@ -390,132 +390,132 @@ describe('validator', () => {
 
   it('can use "isHash" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isHash: { algorithm: 'md5' }
+      isHash: { algorithm: 'md5' },
     });
     expect(hints).toEqual(['The parameter must be a valid md5 hash']);
   });
 
   it('can use "isHexadecimal" constraint', async () => {
     const hints = await validator.validateValue('ff0044', {
-      isHexadecimal: {}
+      isHexadecimal: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isHexadecimal" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isHexadecimal: {}
+      isHexadecimal: {},
     });
     expect(hints).toEqual(['The parameter must be a hexadecimal number']);
   });
 
   it('can use "isIP" constraint', async () => {
     const hints = await validator.validateValue('127.0.0.1', {
-      isIP: {}
+      isIP: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isIP" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isIP: {}
+      isIP: {},
     });
     expect(hints).toEqual(['The parameter must be a valid IP address']);
   });
 
   it('can use "isIPRange" constraint', async () => {
     const hints = await validator.validateValue('127.0.0.1/24', {
-      isIPRange: {}
+      isIPRange: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isIPRange" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isIPRange: {}
+      isIPRange: {},
     });
     expect(hints).toEqual(['The parameter must be a valid IP address range']);
   });
 
   it('can use "isISO8601" constraint', async () => {
     const hints = await validator.validateValue('2011-10-05T14:48:00', {
-      isISO8601: {}
+      isISO8601: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isISO8601" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isISO8601: {}
+      isISO8601: {},
     });
     expect(hints).toEqual(['The parameter must be a valid ISO 8601 date']);
   });
 
   it('can use "isNotEmpty" constraint', async () => {
     const hints = await validator.validateValue('text', {
-      isNotEmpty: {}
+      isNotEmpty: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isNotEmpty" constraint (hint)', async () => {
     const hints = await validator.validateValue('', {
-      isNotEmpty: {}
+      isNotEmpty: {},
     });
     expect(hints).toEqual(['The parameter cannot be empty']);
   });
 
   it('can use "isRFC3339" constraint', async () => {
     const hints = await validator.validateValue('2009-05-19 14:39:22-06:00', {
-      isRFC3339: {}
+      isRFC3339: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isRFC3339" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isRFC3339: {}
+      isRFC3339: {},
     });
     expect(hints).toEqual(['The parameter must be a valid RFC 3339 date']);
   });
 
   it('can use "isISO31661Alpha2" constraint', async () => {
     const hints = await validator.validateValue('IE', {
-      isISO31661Alpha2: {}
+      isISO31661Alpha2: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isISO31661Alpha2" constraint (hint)', async () => {
     const hints = await validator.validateValue('FRA', {
-      isISO31661Alpha2: {}
+      isISO31661Alpha2: {},
     });
     expect(hints).toEqual([
-      'The parameter must be a valid ISO 3166-1 alpha-2 country code'
+      'The parameter must be a valid ISO 3166-1 alpha-2 country code',
     ]);
   });
 
   it('can use "isISO31661Alpha3" constraint', async () => {
     const hints = await validator.validateValue('ITA', {
-      isISO31661Alpha3: {}
+      isISO31661Alpha3: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isISO31661Alpha3" constraint (hint)', async () => {
     const hints = await validator.validateValue('FR', {
-      isISO31661Alpha3: {}
+      isISO31661Alpha3: {},
     });
     expect(hints).toEqual([
-      'The parameter must be a valid ISO 3166-1 alpha-3 country code'
+      'The parameter must be a valid ISO 3166-1 alpha-3 country code',
     ]);
   });
 
   it('can use "isIn" constraint', async () => {
     const hints = await validator.validateValue('2', {
       isIn: {
-        values: [1, 2, 3]
-      }
+        values: [1, 2, 3],
+      },
     });
     expect(hints.length).toBeFalsy();
   });
@@ -523,15 +523,15 @@ describe('validator', () => {
   it('can use "isIn" constraint (hint)', async () => {
     const hints = await validator.validateValue('5', {
       isIn: {
-        values: [1, 2, 3]
-      }
+        values: [1, 2, 3],
+      },
     });
     expect(hints).toEqual(['The parameter must be one of 1,2,3']);
   });
 
   it('can use "isInt" constraint', async () => {
     const hints = await validator.validateValue('100', {
-      isInt: {}
+      isInt: {},
     });
     expect(hints.length).toBeFalsy();
   });
@@ -539,31 +539,31 @@ describe('validator', () => {
   it('can use "isInt" constraint (hint)', async () => {
     {
       const hints = await validator.validateValue('text', {
-        isInt: {}
+        isInt: {},
       });
       expect(hints).toEqual(['The parameter must be a integer number']);
     }
 
     {
       const hints = await validator.validateValue('20', {
-        isInt: { min: 5, max: 10 }
+        isInt: { min: 5, max: 10 },
       });
       expect(hints).toEqual([
-        'The parameter must be a integer between 5 and 10'
+        'The parameter must be a integer between 5 and 10',
       ]);
     }
   });
 
   it('can use "isJSON" constraint', async () => {
     const hints = await validator.validateValue('{ "key": "value" }', {
-      isJSON: {}
+      isJSON: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isJSON" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isJSON: {}
+      isJSON: {},
     });
     expect(hints).toEqual(['The parameter must be a valid JSON']);
   });
@@ -574,7 +574,7 @@ describe('validator', () => {
         'NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5M' +
         'DIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
       {
-        isJWT: {}
+        isJWT: {},
       }
     );
     expect(hints.length).toBeFalsy();
@@ -582,123 +582,123 @@ describe('validator', () => {
 
   it('can use "isJWT" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isJWT: {}
+      isJWT: {},
     });
     expect(hints).toEqual(['The parameter must be a valid JWT']);
   });
 
   it('can use "isLatLong" constraint', async () => {
     const hints = await validator.validateValue('(-17.738223, 85.605469)', {
-      isLatLong: {}
+      isLatLong: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isLatLong" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isLatLong: {}
+      isLatLong: {},
     });
     expect(hints).toEqual([
-      'The parameter must be a valid latitude-longitude coordinate'
+      'The parameter must be a valid latitude-longitude coordinate',
     ]);
   });
 
   it('can use "isLength" constraint', async () => {
     const hints = await validator.validateValue('xxxx', {
-      isLength: { min: 3, max: 5 }
+      isLength: { min: 3, max: 5 },
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isLength" constraint (hint)', async () => {
     const hints = await validator.validateValue('xxxxxx', {
-      isLength: { min: 3, max: 5 }
+      isLength: { min: 3, max: 5 },
     });
     expect(hints).toEqual(['The parameter must be between 3 and 5 characters']);
   });
 
   it('can use "isLowercase" constraint', async () => {
     const hints = await validator.validateValue('text', {
-      isLowercase: {}
+      isLowercase: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isLowercase" constraint (hint)', async () => {
     const hints = await validator.validateValue('TEXT', {
-      isLowercase: {}
+      isLowercase: {},
     });
     expect(hints).toEqual(['The parameter must be a lowercase string']);
   });
 
   it('can use "isMACAddress" constraint', async () => {
     const hints = await validator.validateValue('01:AB:03:04:05:06', {
-      isMACAddress: {}
+      isMACAddress: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isMACAddress" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isMACAddress: {}
+      isMACAddress: {},
     });
     expect(hints).toEqual(['The parameter must be a valid MAC address']);
   });
 
   it('can use "isMimeType" constraint', async () => {
     const hints = await validator.validateValue('application/json', {
-      isMimeType: {}
+      isMimeType: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isMimeType" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isMimeType: {}
+      isMimeType: {},
     });
     expect(hints).toEqual(['The parameter must be a valid MIME type format']);
   });
 
   it('can use "isMobilePhone" constraint', async () => {
     const hints = await validator.validateValue('8005552222', {
-      isMobilePhone: {}
+      isMobilePhone: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isMobilePhone" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isMobilePhone: {}
+      isMobilePhone: {},
     });
     expect(hints).toEqual([
-      'The parameter must be a valid mobile phone number'
+      'The parameter must be a valid mobile phone number',
     ]);
   });
 
   it('can use "isNumeric" constraint', async () => {
     const hints = await validator.validateValue('100', {
-      isNumeric: {}
+      isNumeric: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isNumeric" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isNumeric: {}
+      isNumeric: {},
     });
     expect(hints).toEqual(['The parameter must be a number']);
   });
 
   it('can use "isPort" constraint', async () => {
     const hints = await validator.validateValue('8080', {
-      isPort: {}
+      isPort: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isPort" constraint (hint)', async () => {
     const hints = await validator.validateValue('65536', {
-      isPort: {}
+      isPort: {},
     });
     expect(hints).toEqual(['The parameter must be a port number']);
   });
@@ -706,8 +706,8 @@ describe('validator', () => {
   it('can use "isPostalCode" constraint', async () => {
     const hints = await validator.validateValue('TW8 9GS', {
       isPostalCode: {
-        locale: 'GB'
-      }
+        locale: 'GB',
+      },
     });
     expect(hints.length).toBeFalsy();
   });
@@ -715,22 +715,22 @@ describe('validator', () => {
   it('can use "isPostalCode" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
       isPostalCode: {
-        locale: 'GB'
-      }
+        locale: 'GB',
+      },
     });
     expect(hints).toEqual(['The parameter must be a valid postal code']);
   });
 
   it('can use "isURL" constraint', async () => {
     const hints = await validator.validateValue('http://domain.com/', {
-      isURL: {}
+      isURL: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isURL" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isURL: {}
+      isURL: {},
     });
     expect(hints).toEqual(['The parameter must be a valid URL']);
   });
@@ -739,7 +739,7 @@ describe('validator', () => {
     const hints = await validator.validateValue(
       '3f87c20c-6d38-467c-ae84-ddb7f5830634',
       {
-        isUUID: {}
+        isUUID: {},
       }
     );
     expect(hints.length).toBeFalsy();
@@ -747,21 +747,21 @@ describe('validator', () => {
 
   it('can use "isUUID" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isUUID: {}
+      isUUID: {},
     });
     expect(hints).toEqual(['The parameter must be a valid UUID']);
   });
 
   it('can use "isUppercase" constraint', async () => {
     const hints = await validator.validateValue('TEXT', {
-      isUppercase: {}
+      isUppercase: {},
     });
     expect(hints.length).toBeFalsy();
   });
 
   it('can use "isUppercase" constraint (hint)', async () => {
     const hints = await validator.validateValue('text', {
-      isUppercase: {}
+      isUppercase: {},
     });
     expect(hints).toEqual(['The parameter must be an uppercase string']);
   });
@@ -769,8 +769,8 @@ describe('validator', () => {
   it('can use "isWhitelisted" constraint', async () => {
     const hints = await validator.validateValue('john', {
       isWhitelisted: {
-        chars: 'abcdefghijklmnopqrstuvwxyz'
-      }
+        chars: 'abcdefghijklmnopqrstuvwxyz',
+      },
     });
     expect(hints.length).toBeFalsy();
   });
@@ -778,11 +778,11 @@ describe('validator', () => {
   it('can use "isWhitelisted" constraint (hint)', async () => {
     const hints = await validator.validateValue('Mario', {
       isWhitelisted: {
-        chars: 'abcd'
-      }
+        chars: 'abcd',
+      },
     });
     expect(hints).toEqual([
-      'The parameter must contain only the characters "abcd"'
+      'The parameter must contain only the characters "abcd"',
     ]);
   });
 
@@ -830,7 +830,7 @@ describe('validator', () => {
       isURL: {},
       isUUID: {},
       isUppercase: {},
-      isWhitelisted: {}
+      isWhitelisted: {},
     });
   });
 });

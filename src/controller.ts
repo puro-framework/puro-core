@@ -50,20 +50,20 @@ export class Controller {
   static HttpMethodOptions: { [key: string]: any } = {
     POST: {
       hook: 'create',
-      defaultStatusCode: 201
+      defaultStatusCode: 201,
     },
     GET: {
       hook: 'read',
-      defaultStatusCode: 200
+      defaultStatusCode: 200,
     },
     PUT: {
       hook: 'update',
-      defaultStatusCode: 204
+      defaultStatusCode: 204,
     },
     DELETE: {
       hook: 'remove',
-      defaultStatusCode: 204
-    }
+      defaultStatusCode: 204,
+    },
   };
 
   /**
