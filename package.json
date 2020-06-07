@@ -1,6 +1,6 @@
 {
   "name": "@puro/core",
-  "version": "0.1.0-alpha17",
+  "version": "0.1.0-alpha19",
   "description": "Puro REST Framework",
   "license": "MIT",
   "author": {
@@ -52,7 +52,7 @@
     "@types/express": "4.17.0",
     "@types/jest": "25.2.3",
     "@types/lodash": "4.14.155",
-    "@types/node": "14.0.11",
+    "@types/node": "12.12.6",
     "@types/passport": "1.0.3",
     "@types/passport-jwt": "3.0.3",
     "@types/validator": "^13.0.0",
