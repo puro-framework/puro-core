@@ -31,6 +31,13 @@ import { Container, IServiceDef } from './container';
 import { Firewall } from './firewall';
 
 /**
+ * The plugin options.
+ */
+export interface IPluginOptions {
+  basepath?: string;
+}
+
+/**
  * The plugin class.
  */
 export abstract class Plugin {
@@ -55,13 +62,25 @@ export abstract class Plugin {
   firewall!: Firewall;
 
   /**
+   * The plugin options.
+   */
+  options: IPluginOptions = {};
+
+  /**
+   * Constructor method.
+   */
+  constructor(options?: IPluginOptions) {
+    this.options = Object.assign(this.options, options);
+  }
+
+  /**
    * Returns the definition for the routes.
    */
   prepare(container: Container, firewall: Firewall) {
-    this.configure();
-
     this.container = container;
     this.firewall = firewall;
+
+    this.configure();
 
     this.router = this.buildRouter();
     this.services = this.getServices();

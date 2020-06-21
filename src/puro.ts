@@ -133,7 +133,7 @@ export class Puro {
     const { basepath } = this.options;
 
     this.plugins.forEach((plugin) => {
-      this.server.use(basepath, plugin.router);
+      this.server.use(plugin.options.basepath || basepath, plugin.router);
     });
 
     // Load the services
